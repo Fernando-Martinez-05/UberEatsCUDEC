@@ -16,7 +16,7 @@ alert('Platillo agregado')
 function mostrarPlatillo(Platillo, id){
 contenido += `
 <div class = "card-panel recipe white row"
- data-id="${id}"> 
+id="${id}"> 
 <div class = "recipe-details">
 <div class = "recipe-title">
 ${Platillo.nombre}
@@ -26,7 +26,7 @@ ${Platillo.nombre}
 ${Platillo.ingredientes}
 </div>
 
-<div class = "recipe-Precio">
+<div class = "recipe-price">
 ${Platillo.Precio}
 </div>
 
@@ -39,3 +39,11 @@ ${Platillo.Precio}
 document.querySelector('.recipes').innerHTML = contenido;
 
 }
+
+function actualizarPlatillo(platillo, id){
+let tarjeta = document.getElementById(`${id}`);
+tarjeta.querySelector(".recipe-title").innerHTML = platillo.nombre;
+    tarjeta.querySelector(".recipe-ingredients").innerHTML = platillo.ingredientes;
+tarjeta.querySelector(".recipe-price").innerHTML = platillo.Precio;
+
+}   
