@@ -17,7 +17,7 @@ btnAgregarPlatillo.addEventListener('click', function() {
 
 function mostrarPlatillo(platillo, id) {
     contenido = `
-    <div class='card-panel recipe white row' id='${id}'>
+    <div class='card-panel recipe white row' id='${id}' data-id='${id}'>
          <div class='recipe-details'>
                 <div class='recipe-title'>
                     ${platillo.nombre}
@@ -45,3 +45,8 @@ function actualizarPlatillo(platillo, id) {
     tarjeta.querySelector(".recipe-ingredients").innerHTML = platillo.ingredientes;
     tarjeta.querySelector(".recipe-price").innerHTML = platillo.precio;
 }
+
+const borrarPlatillo = (id) => {
+  const platillo = document.querySelector(`.recipe[data-id=${id}]`);
+  platillo.remove();
+};
