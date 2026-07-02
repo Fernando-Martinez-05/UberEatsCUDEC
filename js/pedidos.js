@@ -4,9 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
 const menus = document.querySelectorAll('.side-menu');
 M.Sidenav.init(menus, {edge: 'right'});
 // add recipe form
-const forms = document.querySelectorAll('.side-form');
-M.Sidenav.init(forms, {edge: 'left'});
-});
 
 
 let contenidoLista = '';
@@ -25,9 +22,11 @@ db.collection("platillos").onSnapshot((datos) => {
 });
 
 function agregarAlista(platillo, id) {
-    contenidoLista += `<option value='${id}'>${platillo.nombre}</option>`;
+    contenidoLista += `<option value='${id}'>
+    ${platillo.nombre}
+    </option>`;
     
-    document.querySelector('#platillo').innerHTML = contenidoLista;
+    document.getElementById("listaPlatillo").innerHTML = contenidoLista;
 }
 
 M.AutoInit();
