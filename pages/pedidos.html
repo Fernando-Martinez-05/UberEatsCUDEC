@@ -35,10 +35,28 @@
 
   <!-- content -->
   <div class="container grey-text">
+    <h5 class="center">Pedidos</h5>
     <form>
-      <selec id ="listaPlatillos"></selec>
+       <div class="input-field">
+      <select id="listaPlatillos"></select>
+    </div>
+       <!-- agregar platillo --> 
+ <div class="divider"></div>
+      <div class="input-field">
+        <input placeholder="ejemplo: Pizza" id="title" type="text" class="validate">
+        <label for="title">Nombre</label>
+      </div>
+      <div class="input-field">
+        <input placeholder="ejemplo: calle" id="direccion" type="text" class="validate">
+        <label for="direccion">direccion</label>
+      </div>
+      <div class="input-field center">
+        <button class="btn-small">Agregar</button>
+      </div>
+
+  
     </form>
-  </div>
+    <button id="btnUbicacion">Ubicacion</button>
  <script src="https://www.gstatic.com/firebasejs/6.0.1/firebase-app.js">
  </script>
   
