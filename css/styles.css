@@ -73,3 +73,31 @@ input{
 form .input-field{
   margin-top: 30px;
 }
+
+/* =========================================
+   CAMARA
+========================================= */
+
+#camera-menu {
+    overflow-y: auto;
+}
+
+#camera-menu #video {
+    display: block;
+    margin: 0 auto;
+    object-fit: cover;
+}
+
+#camera-menu #foto {
+    display: none;
+    margin: 0 auto;
+    object-fit: cover;
+}
+
+#camera-menu #cameraStatus {
+    text-align: center;
+}
+
+#camera-menu #cameraError {
+    text-align: center;
+}
