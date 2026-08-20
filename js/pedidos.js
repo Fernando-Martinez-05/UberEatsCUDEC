@@ -13,12 +13,16 @@ let platillos = {};
 
 document.addEventListener("DOMContentLoaded", function () {
 
+    console.log("=================================");
+    console.log("INICIANDO PEDIDOS");
+    console.log("=================================");
+
+
     // =====================================================
     // MENÚ LATERAL
     // =====================================================
 
-    const menus =
-        document.querySelectorAll(".sidenav");
+    const menus = document.querySelectorAll(".sidenav");
 
     if (typeof M !== "undefined") {
         M.Sidenav.init(menus);
@@ -40,27 +44,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =====================================================
-    // CAMBIO DE PLATILLO
+    // SELECT DE PLATILLOS
     // =====================================================
 
-    // IMPORTANTE:
-    // En pedidos.html el ID es "listaplatillos"
+    const lista = document.getElementById("listaPlatillos");
 
-    const lista =
-        document.getElementById("listaPlatillos");
+    if (!lista) {
 
-    if (lista) {
-
-        lista.addEventListener(
-            "change",
-            function () {
-
-                mostrarInformacionPlatillo(
-                    this.value
-                );
-
-            }
+        console.error(
+            "ERROR: No existe el elemento #listaPlatillos"
         );
+
+    } else {
+
+        console.log(
+            "Select #listaPlatillos encontrado correctamente"
+        );
+
+
+        lista.addEventListener("change", function () {
+
+            console.log(
+                "Platillo seleccionado:",
+                this.value
+            );
+
+            mostrarInformacionPlatillo(this.value);
+
+        });
 
     }
 
@@ -132,8 +143,6 @@ function iniciarMapa() {
     }
 
 
-    // Ciudad de México como posición inicial
-
     const posicionInicial = [
         19.4326,
         -99.1332
@@ -146,8 +155,6 @@ function iniciarMapa() {
     );
 
 
-    // OpenStreetMap
-
     L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         {
@@ -157,8 +164,6 @@ function iniciarMapa() {
         }
     ).addTo(map);
 
-
-    // Marcador inicial
 
     marcador =
         L.marker(
@@ -179,20 +184,41 @@ function iniciarMapa() {
 
 function cargarPlatillos() {
 
-    if (
-        typeof db === "undefined"
-    ) {
+    console.log(
+        "Intentando cargar platillos..."
+    );
+
+
+    // =====================================================
+    // COMPROBAR FIREBASE
+    // =====================================================
+
+    if (typeof db === "undefined") {
 
         console.error(
-            "Firebase no está inicializado. Verifica firebase.js"
+            "ERROR: db NO está definido."
+        );
+
+        console.error(
+            "Revisa ../js/firebase.js"
+        );
+
+        mostrarErrorPlatillos(
+            "Firebase no está disponible."
         );
 
         return;
     }
 
 
-    // IMPORTANTE:
-    // Este es el ID que realmente tienes en pedidos.html
+    console.log(
+        "Firebase encontrado correctamente."
+    );
+
+
+    // =====================================================
+    // OBTENER SELECT
+    // =====================================================
 
     const select =
         document.getElementById(
@@ -201,26 +227,94 @@ function cargarPlatillos() {
 
 
     if (!select) {
+
+        console.error(
+            "ERROR: No se encontró #listaPlatillos"
+        );
+
         return;
     }
 
+
+    // =====================================================
+    // LEER COLECCIÓN
+    // =====================================================
 
     db.collection("platillos")
         .onSnapshot(
 
             function (coleccion) {
 
-                // Limpiar
+                console.log(
+                    "Colección platillos recibida."
+                );
 
-                select.innerHTML = `
-                    <option value="" selected>
-                        -- Selecciona un platillo --
-                    </option>
-                `;
+                console.log(
+                    "Cantidad de platillos:",
+                    coleccion.size
+                );
 
+
+                // =================================================
+                // LIMPIAR SELECT
+                // =================================================
+
+                select.innerHTML = "";
+
+
+                const opcionInicial =
+                    document.createElement("option");
+
+
+                opcionInicial.value = "";
+
+                opcionInicial.textContent =
+                    "-- Selecciona un platillo --";
+
+                opcionInicial.selected = true;
+
+
+                select.appendChild(
+                    opcionInicial
+                );
+
+
+                // =================================================
+                // LIMPIAR OBJETO
+                // =================================================
 
                 platillos = {};
 
+
+                // =================================================
+                // SI NO HAY PLATILLOS
+                // =================================================
+
+                if (coleccion.empty) {
+
+                    console.warn(
+                        "La colección 'platillos' está vacía."
+                    );
+
+                    const opcionVacia =
+                        document.createElement("option");
+
+                    opcionVacia.disabled = true;
+
+                    opcionVacia.textContent =
+                        "No hay platillos registrados";
+
+                    select.appendChild(
+                        opcionVacia
+                    );
+
+                    return;
+                }
+
+
+                // =================================================
+                // RECORRER PLATILLOS
+                // =================================================
 
                 coleccion.forEach(
                     function (documento) {
@@ -233,8 +327,20 @@ function cargarPlatillos() {
                             documento.id;
 
 
-                        platillos[id] = datos;
+                        console.log(
+                            "Platillo encontrado:",
+                            id,
+                            datos
+                        );
 
+
+                        // Guardarlo en memoria
+
+                        platillos[id] =
+                            datos;
+
+
+                        // Crear option
 
                         const option =
                             document.createElement(
@@ -248,7 +354,7 @@ function cargarPlatillos() {
 
                         option.textContent =
                             datos.nombre ||
-                            "Platillo";
+                            "Platillo sin nombre";
 
 
                         select.appendChild(
@@ -258,18 +364,64 @@ function cargarPlatillos() {
                     }
                 );
 
+
+                console.log(
+                    "Platillos cargados en el select:",
+                    select.options.length - 1
+                );
+
             },
 
             function (error) {
 
                 console.error(
-                    "Error cargando platillos:",
+                    "ERROR leyendo colección platillos:",
                     error
+                );
+
+
+                mostrarErrorPlatillos(
+                    "Error al cargar los platillos."
                 );
 
             }
 
         );
+
+}
+
+
+// =========================================================
+// MOSTRAR ERROR DE PLATILLOS
+// =========================================================
+
+function mostrarErrorPlatillos(mensaje) {
+
+    const select =
+        document.getElementById(
+            "listaPlatillos"
+        );
+
+
+    if (!select) {
+        return;
+    }
+
+
+    select.innerHTML = "";
+
+
+    const option =
+        document.createElement("option");
+
+
+    option.value = "";
+
+    option.textContent =
+        mensaje;
+
+
+    select.appendChild(option);
 
 }
 
@@ -304,6 +456,10 @@ function mostrarInformacionPlatillo(id) {
         );
 
 
+    // =====================================================
+    // SIN SELECCIÓN
+    // =====================================================
+
     if (!id || !platillos[id]) {
 
         if (ingredientesVista) {
@@ -324,8 +480,7 @@ function mostrarInformacionPlatillo(id) {
 
         if (ingredientesInput) {
 
-            ingredientesInput.value =
-                "";
+            ingredientesInput.value = "";
 
         }
 
@@ -338,13 +493,26 @@ function mostrarInformacionPlatillo(id) {
         }
 
 
-        return;
+        if (typeof M !== "undefined") {
+            M.updateTextFields();
+        }
 
+        return;
     }
 
 
+    // =====================================================
+    // OBTENER PLATILLO
+    // =====================================================
+
     const platillo =
         platillos[id];
+
+
+    console.log(
+        "Mostrando platillo:",
+        platillo
+    );
 
 
     const ingredientes =
@@ -359,7 +527,7 @@ function mostrarInformacionPlatillo(id) {
 
 
     // =====================================================
-    // MOSTRAR EN TARJETA
+    // INFORMACIÓN VISUAL
     // =====================================================
 
     if (ingredientesVista) {
@@ -379,7 +547,7 @@ function mostrarInformacionPlatillo(id) {
 
 
     // =====================================================
-    // MOSTRAR EN CAMPOS
+    // CAMPOS
     // =====================================================
 
     if (ingredientesInput) {
@@ -397,8 +565,6 @@ function mostrarInformacionPlatillo(id) {
 
     }
 
-
-    // Materialize
 
     if (typeof M !== "undefined") {
 
@@ -421,12 +587,6 @@ function obtenerUbicacion() {
         );
 
 
-    const estado =
-        document.getElementById(
-            "estadoUbicacion"
-        );
-
-
     if (!navigator.geolocation) {
 
         mostrarEstado(
@@ -435,7 +595,6 @@ function obtenerUbicacion() {
         );
 
         return;
-
     }
 
 
@@ -483,10 +642,6 @@ function obtenerUbicacion() {
             );
 
 
-            // =================================================
-            // GUARDAR COORDENADAS
-            // =================================================
-
             const txtLatitud =
                 document.getElementById(
                     "txtLatitud"
@@ -514,10 +669,6 @@ function obtenerUbicacion() {
 
             }
 
-
-            // =================================================
-            // MOSTRAR COORDENADAS
-            // =================================================
 
             const latitudVista =
                 document.getElementById(
@@ -547,10 +698,6 @@ function obtenerUbicacion() {
             }
 
 
-            // =================================================
-            // MOVER MAPA
-            // =================================================
-
             if (map) {
 
                 map.setView(
@@ -564,10 +711,6 @@ function obtenerUbicacion() {
             }
 
 
-            // =================================================
-            // MOVER MARCADOR
-            // =================================================
-
             if (marcador) {
 
                 marcador.setLatLng([
@@ -575,18 +718,16 @@ function obtenerUbicacion() {
                     longitud
                 ]);
 
+
                 marcador.bindPopup(
                     "Tu ubicación"
                 );
+
 
                 marcador.openPopup();
 
             }
 
-
-            // =================================================
-            // OBTENER DIRECCIÓN
-            // =================================================
 
             obtenerDireccion(
                 latitud,
@@ -612,7 +753,7 @@ function obtenerUbicacion() {
                 case error.PERMISSION_DENIED:
 
                     mensaje =
-                        "Permiso de ubicación denegado. Permite el acceso a la ubicación en tu navegador.";
+                        "Permiso de ubicación denegado.";
 
                     break;
 
@@ -657,7 +798,7 @@ function obtenerUbicacion() {
 
 
 // =========================================================
-// OBTENER DIRECCIÓN A PARTIR DE COORDENADAS
+// OBTENER DIRECCIÓN
 // =========================================================
 
 async function obtenerDireccion(
@@ -715,12 +856,6 @@ async function obtenerDireccion(
 
         const datos =
             await respuesta.json();
-
-
-        console.log(
-            "Datos de dirección:",
-            datos
-        );
 
 
         const address =
@@ -833,9 +968,7 @@ async function obtenerDireccion(
         );
 
 
-        restaurarBotonUbicacion(
-            true
-        );
+        restaurarBotonUbicacion(true);
 
 
         if (marcador) {
@@ -928,7 +1061,7 @@ function mostrarEstado(
 
 
 // =========================================================
-// RESTAURAR BOTÓN
+// RESTAURAR BOTÓN UBICACIÓN
 // =========================================================
 
 function restaurarBotonUbicacion(
@@ -980,10 +1113,6 @@ function restaurarBotonUbicacion(
 
 function guardarPedido() {
 
-    // IMPORTANTE:
-    // El ID real del select en pedidos.html
-    // es "listaplatillos"
-
     const lista =
         document.getElementById(
             "listaPlatillos"
@@ -999,18 +1128,6 @@ function guardarPedido() {
     const direccion =
         document.getElementById(
             "txtDireccion"
-        );
-
-
-    const ingredientes =
-        document.getElementById(
-            "txtIngredientes"
-        );
-
-
-    const costo =
-        document.getElementById(
-            "txtCosto"
         );
 
 
@@ -1107,7 +1224,7 @@ function guardarPedido() {
 
 
     // =====================================================
-    // DATOS DEL PLATILLO
+    // OBTENER PLATILLO
     // =====================================================
 
     const platillo =
@@ -1155,16 +1272,14 @@ function guardarPedido() {
             direccion.value.trim(),
 
         latitud:
-            latitud &&
-            latitud.value
+            latitud && latitud.value
                 ? parseFloat(
                     latitud.value
                 )
                 : null,
 
         longitud:
-            longitud &&
-            longitud.value
+            longitud && longitud.value
                 ? parseFloat(
                     longitud.value
                 )
@@ -1177,24 +1292,22 @@ function guardarPedido() {
 
 
     // =====================================================
-    // FIREBASE
+    // COMPROBAR FIREBASE
     // =====================================================
 
-    if (
-        typeof db === "undefined"
-    ) {
+    if (typeof db === "undefined") {
 
         alert(
             "Firebase no está disponible."
         );
 
-        console.error(
-            "db no está definido."
-        );
-
         return;
     }
 
+
+    // =====================================================
+    // BOTÓN
+    // =====================================================
 
     const btn =
         document.getElementById(
@@ -1217,114 +1330,117 @@ function guardarPedido() {
 
 
     // =====================================================
-    // GUARDAR EN FIREBASE
+    // GUARDAR
     // =====================================================
 
     db.collection("pedidos")
         .add(pedido)
 
-        .then(
-            function (docRef) {
+        .then(function (docRef) {
 
-                console.log(
-                    "Pedido guardado:",
-                    docRef.id
-                );
-
-
-                // =================================================
-                // CREAR DATOS PARA INDEX
-                // =================================================
-
-                const platilloParaIndex = {
-
-                    id:
-                        "pedido_" +
-                        docRef.id,
-
-                    nombre:
-                        platillo.nombre ||
-                        "Sin nombre",
-
-                    ingredientes:
-                        platillo.ingredientes ||
-                        "Sin ingredientes",
-
-                    precio:
-                        precio,
-
-                    foto:
-                        platillo.foto ||
-                        "",
-
-                    pedidoId:
-                        docRef.id,
-
-                    cliente:
-                        nombre.value.trim(),
-
-                    direccion:
-                        direccion.value.trim()
-
-                };
+            console.log(
+                "Pedido guardado:",
+                docRef.id
+            );
 
 
-                // =================================================
-                // GUARDAR TEMPORALMENTE
-                // =================================================
+            // =================================================
+            // DATOS PARA INDEX
+            // =================================================
 
-                localStorage.setItem(
-                    "nuevoPlatilloIndex",
-                    JSON.stringify(
-                        platilloParaIndex
-                    )
-                );
+            const platilloParaIndex = {
+
+                id:
+                    "pedido_" +
+                    docRef.id,
+
+                nombre:
+                    platillo.nombre ||
+                    "Sin nombre",
+
+                ingredientes:
+                    platillo.ingredientes ||
+                    "Sin ingredientes",
+
+                precio:
+                    precio,
+
+                foto:
+                    platillo.foto ||
+                    "",
+
+                pedidoId:
+                    docRef.id,
+
+                cliente:
+                    nombre.value.trim(),
+
+                direccion:
+                    direccion.value.trim(),
+
+                latitud:
+                    pedido.latitud,
+
+                longitud:
+                    pedido.longitud,
+
+                fecha:
+                    pedido.fecha
+
+            };
 
 
-                // =================================================
-                // REDIRIGIR AL INDEX
-                // =================================================
+            // =================================================
+            // LOCAL STORAGE
+            // =================================================
 
-                window.location.href =
-                    "../index.html";
+            localStorage.setItem(
+                "nuevoPlatilloIndex",
+                JSON.stringify(
+                    platilloParaIndex
+                )
+            );
+
+
+            // =================================================
+            // REDIRECCIÓN
+            // =================================================
+
+            window.location.href =
+                "../index.html";
+
+        })
+
+        .catch(function (error) {
+
+            console.error(
+                "Error guardando pedido:",
+                error
+            );
+
+
+            alert(
+                "Ocurrió un error al guardar el pedido."
+            );
+
+        })
+
+        .finally(function () {
+
+            if (btn) {
+
+                btn.disabled = false;
+
+                btn.innerHTML = `
+                    <i class="material-icons left">
+                        save
+                    </i>
+                    Guardar pedido
+                `;
 
             }
-        )
 
-        .catch(
-            function (error) {
-
-                console.error(
-                    "Error guardando pedido:",
-                    error
-                );
-
-
-                alert(
-                    "Ocurrió un error al guardar el pedido."
-                );
-
-            }
-        )
-
-        .finally(
-            function () {
-
-                if (btn) {
-
-                    btn.disabled = false;
-
-                    btn.innerHTML = `
-                        <i class="material-icons left">
-                            save
-                        </i>
-                        Guardar pedido
-                    `;
-
-                }
-
-            }
-        );
+        });
 
 }
 
@@ -1398,7 +1514,8 @@ function limpiarPedido() {
 
 
     if (costo) {
-        costo.value = "$0.00 MXN";
+        costo.value =
+            "$0.00 MXN";
     }
 
 
@@ -1411,10 +1528,6 @@ function limpiarPedido() {
         longitud.value = "";
     }
 
-
-    // =====================================================
-    // INFORMACIÓN VISUAL
-    // =====================================================
 
     const ingredientesVista =
         document.getElementById(
@@ -1503,10 +1616,6 @@ function limpiarPedido() {
     }
 
 
-    // =====================================================
-    // MATERIALIZE
-    // =====================================================
-
     if (typeof M !== "undefined") {
 
         M.updateTextFields();
@@ -1523,7 +1632,7 @@ function limpiarPedido() {
 
 
 // =========================================================
-// ACTUALIZAR MAPA AL CAMBIAR TAMAÑO
+// ACTUALIZAR MAPA
 // =========================================================
 
 window.addEventListener(
