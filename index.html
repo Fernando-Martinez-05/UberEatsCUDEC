@@ -1,150 +1,505 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>YhaiEats</title>
-  <!-- materialize icons, css & js -->
-  <link type="text/css" href="css/materialize.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link type="text/css" href="css/styles.css" rel="stylesheet">
-  <script type="text/javascript" src="js/materialize.min.js"></script>
 
-  <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
 
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="application-name" content="Yeats">
-<meta name="apple-mobile-web-app-title" content="Yeats">
-<meta name="theme-color" content="#edb90c">
-<meta name="msapplication-navbutton-color" content="#edb90c">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        http-equiv="X-UA-Compatible"
+        content="ie=edge"
+    >
+
+    <title>DITS</title>
 
 
-<link rel="icon" type="image/png" sizes="16x16" href="icon-16x16.png">
-<link rel="apple-touch-icon" type="image/png" sizes="16x16" href="icon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="icon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="32x32" href="icon-32x32.png">
-<link rel="icon" type="image/png" sizes="48x48" href="icon-48x48.png">
-<link rel="apple-touch-icon" type="image/png" sizes="48x48" href="icon-48x48.png">
-<link rel="icon" type="image/png" sizes="64x64" href="icon-64x64.png">
-<link rel="apple-touch-icon" type="image/png" sizes="64x64" href="icon-64x64.png">
-<link rel="icon" type="image/png" sizes="96x96" href="icon-96x96.png">
-<link rel="apple-touch-icon" type="image/png" sizes="96x96" href="icon-96x96.png">
-<link rel="icon" type="image/png" sizes="128x128" href="icon-128x128.png">
-<link rel="apple-touch-icon" type="image/png" sizes="128x128" href="icon-128x128.png">
-<link rel="icon" type="image/png" sizes="144x144" href="icon-144x144.png">
-<link rel="apple-touch-icon" type="image/png" sizes="144x144" href="icon-144x144.png">
-<link rel="icon" type="image/png" sizes="152x152" href="icon-152x152.png">
-<link rel="apple-touch-icon" type="image/png" sizes="152x152" href="icon-152x152.png">
-<link rel="icon" type="image/png" sizes="180x180" href="icon-180x180.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
-<link rel="apple-touch-icon" type="image/png" sizes="192x192" href="icon-192x192.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192x192-maskable.png">
-<link rel="apple-touch-icon" type="image/png" sizes="192x192" href="icon-192x192-maskable.png">
-<link rel="icon" type="image/png" sizes="384x384" href="icon-384x384.png">
-<link rel="apple-touch-icon" type="image/png" sizes="384x384" href="icon-384x384.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512x512.png">
-<link rel="apple-touch-icon" type="image/png" sizes="512x512" href="icon-512x512.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512x512-maskable.png">
-<link rel="apple-touch-icon" type="image/png" sizes="512x512" href="icon-512x512-maskable.png">
+    <!-- =========================================
+         MATERIALIZE CSS
+    ========================================== -->
+
+    <link
+        type="text/css"
+        href="./CSS/materialize.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================
+         MATERIAL ICONS
+    ========================================== -->
+
+    <link
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================
+         CSS DEL PROYECTO
+    ========================================== -->
+
+    <link
+        type="text/css"
+        href="./CSS/styles.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================
+         MANIFEST
+    ========================================== -->
+
+    <link
+        rel="manifest"
+        href="./manifest.json"
+    >
+
+
+    <!-- =========================================
+         CONFIGURACIÓN PWA
+    ========================================== -->
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="application-name"
+        content="DITS"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="DITS"
+    >
+
+    <meta
+        name="theme-color"
+        content="#4dc7e4"
+    >
+
+    <meta
+        name="msapplication-navbutton-color"
+        content="#4dc7e4"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"
+    >
+
+
+    <!-- =========================================
+         ICONOS
+    ========================================== -->
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="./icon-16x16.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="./icon-16x16.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="./icon-32x32.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="./icon-32x32.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="./icon-64x64.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="./icon-64x64.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="./icon-128x128.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="./icon-128x128.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="./icon-192x192.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="./icon-192x192.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="./icon-512x512.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="./icon-512x512.png"
+    >
+
 </head>
+
+
 <body class="grey lighten-4">
 
-  <!-- Menu superior -->
-  <nav class="z-depth-0">
-    <div class="nav-wrapper container">
-      <a href="https://theyhai.github.io/UberEatsCUDEC/">YhaiEats</a>
-      <span class="right grey-text text-darken-1">
-        <i class="material-icons sidenav-trigger" data-target="side-menu">menu</i>
-      </span>
+
+    <!-- =========================================
+         MENÚ SUPERIOR
+    ========================================== -->
+
+    <nav class="z-depth-0">
+
+        <div class="nav-wrapper container">
+
+
+            <a href="./">
+                DITS
+            </a>
+
+
+            <span class="right grey-text text-darken-1">
+
+                <i
+                    class="material-icons sidenav-trigger"
+                    data-target="side-menu"
+                >
+                    menu
+                </i>
+
+            </span>
+
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =========================================
+         MENÚ LATERAL
+    ========================================== -->
+
+    <ul
+        id="side-menu"
+        class="sidenav side-menu"
+    >
+
+
+        <li>
+
+            <a class="subheader">
+                DITS
+            </a>
+
+        </li>
+
+
+        <!-- INICIO -->
+
+        <li>
+
+            <a
+                href="./"
+                class="waves-effect"
+            >
+                Inicio
+            </a>
+
+        </li>
+
+
+        <!-- PEDIDOS -->
+
+        <li>
+
+            <a
+                href="./pages/pedidos.html"
+                class="waves-effect"
+            >
+                Pedidos
+            </a>
+
+        </li>
+
+
+        <!-- ACERCA -->
+
+        <li>
+
+            <a
+                href="./pages/about.html"
+                class="waves-effect"
+            >
+                Acerca
+            </a>
+
+        </li>
+
+
+        <!-- SEPARADOR -->
+
+        <li>
+
+            <div class="divider"></div>
+
+        </li>
+
+
+        <!-- CONTACTO -->
+
+        <li>
+
+            <a
+                href="./pages/contact.html"
+                class="waves-effect"
+            >
+
+                <i class="material-icons">
+                    mail_outline
+                </i>
+
+                Contacto
+
+            </a>
+
+        </li>
+
+
+    </ul>
+
+
+
+    <!-- =========================================
+         LISTA DE PLATILLOS
+    ========================================== -->
+
+    <div
+        class="recipes container grey-text text-darken-1"
+    >
     </div>
-  </nav>
 
-  <!-- Menu lateral -->
-  <ul id="side-menu" class="sidenav side-menu">
-    <li><a class="subheader">UberEatsCUDEC</a></li>
-    <li><a href="https://theyhai.github.io/UberEatsCUDEC/" class="waves-effect">Inicio</a></li>
-    <li><a href="pages/about.html" class="waves-effect">Acerca</a></li>
-    <li><a href="pages/pedidos.html" class="waves-effect">Pedidos</a></li>
-    <li><div class="divider"></div></li>
-    <li><a href="pages/contact.html" class="waves-effect">
-      <i class="material-icons">mail_outline</i>Contacto</a>
-    </li>
-  </ul>
 
-  <!-- Lista de platillos -->
-  <div class="recipes container grey-text text-darken-1">
-  </div>
 
-  <div class="center">
-    <a class="btn-floating btn-small btn-large add-btn sidenav-trigger" data-target="side-form">
-      <i class="material-icons">add</i>
-    </a>
-  </div>
+    <!-- =========================================
+         BOTÓN AGREGAR
+    ========================================== -->
 
-  <!-- Agregar platillo -->
-  <div id="side-form" class="sidenav side-form">
-    <form class="add-recipe container section">
-      <h6 >Nuevo platillo</h6>
-      <div class="divider"></div>
-      <div class="input-field">
-        <input placeholder="ejemplo: Pizza" id="title" type="text" class="validate">
-        <label for="title">Nombre</label>
-      </div>
-      <div class="input-field">
-        <input placeholder="e.g. Tofu, mushroom, garlic" id="ingredients" type="text" class="validate">
-        <label for="ingredients">Ingredientes</label>
-      </div>
-      <input id="fotoInput" type="hidden" value="">
-      <div class="input-field">
-        <input placeholder="ejemplo: 100" id="price" type="number" class="validate">
-        <label for="price">Precio</label>
-      </div>
-      <div class="input-field center">
-        <button class="btn-small">Agregar</button>
-      </div>
-    </form>
-   
-   <div class="center">
-  <!-- Subir archivo desde galería -->
-  <input type="file" id="btnFoto" accept="image/*">
+    <div class="center">
 
-  <!-- Nuevo botón para abrir cámara -->
-  <button id="btnCamara" class="btn-small green">Usar cámara</button>
+        <a
+            class="btn-floating btn-large add-btn sidenav-trigger"
+            data-target="side-form"
+        >
 
-  <button id="btnCapturar" class="btn-small">Capturar</button>
-  <button id="btnLimpiar" class="btn-small red">Limpiar</button>
-</div>
-<div id="Camera">
-  <video id="Video" autoplay playsinline>Video no disponible</video>
-</div>
-<canvas id="Canvas" style="display:none;"></canvas>
-<div id="Salida">
-  <img id="foto" src="img/default.jpg" alt="Foto del platillo">
+            <i class="material-icons">
+                add
+            </i>
 
-</div>
+        </a>
 
-  
-  
-  
-  <script src="https://www.gstatic.com/firebasejs/6.0.1/firebase-app.js"></script>
+    </div>
 
-  <script src="https://www.gstatic.com/firebasejs/6.0.1/firebase-firestore.js"></script>
- 
 
-<script src="js/firebase.js"></script>
-<script src="js/index.js"></script>
-<script src="js/db.js"></script>
 
-<!--Agregado de service worker-->
-<script>
-  if(typeof navigator.serviceWorker !== 'undefined') {
-    navigator.serviceWorker.register('sw.js')
-  }
-</script>
+    <!-- =========================================
+         FORMULARIO AGREGAR PLATILLO
+    ========================================== -->
+
+    <div
+        id="side-form"
+        class="sidenav side-form"
+    >
+
+
+        <form
+            id="formAgregar"
+            class="add-recipe container section"
+        >
+
+
+            <h6>
+                Nuevo platillo
+            </h6>
+
+
+            <div class="divider"></div>
+
+
+
+            <!-- NOMBRE -->
+
+            <div class="input-field">
+
+                <input
+                    placeholder="Ejemplo: Pizza"
+                    id="title"
+                    name="title"
+                    type="text"
+                    class="validate"
+                    required
+                >
+
+                <label for="title">
+                    Nombre
+                </label>
+
+            </div>
+
+
+
+            <!-- INGREDIENTES -->
+
+            <div class="input-field">
+
+                <input
+                    placeholder="Ejemplo: Queso, tomate, harina"
+                    id="ingredients"
+                    name="ingredients"
+                    type="text"
+                    class="validate"
+                    required
+                >
+
+                <label for="ingredients">
+                    Ingredientes
+                </label>
+
+            </div>
+
+
+
+            <!-- PRECIO -->
+
+            <div class="input-field">
+
+                <input
+                    placeholder="Costo"
+                    id="price"
+                    name="price"
+                    type="number"
+                    class="validate"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+
+                <label for="price">
+                    Precio
+                </label>
+
+            </div>
+
+
+
+            <!-- BOTÓN -->
+
+            <div class="input-field center">
+
+                <button
+                    id="btnAgregarPlatillo"
+                    type="submit"
+                    class="btn-small"
+                >
+
+                    Agregar
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+
+    <!-- =========================================
+         FIREBASE
+    ========================================== -->
+
+    <script
+        src="https://www.gstatic.com/firebasejs/6.0.1/firebase-app.js">
+    </script>
+
+    <script
+        src="https://www.gstatic.com/firebasejs/6.0.1/firebase-firestore.js">
+    </script>
+
+
+
+    <!-- =========================================
+         MATERIALIZE JS
+    ========================================== -->
+
+    <script
+        src="./JS/materialize.min.js">
+    </script>
+
+
+
+    <!-- =========================================
+         FIREBASE DEL PROYECTO
+    ========================================== -->
+
+    <script
+        src="./JS/firebase.js">
+    </script>
+
+
+
+    <!-- =========================================
+         INDEX JS
+    ========================================== -->
+
+    <script
+        src="./JS/index.js">
+    </script>
+
+
+
+    <!-- =========================================
+         BASE DE DATOS
+    ========================================== -->
+
+    <script
+        src="./JS/db.js">
+    </script>
+
 
 </body>
+
 </html>
