@@ -1,45 +1,855 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Food Ninja</title>
-  <!-- materialize icons, css & js -->
-  <link type="text/css" href="/css/materialize.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link type="text/css" href="/css/styles.css" rel="stylesheet">
-  <script type="text/javascript" src="/js/materialize.min.js"></script>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        http-equiv="X-UA-Compatible"
+        content="ie=edge"
+    >
+
+    <title>DITS - Acerca de</title>
+
+
+    <!-- =========================================
+         MATERIALIZE
+    ========================================== -->
+
+    <link
+        type="text/css"
+        href="../css/materialize.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet"
+    >
+
+    <link
+        type="text/css"
+        href="../css/styles.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================
+         PWA
+    ========================================== -->
+
+    <link
+        rel="manifest"
+        href="../manifest.json"
+    >
+
+    <meta
+        name="theme-color"
+        content="#edb90c"
+    >
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="DITS"
+    >
+
+
+    <!-- =========================================
+         ESTILOS
+    ========================================== -->
+
+    <style>
+
+        /* =====================================
+           GENERAL
+        ====================================== */
+
+        body {
+            min-height: 100vh;
+            background: #f5f5f5;
+        }
+
+
+        /* =====================================
+           NAVBAR
+        ====================================== */
+
+        nav {
+            background: #edb90c;
+        }
+
+        nav .brand-logo,
+        nav a {
+            color: white;
+            font-weight: 600;
+        }
+
+        nav .sidenav-trigger {
+            color: white;
+        }
+
+
+        /* =====================================
+           CONTENEDOR
+        ====================================== */
+
+        .about-container {
+            width: 92%;
+            max-width: 900px;
+            margin: 35px auto 60px;
+        }
+
+
+        /* =====================================
+           TARJETA PRINCIPAL
+        ====================================== */
+
+        .about-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+
+        /* =====================================
+           LOGO
+        ====================================== */
+
+        .app-logo {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 18px;
+
+            border-radius: 28px;
+
+            background: linear-gradient(
+                135deg,
+                #edb90c,
+                #ff9000
+            );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            box-shadow:
+                0 8px 20px rgba(237, 185, 12, 0.30);
+        }
+
+
+        .app-logo i {
+            font-size: 62px;
+            color: white;
+        }
+
+
+        /* =====================================
+           NOMBRE
+        ====================================== */
+
+        .app-name {
+            text-align: center;
+            font-size: 34px;
+            font-weight: 700;
+            margin: 5px 0;
+            color: #333;
+        }
+
+
+        .app-type {
+            text-align: center;
+            color: #777;
+            font-size: 15px;
+            margin-bottom: 35px;
+        }
+
+
+        /* =====================================
+           SECCIONES
+        ====================================== */
+
+        .about-section {
+            margin-top: 35px;
+        }
+
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-size: 21px;
+            font-weight: 600;
+
+            color: #333;
+
+            margin-bottom: 15px;
+        }
+
+
+        .section-title i {
+            color: #edb90c;
+            font-size: 27px;
+        }
+
+
+        .about-section p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.7;
+            margin: 8px 0;
+        }
+
+
+        /* =====================================
+           INFORMACIÓN DE LA APP
+        ====================================== */
+
+        .info-box {
+            background: #fff8df;
+            border-left: 5px solid #edb90c;
+
+            border-radius: 10px;
+
+            padding: 18px 20px;
+
+            margin-top: 10px;
+        }
+
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            margin: 10px 0;
+
+            color: #555;
+        }
+
+
+        .info-row i {
+            color: #edb90c;
+            font-size: 21px;
+        }
+
+
+        .info-row strong {
+            color: #333;
+        }
+
+
+        /* =====================================
+           DESCRIPCIÓN
+        ====================================== */
+
+        .description-box {
+            background: #fafafa;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+
+        /* =====================================
+           SOPORTE
+        ====================================== */
+
+        .support-box {
+            background: linear-gradient(
+                135deg,
+                #fff8df,
+                #fff3c4
+            );
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            text-align: center;
+        }
+
+
+        .support-box i {
+            font-size: 42px;
+            color: #edb90c;
+            margin-bottom: 10px;
+        }
+
+
+        .support-box h6 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+
+        .support-email {
+            display: inline-block;
+
+            margin-top: 10px;
+
+            color: #e09f00;
+
+            font-weight: 600;
+
+            text-decoration: none;
+        }
+
+
+        .support-email:hover {
+            text-decoration: underline;
+        }
+
+
+        /* =====================================
+           SEPARADOR
+        ====================================== */
+
+        .about-divider {
+            margin: 30px 0;
+            border: 0;
+            border-top: 1px solid #eee;
+        }
+
+
+        /* =====================================
+           FOOTER
+        ====================================== */
+
+        .about-footer {
+            text-align: center;
+
+            margin-top: 30px;
+
+            color: #999;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================
+           BOTÓN REGRESAR
+        ====================================== */
+
+        .back-button {
+            margin-top: 25px;
+            background: #edb90c;
+        }
+
+
+        .back-button:hover {
+            background: #dba900;
+        }
+
+
+        /* =====================================
+           MÓVILES
+        ====================================== */
+
+        @media only screen and (max-width: 600px) {
+
+            .about-container {
+                width: 94%;
+                margin-top: 20px;
+            }
+
+            .about-card {
+                padding: 25px 20px;
+                border-radius: 15px;
+            }
+
+            .app-logo {
+                width: 90px;
+                height: 90px;
+            }
+
+            .app-logo i {
+                font-size: 50px;
+            }
+
+            .app-name {
+                font-size: 28px;
+            }
+
+            .section-title {
+                font-size: 19px;
+            }
+
+            .about-section p {
+                font-size: 15px;
+            }
+
+            .info-row {
+                align-items: flex-start;
+            }
+
+        }
+
+    </style>
+
 </head>
-<body class="grey lighten-4">
 
-  <!-- top nav -->
-  <nav class="z-depth-0">
-    <div class="nav-wrapper container">
-      <a href="/">Food<span>Ninja</span></a>
-      <span class="right grey-text text-darken-1">
-        <i class="material-icons sidenav-trigger" data-target="side-menu">menu</i>
-      </span>
-    </div>
-  </nav>
 
-  <!-- side nav -->
-  <ul id="side-menu" class="sidenav side-menu">
-    <li><a class="subheader">FOODNINJA</a></li>
-    <li><a href="/" class="waves-effect">Home</a></li>
-    <li><a href="/pages/about.html" class="waves-effect">About</a></li>
-    <li><div class="divider"></div></li>
-    <li><a href="/pages/contact.html" class="waves-effect">
-      <i class="material-icons">mail_outline</i>Contact</a>
-    </li>
-  </ul>
+<body>
 
-  <!-- content -->
-  <div class="container grey-text">
-    <h5 class="center">About Food Ninja</h5>
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus, porro voluptatum illum veniam eaque sunt sit labore provident eligendi! Voluptate amet suscipit inventore unde maxime atque impedit officia nobis laboriosam!</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam voluptatibus omnis, ea doloremque exercitationem id necessitatibus. Voluptatem officiis cupiditate commodi totam, hic laborum est ducimus amet iure, non dignissimos illo.</p>
-  </div>
 
-  <script src="/js/ui.js"></script>
+    <!-- =========================================
+         MENÚ SUPERIOR
+    ========================================== -->
+
+    <nav class="z-depth-0">
+
+        <div class="nav-wrapper container">
+
+            <a href="../">
+                DITS
+            </a>
+
+            <span class="right">
+
+                <i
+                    class="material-icons sidenav-trigger"
+                    data-target="side-menu"
+                >
+                    menu
+                </i>
+
+            </span>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================================
+         MENÚ LATERAL
+    ========================================== -->
+
+    <ul
+        id="side-menu"
+        class="sidenav side-menu"
+    >
+
+        <li>
+
+            <a class="subheader">
+                DITS
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a
+                href="../"
+                class="waves-effect"
+            >
+
+                <i class="material-icons">
+                    home
+                </i>
+
+                Inicio
+
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a
+                href="pedidos.html"
+                class="waves-effect"
+            >
+
+                <i class="material-icons">
+                    restaurant_menu
+                </i>
+
+                Pedidos
+
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a
+                href="about.html"
+                class="waves-effect"
+            >
+
+                <i class="material-icons">
+                    info
+                </i>
+
+                Acerca
+
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <div class="divider"></div>
+
+        </li>
+
+
+        <li>
+
+            <a
+                href="contact.html"
+                class="waves-effect"
+            >
+
+                <i class="material-icons">
+                    mail_outline
+                </i>
+
+                Contacto
+
+            </a>
+
+        </li>
+
+    </ul>
+
+
+    <!-- =========================================
+         CONTENIDO
+    ========================================== -->
+
+    <main class="about-container">
+
+
+        <div class="about-card">
+
+
+            <!-- =================================
+                 LOGO
+            ================================== -->
+
+            <div class="app-logo">
+
+                <i class="material-icons">
+                    restaurant
+                </i>
+
+            </div>
+
+
+            <!-- =================================
+                 NOMBRE
+            ================================== -->
+
+            <h1 class="app-name">
+                DITS
+            </h1>
+
+
+            <div class="app-type">
+                Aplicación Web Progresiva (PWA)
+            </div>
+
+
+            <!-- =================================
+                 INFORMACIÓN DE LA APLICACIÓN
+            ================================== -->
+
+            <section class="about-section">
+
+                <div class="section-title">
+
+                    <i class="material-icons">
+                        apps
+                    </i>
+
+                    Información de la aplicación
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-row">
+
+                        <i class="material-icons">
+                            restaurant
+                        </i>
+
+                        <span>
+                            <strong>Nombre:</strong>
+                            DITS
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <i class="material-icons">
+                            system_update
+                        </i>
+
+                        <span>
+                            <strong>Versión:</strong>
+                            1.0.0
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <i class="material-icons">
+                            phone_android
+                        </i>
+
+                        <span>
+                            <strong>Tipo:</strong>
+                            Aplicación Web Progresiva (PWA)
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <hr class="about-divider">
+
+
+            <!-- =================================
+                 DESCRIPCIÓN
+            ================================== -->
+
+            <section class="about-section">
+
+                <div class="section-title">
+
+                    <i class="material-icons">
+                        description
+                    </i>
+
+                    Descripción de la aplicación
+
+                </div>
+
+
+                <div class="description-box">
+
+                    <p>
+                        <strong>DITS</strong> es una aplicación web
+                        diseñada para facilitar la consulta y
+                        administración de platillos, así como la
+                        realización de pedidos.
+                    </p>
+
+
+                    <p>
+                        La aplicación permite a los usuarios consultar
+                        los platillos disponibles, seleccionar sus
+                        alimentos y registrar la información necesaria
+                        para realizar un pedido.
+                    </p>
+
+
+                    <p>
+                        DITS utiliza tecnologías web modernas y está
+                        diseñada como una PWA, permitiendo que pueda
+                        utilizarse desde dispositivos móviles y
+                        computadoras.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <hr class="about-divider">
+
+
+            <!-- =================================
+                 PROPÓSITO
+            ================================== -->
+
+            <section class="about-section">
+
+                <div class="section-title">
+
+                    <i class="material-icons">
+                        lightbulb
+                    </i>
+
+                    Propósito de la aplicación
+
+                </div>
+
+
+                <p>
+
+                    El propósito de DITS es ofrecer una solución
+                    sencilla para la gestión de platillos y pedidos,
+                    integrando herramientas como geolocalización,
+                    mapas y almacenamiento de información en la nube.
+
+                </p>
+
+            </section>
+
+
+            <hr class="about-divider">
+
+
+            <!-- =================================
+                 SOPORTE
+            ================================== -->
+
+            <section class="about-section">
+
+                <div class="section-title">
+
+                    <i class="material-icons">
+                        support_agent
+                    </i>
+
+                    Soporte y contacto
+
+                </div>
+
+
+                <div class="support-box">
+
+                    <i class="material-icons">
+                        mail
+                    </i>
+
+
+                    <h6>
+                        ¿Necesitas ayuda?
+                    </h6>
+
+
+                    <p>
+                        Para dudas, problemas o comentarios
+                        relacionados con la aplicación,
+                        puedes comunicarte mediante el correo
+                        electrónico de soporte.
+                    </p>
+
+
+                    <a
+                        href="mailto:soporte@dits.com"
+                        class="support-email"
+                    >
+                        soporte@dits.com
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 BOTÓN REGRESAR
+            ================================== -->
+
+            <div class="center">
+
+                <a
+                    href="../"
+                    class="btn waves-effect waves-light back-button"
+                >
+
+                    <i class="material-icons left">
+                        arrow_back
+                    </i>
+
+                    Volver al inicio
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================
+                 FOOTER
+            ================================== -->
+
+            <div class="about-footer">
+
+                DITS © 2026
+
+                <br>
+
+                Proyecto desarrollado con fines académicos.
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================================
+         MATERIALIZE JS
+    ========================================== -->
+
+    <script
+        src="../js/materialize.min.js"
+    ></script>
+
+
+    <!-- =========================================
+         INICIALIZAR MENÚ
+    ========================================== -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const sidenavs =
+                    document.querySelectorAll(".sidenav");
+
+                M.Sidenav.init(
+                    sidenavs,
+                    {
+                        edge: "right"
+                    }
+                );
+
+            }
+        );
+
+    </script>
+
+
 </body>
+
 </html>
