@@ -21,9 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".sidenav");
 
     if (typeof M !== "undefined") {
-
         M.Sidenav.init(menus);
-
     }
 
 
@@ -45,8 +43,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // CAMBIO DE PLATILLO
     // =====================================================
 
+    // IMPORTANTE:
+    // En pedidos.html el ID es "listaplatillos"
+
     const lista =
-        document.getElementById("listaPlatillos");
+        document.getElementById("listaplatillos");
 
     if (lista) {
 
@@ -127,9 +128,7 @@ function iniciarMapa() {
         document.getElementById("map");
 
     if (!mapaElemento) {
-
         return;
-
     }
 
 
@@ -189,20 +188,20 @@ function cargarPlatillos() {
         );
 
         return;
-
     }
 
 
+    // IMPORTANTE:
+    // Este es el ID que realmente tienes en pedidos.html
+
     const select =
         document.getElementById(
-            "listaPlatillos"
+            "listaplatillos"
         );
 
 
     if (!select) {
-
         return;
-
     }
 
 
@@ -648,11 +647,8 @@ function obtenerUbicacion() {
 
         {
             enableHighAccuracy: true,
-
             timeout: 20000,
-
             maximumAge: 0
-
         }
 
     );
@@ -731,10 +727,6 @@ async function obtenerDireccion(
             datos.address || {};
 
 
-        // =====================================================
-        // CALLE
-        // =====================================================
-
         const calle =
             address.road ||
             address.pedestrian ||
@@ -743,18 +735,10 @@ async function obtenerDireccion(
             "";
 
 
-        // =====================================================
-        // NÚMERO
-        // =====================================================
-
         const numero =
             address.house_number ||
             "";
 
-
-        // =====================================================
-        // COLONIA
-        // =====================================================
 
         const colonia =
             address.suburb ||
@@ -762,10 +746,6 @@ async function obtenerDireccion(
             address.quarter ||
             "";
 
-
-        // =====================================================
-        // CIUDAD
-        // =====================================================
 
         const ciudad =
             address.city ||
@@ -775,82 +755,53 @@ async function obtenerDireccion(
             "";
 
 
-        // =====================================================
-        // ESTADO
-        // =====================================================
-
         const estado =
             address.state ||
             "";
 
-
-        // =====================================================
-        // CÓDIGO POSTAL
-        // =====================================================
 
         const codigoPostal =
             address.postcode ||
             "";
 
 
-        // =====================================================
-        // CONSTRUIR DIRECCIÓN
-        // =====================================================
-
         let direccionFinal = "";
 
 
         if (calle) {
-
-            direccionFinal +=
-                calle;
-
+            direccionFinal += calle;
         }
 
 
         if (numero) {
-
             direccionFinal +=
                 " " + numero;
-
         }
 
 
         if (colonia) {
-
             direccionFinal +=
                 ", " + colonia;
-
         }
 
 
         if (ciudad) {
-
             direccionFinal +=
                 ", " + ciudad;
-
         }
 
 
         if (estado) {
-
             direccionFinal +=
                 ", " + estado;
-
         }
 
 
         if (codigoPostal) {
-
             direccionFinal +=
                 ", C.P. " + codigoPostal;
-
         }
 
-
-        // =====================================================
-        // RESPALDO
-        // =====================================================
 
         if (!direccionFinal.trim()) {
 
@@ -860,10 +811,6 @@ async function obtenerDireccion(
 
         }
 
-
-        // =====================================================
-        // MOSTRAR DIRECCIÓN
-        // =====================================================
 
         if (direccion) {
 
@@ -880,10 +827,6 @@ async function obtenerDireccion(
         }
 
 
-        // =====================================================
-        // ACTUALIZAR ESTADO
-        // =====================================================
-
         mostrarEstado(
             "✓ Ubicación encontrada correctamente.",
             false
@@ -894,10 +837,6 @@ async function obtenerDireccion(
             true
         );
 
-
-        // =====================================================
-        // POPUP DEL MAPA
-        // =====================================================
 
         if (marcador) {
 
@@ -910,6 +849,7 @@ async function obtenerDireccion(
         }
 
     }
+
     catch (error) {
 
         console.error(
@@ -917,9 +857,6 @@ async function obtenerDireccion(
             error
         );
 
-
-        // Aunque falle la conversión,
-        // conservamos las coordenadas.
 
         if (direccion) {
 
@@ -965,9 +902,7 @@ function mostrarEstado(
 
 
     if (!elemento) {
-
         return;
-
     }
 
 
@@ -981,6 +916,7 @@ function mostrarEstado(
             "red-text";
 
     }
+
     else {
 
         elemento.className =
@@ -1006,9 +942,7 @@ function restaurarBotonUbicacion(
 
 
     if (!btn) {
-
         return;
-
     }
 
 
@@ -1025,6 +959,7 @@ function restaurarBotonUbicacion(
         `;
 
     }
+
     else {
 
         btn.innerHTML = `
@@ -1045,9 +980,13 @@ function restaurarBotonUbicacion(
 
 function guardarPedido() {
 
+    // IMPORTANTE:
+    // El ID real del select en pedidos.html
+    // es "listaplatillos"
+
     const lista =
         document.getElementById(
-            "listaPlatillos"
+            "listaplatillos"
         );
 
 
@@ -1088,22 +1027,22 @@ function guardarPedido() {
 
 
     // =====================================================
-    // VALIDACIONES
+    // VALIDAR PLATILLO
     // =====================================================
 
-    if (
-        !lista ||
-        !lista.value
-    ) {
+    if (!lista || !lista.value) {
 
         alert(
             "Selecciona un platillo."
         );
 
         return;
-
     }
 
+
+    // =====================================================
+    // VALIDAR NOMBRE
+    // =====================================================
 
     if (
         !nombre ||
@@ -1115,15 +1054,16 @@ function guardarPedido() {
         );
 
         if (nombre) {
-
             nombre.focus();
-
         }
 
         return;
-
     }
 
+
+    // =====================================================
+    // VALIDAR DIRECCIÓN
+    // =====================================================
 
     if (
         !direccion ||
@@ -1135,15 +1075,16 @@ function guardarPedido() {
         );
 
         if (direccion) {
-
             direccion.focus();
-
         }
 
         return;
-
     }
 
+
+    // =====================================================
+    // VALIDAR GPS
+    // =====================================================
 
     if (
         !latitud ||
@@ -1159,9 +1100,7 @@ function guardarPedido() {
 
 
         if (!confirmar) {
-
             return;
-
         }
 
     }
@@ -1182,7 +1121,6 @@ function guardarPedido() {
         );
 
         return;
-
     }
 
 
@@ -1193,7 +1131,7 @@ function guardarPedido() {
 
 
     // =====================================================
-    // PEDIDO
+    // CREAR PEDIDO
     // =====================================================
 
     const pedido = {
@@ -1217,17 +1155,23 @@ function guardarPedido() {
             direccion.value.trim(),
 
         latitud:
+            latitud &&
             latitud.value
-                ? parseFloat(latitud.value)
+                ? parseFloat(
+                    latitud.value
+                )
                 : null,
 
         longitud:
+            longitud &&
             longitud.value
-                ? parseFloat(longitud.value)
+                ? parseFloat(
+                    longitud.value
+                )
                 : null,
 
         fecha:
-            new Date()
+            new Date().toISOString()
 
     };
 
@@ -1249,7 +1193,6 @@ function guardarPedido() {
         );
 
         return;
-
     }
 
 
@@ -1273,18 +1216,77 @@ function guardarPedido() {
     }
 
 
+    // =====================================================
+    // GUARDAR EN FIREBASE
+    // =====================================================
+
     db.collection("pedidos")
         .add(pedido)
 
         .then(
-            function () {
+            function (docRef) {
 
-                alert(
-                    "¡Pedido guardado correctamente!"
+                console.log(
+                    "Pedido guardado:",
+                    docRef.id
                 );
 
 
-                limpiarPedido();
+                // =================================================
+                // CREAR DATOS PARA INDEX
+                // =================================================
+
+                const platilloParaIndex = {
+
+                    id:
+                        "pedido_" +
+                        docRef.id,
+
+                    nombre:
+                        platillo.nombre ||
+                        "Sin nombre",
+
+                    ingredientes:
+                        platillo.ingredientes ||
+                        "Sin ingredientes",
+
+                    precio:
+                        precio,
+
+                    foto:
+                        platillo.foto ||
+                        "",
+
+                    pedidoId:
+                        docRef.id,
+
+                    cliente:
+                        nombre.value.trim(),
+
+                    direccion:
+                        direccion.value.trim()
+
+                };
+
+
+                // =================================================
+                // GUARDAR TEMPORALMENTE
+                // =================================================
+
+                localStorage.setItem(
+                    "nuevoPlatilloIndex",
+                    JSON.stringify(
+                        platilloParaIndex
+                    )
+                );
+
+
+                // =================================================
+                // REDIRIGIR AL INDEX
+                // =================================================
+
+                window.location.href =
+                    "../index.html";
 
             }
         )
@@ -1335,7 +1337,7 @@ function limpiarPedido() {
 
     const lista =
         document.getElementById(
-            "listaPlatillos"
+            "listaplatillos"
         );
 
 
@@ -1375,57 +1377,38 @@ function limpiarPedido() {
         );
 
 
-    // =====================================================
-    // LIMPIAR CAMPOS
-    // =====================================================
-
     if (lista) {
-
         lista.value = "";
-
     }
 
 
     if (nombre) {
-
         nombre.value = "";
-
     }
 
 
     if (direccion) {
-
         direccion.value = "";
-
     }
 
 
     if (ingredientes) {
-
         ingredientes.value = "";
-
     }
 
 
     if (costo) {
-
-        costo.value =
-            "$0.00 MXN";
-
+        costo.value = "$0.00 MXN";
     }
 
 
     if (latitud) {
-
         latitud.value = "";
-
     }
 
 
     if (longitud) {
-
         longitud.value = "";
-
     }
 
 
@@ -1540,7 +1523,7 @@ function limpiarPedido() {
 
 
 // =========================================================
-// ACTUALIZAR MAPA CUANDO CAMBIA EL TAMAÑO
+// ACTUALIZAR MAPA AL CAMBIAR TAMAÑO
 // =========================================================
 
 window.addEventListener(
