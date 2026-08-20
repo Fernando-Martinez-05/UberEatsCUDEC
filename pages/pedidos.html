@@ -61,7 +61,7 @@
 
 
     <!-- =========================================
-         LEAFLET CSS
+         LEAFLET
     ========================================== -->
 
     <link
@@ -71,11 +71,6 @@
         crossorigin=""
     >
 
-
-    <!-- =========================================
-         LEAFLET JS
-    ========================================== -->
-
     <script
         src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         crossorigin=""
@@ -83,82 +78,437 @@
 
 
     <!-- =========================================
-         ESTILOS DE LA PÁGINA
+         ESTILOS DE PEDIDOS
     ========================================== -->
 
     <style>
 
-        #map {
-            height: 400px;
-            width: 100%;
-            margin-top: 25px;
-            border-radius: 12px;
-            overflow: hidden;
+        /* =====================================
+           CONTENEDOR PRINCIPAL
+        ====================================== */
+
+        .pedidos-page {
+
+            max-width: 900px;
+
+            margin: 0 auto;
+
+            padding: 25px 20px 50px;
+
         }
 
 
-        .pedido-container {
-            padding-top: 20px;
-            padding-bottom: 40px;
-        }
+        /* =====================================
+           ENCABEZADO
+        ====================================== */
 
+        .pedidos-header {
 
-        .pedido-title {
-            margin-bottom: 30px;
-        }
+            text-align: center;
 
-
-        .pedido-section {
             margin-bottom: 25px;
+
         }
 
+
+        .pedidos-header .material-icons {
+
+            font-size: 42px;
+
+            vertical-align: middle;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .pedidos-header h4 {
+
+            margin: 5px 0 8px;
+
+            font-weight: 500;
+
+        }
+
+
+        .pedidos-header p {
+
+            margin: 0;
+
+            font-size: 15px;
+
+        }
+
+
+        /* =====================================
+           TARJETA GENERAL
+        ====================================== */
+
+        .pedido-card {
+
+            background: #ffffff;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+
+        }
+
+
+        /* =====================================
+           TÍTULOS DE SECCIÓN
+        ====================================== */
+
+        .section-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+
+            padding-bottom: 12px;
+
+            border-bottom: 1px solid #eeeeee;
+
+        }
+
+
+        .section-title .material-icons {
+
+            font-size: 25px;
+
+        }
+
+
+        .section-title h6 {
+
+            margin: 0;
+
+            font-size: 18px;
+
+            font-weight: 500;
+
+        }
+
+
+        /* =====================================
+           SELECT
+        ====================================== */
+
+        .platillo-container {
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .platillo-container label {
+
+            display: block;
+
+            font-size: 15px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        #listaPlatillos {
+
+            width: 100%;
+
+            height: 48px;
+
+            border: 1px solid #dddddd;
+
+            border-radius: 10px;
+
+            background: #ffffff;
+
+            padding: 0 12px;
+
+            font-size: 15px;
+
+        }
+
+
+        #listaPlatillos:focus {
+
+            outline: none;
+
+            border-color: #4dc7e4;
+
+        }
+
+
+        /* =====================================
+           INPUTS
+        ====================================== */
+
+        .input-field {
+
+            margin-top: 25px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .input-field input {
+
+            border-radius: 8px;
+
+            padding-left: 10px;
+
+            padding-right: 10px;
+
+            box-sizing: border-box;
+
+        }
+
+
+        .input-field textarea {
+
+            min-height: 110px;
+
+            border: 1px solid #dddddd;
+
+            border-radius: 10px;
+
+            padding: 12px;
+
+            box-sizing: border-box;
+
+            resize: vertical;
+
+        }
+
+
+        .input-field textarea:focus {
+
+            border-bottom: 1px solid #4dc7e4;
+
+            box-shadow: 0 1px 0 0 #4dc7e4;
+
+        }
+
+
+        /* =====================================
+           BOTONES
+        ====================================== */
 
         .pedido-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+
             margin-top: 25px;
+
         }
 
 
         .pedido-buttons button {
+
+            width: 100%;
+
+            height: 48px;
+
+            border-radius: 10px;
+
             margin: 0;
+
+        }
+
+
+        /* =====================================
+           MAPA
+        ====================================== */
+
+        .map-container {
+
+            margin-top: 10px;
+
+        }
+
+
+        #map {
+
+            width: 100%;
+
+            height: 400px;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+
+            border: 1px solid #eeeeee;
+
+        }
+
+
+        /* =====================================
+           QR
+        ====================================== */
+
+        .qr-container {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+        }
+
+
+        .qr-container h6 {
+
+            margin-bottom: 20px;
+
+            font-weight: 500;
+
         }
 
 
         #qr {
-            margin-top: 30px;
+
             display: flex;
+
             justify-content: center;
+
             align-items: center;
+
+            min-height: 20px;
+
         }
 
 
-        .direccion-container {
-            margin-top: 10px;
+        /* =====================================
+           INFORMACIÓN
+        ====================================== */
+
+        .info-box {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 12px;
+
+            background: #f5fbfd;
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+            margin-top: 20px;
+
         }
 
 
-        @media only screen and (max-width: 600px) {
+        .info-box .material-icons {
 
-            .pedido-container {
-                padding-left: 20px;
-                padding-right: 20px;
+            font-size: 22px;
+
+        }
+
+
+        .info-box p {
+
+            margin: 0;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+        }
+
+
+        /* =====================================
+           RESPONSIVE
+        ====================================== */
+
+        @media only screen and (max-width: 700px) {
+
+            .pedidos-page {
+
+                padding: 20px 15px 40px;
+
+            }
+
+
+            .pedido-card {
+
+                padding: 20px 16px;
+
+                border-radius: 15px;
+
+            }
+
+
+            .pedidos-header h4 {
+
+                font-size: 25px;
+
             }
 
 
             .pedido-buttons {
-                flex-direction: column;
+
+                grid-template-columns: 1fr;
+
             }
 
 
             .pedido-buttons button {
-                width: 100%;
+
+                height: 46px;
+
             }
 
 
             #map {
+
                 height: 300px;
+
+                border-radius: 12px;
+
+            }
+
+        }
+
+
+        @media only screen and (max-width: 400px) {
+
+            .pedidos-page {
+
+                padding-left: 10px;
+
+                padding-right: 10px;
+
+            }
+
+
+            .pedido-card {
+
+                padding: 18px 14px;
+
+            }
+
+
+            .pedidos-header .material-icons {
+
+                font-size: 36px;
+
             }
 
         }
@@ -397,174 +747,252 @@
 
 
     <!-- =========================================
-         CONTENIDO PRINCIPAL
+         CONTENIDO
     ========================================== -->
 
-    <main class="container grey-text pedido-container">
+    <main class="pedidos-page">
 
 
         <!-- =====================================
-             TÍTULO
+             ENCABEZADO
         ====================================== -->
 
-        <h5 class="center pedido-title">
+        <div class="pedidos-header">
 
-            Realizar pedido
+            <i class="material-icons">
+                restaurant
+            </i>
 
-        </h5>
+            <h4>
+                Realizar pedido
+            </h4>
+
+            <p class="grey-text text-darken-1">
+                Selecciona tu platillo y proporciona tus datos
+            </p>
+
+        </div>
 
 
         <!-- =====================================
-             SELECCIÓN DE PLATILLO
+             DATOS DEL PEDIDO
         ====================================== -->
 
-        <div class="pedido-section">
-
-            <label for="listaPlatillos">
-                Platillo:
-            </label>
+        <section class="pedido-card">
 
 
-            <select
-                id="listaPlatillos"
-                name="platillo"
-                class="browser-default"
-            >
+            <div class="section-title">
 
-                <option
-                    value=""
-                    selected
+                <i class="material-icons">
+                    shopping_cart
+                </i>
+
+                <h6>
+                    Información del pedido
+                </h6>
+
+            </div>
+
+
+            <!-- PLATILLO -->
+
+            <div class="platillo-container">
+
+                <label for="listaPlatillos">
+
+                    Platillo
+
+                </label>
+
+
+                <select
+                    id="listaPlatillos"
+                    name="platillo"
+                    class="browser-default"
                 >
-                    -- Selecciona un platillo --
-                </option>
 
-            </select>
+                    <option
+                        value=""
+                        selected
+                    >
+                        -- Selecciona un platillo --
+                    </option>
 
-        </div>
+                </select>
 
-
-        <!-- =====================================
-             NOMBRE
-        ====================================== -->
-
-        <div class="input-field">
-
-            <input
-                type="text"
-                id="txtNombre"
-                name="nombre"
-                placeholder="Ingresa tu nombre"
-            >
+            </div>
 
 
-            <label for="txtNombre">
-                Nombre
-            </label>
+            <!-- NOMBRE -->
 
-        </div>
+            <div class="input-field">
 
+                <input
+                    type="text"
+                    id="txtNombre"
+                    name="nombre"
+                    placeholder="Ejemplo: Luis Martínez"
+                >
 
-        <!-- =====================================
-             DIRECCIÓN
-        ====================================== -->
+                <label for="txtNombre">
+                    Nombre
+                </label>
 
-        <div class="input-field direccion-container">
-
-            <textarea
-                id="txtDireccion"
-                name="direccion"
-                class="materialize-textarea"
-                placeholder="Ingresa tu dirección completa"
-            ></textarea>
+            </div>
 
 
-            <label for="txtDireccion">
-                Dirección
-            </label>
+            <!-- DIRECCIÓN -->
 
-        </div>
+            <div class="input-field">
+
+                <textarea
+                    id="txtDireccion"
+                    name="direccion"
+                    class="materialize-textarea"
+                    placeholder="Ingresa tu dirección completa"
+                ></textarea>
+
+                <label for="txtDireccion">
+                    Dirección
+                </label>
+
+            </div>
 
 
-        <!-- =====================================
-             BOTONES
-        ====================================== -->
+            <!-- INFORMACIÓN -->
 
-        <div class="pedido-buttons">
+            <div class="info-box">
 
-
-            <!-- CANCELAR -->
-
-            <button
-                id="btnCancelar"
-                type="button"
-                class="btn red waves-effect waves-light"
-            >
-
-                <i class="material-icons left">
-                    close
+                <i class="material-icons">
+                    info
                 </i>
 
-                Cancelar
+                <p>
+                    Puedes utilizar tu ubicación actual para
+                    obtener automáticamente tu posición en el mapa
+                    y facilitar la entrega del pedido.
+                </p>
 
-            </button>
-
-
-            <!-- GUARDAR -->
-
-            <button
-                id="btnGuardar"
-                type="button"
-                class="btn green waves-effect waves-light"
-            >
-
-                <i class="material-icons left">
-                    save
-                </i>
-
-                Guardar
-
-            </button>
+            </div>
 
 
-            <!-- UBICACIÓN -->
+            <!-- BOTONES -->
 
-            <button
-                id="btnUbicacion"
-                type="button"
-                class="btn blue waves-effect waves-light"
-            >
-
-                <i class="material-icons left">
-                    location_on
-                </i>
-
-                Obtener dirección
-
-            </button>
+            <div class="pedido-buttons">
 
 
-        </div>
+                <button
+                    id="btnCancelar"
+                    type="button"
+                    class="btn red waves-effect waves-light"
+                >
+
+                    <i class="material-icons left">
+                        close
+                    </i>
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    id="btnGuardar"
+                    type="button"
+                    class="btn green waves-effect waves-light"
+                >
+
+                    <i class="material-icons left">
+                        save
+                    </i>
+
+                    Guardar
+
+                </button>
+
+
+                <button
+                    id="btnUbicacion"
+                    type="button"
+                    class="btn blue waves-effect waves-light"
+                >
+
+                    <i class="material-icons left">
+                        location_on
+                    </i>
+
+                    Obtener ubicación
+
+                </button>
+
+
+            </div>
+
+
+        </section>
 
 
         <!-- =====================================
-             MAPA
+             UBICACIÓN
         ====================================== -->
 
-        <div id="map"></div>
+        <section class="pedido-card">
+
+
+            <div class="section-title">
+
+                <i class="material-icons">
+                    map
+                </i>
+
+                <h6>
+                    Ubicación de entrega
+                </h6>
+
+            </div>
+
+
+            <div class="map-container">
+
+                <div id="map"></div>
+
+            </div>
+
+
+        </section>
 
 
         <!-- =====================================
-             QR
+             CÓDIGO QR
         ====================================== -->
 
-        <div id="qr"></div>
+        <section class="pedido-card qr-container">
+
+
+            <div class="section-title">
+
+                <i class="material-icons">
+                    qr_code
+                </i>
+
+                <h6>
+                    Código QR del pedido
+                </h6>
+
+            </div>
+
+
+            <div id="qr"></div>
+
+
+        </section>
 
 
     </main>
 
 
     <!-- =========================================
-         FIREBASE APP
+         FIREBASE
     ========================================== -->
 
     <script
@@ -572,17 +1000,13 @@
     ></script>
 
 
-    <!-- =========================================
-         FIREBASE FIRESTORE
-    ========================================== -->
-
     <script
         src="https://www.gstatic.com/firebasejs/6.0.1/firebase-firestore.js"
     ></script>
 
 
     <!-- =========================================
-         CONFIGURACIÓN FIREBASE
+         FIREBASE CONFIG
     ========================================== -->
 
     <script src="../js/firebase.js"></script>
@@ -605,7 +1029,7 @@
 
 
     <!-- =========================================
-         PEDIDOS
+         PEDIDOS JS
     ========================================== -->
 
     <script src="../js/pedidos.js"></script>
