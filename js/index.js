@@ -1,5 +1,6 @@
 // =========================================================
 // DITS - INDEX.JS
+// FIREBASE FIRESTORE
 // =========================================================
 
 
@@ -39,7 +40,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const menus = document.querySelectorAll(".sidenav");
 
-    if (typeof M !== "undefined" && menus.length > 0) {
+    if (
+        typeof M !== "undefined" &&
+        menus.length > 0
+    ) {
 
         M.Sidenav.init(menus);
 
@@ -72,7 +76,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // =====================================================
 
     const lista =
-        document.getElementById("listaplatillos");
+        document.getElementById(
+            "listaplatillos"
+        );
 
     if (lista) {
 
@@ -95,7 +101,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // =====================================================
 
     const btnUbicacion =
-        document.getElementById("btnUbicacion");
+        document.getElementById(
+            "btnUbicacion"
+        );
 
     if (btnUbicacion) {
 
@@ -108,11 +116,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =====================================================
-    // CANCELAR
+    // CANCELAR PEDIDO
     // =====================================================
 
     const btnCancelar =
-        document.getElementById("btnCancelar");
+        document.getElementById(
+            "btnCancelar"
+        );
 
     if (btnCancelar) {
 
@@ -129,7 +139,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // =====================================================
 
     const btnGuardar =
-        document.getElementById("btnGuardar");
+        document.getElementById(
+            "btnGuardar"
+        );
 
     if (btnGuardar) {
 
@@ -142,11 +154,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =====================================================
-    // ELIMINAR PEDIDOS
+    // ELIMINAR ELEMENTOS
     // =====================================================
 
     const contenedor =
-        document.querySelector(".recipes");
+        document.querySelector(
+            ".recipes"
+        );
 
     if (contenedor) {
 
@@ -154,23 +168,58 @@ document.addEventListener("DOMContentLoaded", function () {
             "click",
             function (e) {
 
-                const boton =
+                // =============================================
+                // ELIMINAR PEDIDO
+                // =============================================
+
+                const botonPedido =
                     e.target.closest(
                         ".btn-eliminar-pedido"
                     );
 
-                if (!boton) {
+                if (botonPedido) {
+
+                    const id =
+                        botonPedido.getAttribute(
+                            "data-id"
+                        );
+
+                    if (id) {
+
+                        eliminarPedido(id);
+
+                    }
+
                     return;
+
                 }
 
-                const id =
-                    boton.getAttribute("data-id");
 
-                if (!id) {
+                // =============================================
+                // ELIMINAR PLATILLO
+                // =============================================
+
+                const botonPlatillo =
+                    e.target.closest(
+                        ".btn-eliminar-platillo"
+                    );
+
+                if (botonPlatillo) {
+
+                    const id =
+                        botonPlatillo.getAttribute(
+                            "data-id"
+                        );
+
+                    if (id) {
+
+                        eliminarPlatillo(id);
+
+                    }
+
                     return;
-                }
 
-                eliminarPedido(id);
+                }
 
             }
         );
@@ -194,10 +243,14 @@ document.addEventListener("DOMContentLoaded", function () {
 function iniciarMapa() {
 
     const mapaElemento =
-        document.getElementById("map");
+        document.getElementById(
+            "map"
+        );
 
     if (!mapaElemento) {
+
         return;
+
     }
 
 
@@ -218,16 +271,20 @@ function iniciarMapa() {
     ];
 
 
-    map = L.map("map").setView(
-        posicionInicial,
-        12
-    );
+    map =
+        L.map(
+            "map"
+        ).setView(
+            posicionInicial,
+            12
+        );
 
 
     L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         {
             maxZoom: 19,
+
             attribution:
                 "&copy; OpenStreetMap contributors"
         }
@@ -270,28 +327,56 @@ function cargarPlatillos() {
         );
 
 
-    if (!select) {
-        return;
-    }
+    const contenedor =
+        document.querySelector(
+            ".recipes"
+        );
 
+
+    // =====================================================
+    // FIRESTORE
+    // =====================================================
 
     db.collection("platillos")
         .onSnapshot(
 
             function (coleccion) {
 
-                select.innerHTML = `
-                    <option
-                        value=""
-                        selected
-                    >
-                        -- Selecciona un platillo --
-                    </option>
-                `;
+                // =============================================
+                // ACTUALIZAR SELECT
+                // =============================================
 
+                if (select) {
+
+                    select.innerHTML = `
+                        <option
+                            value=""
+                            selected
+                        >
+                            -- Selecciona un platillo --
+                        </option>
+                    `;
+
+                }
+
+
+                // =============================================
+                // LIMPIAR OBJETO
+                // =============================================
 
                 platillos = {};
 
+
+                // =============================================
+                // IDS ACTUALES
+                // =============================================
+
+                const idsActuales = [];
+
+
+                // =============================================
+                // RECORRER PLATILLOS
+                // =============================================
 
                 coleccion.forEach(
                     function (documento) {
@@ -303,34 +388,123 @@ function cargarPlatillos() {
                             documento.id;
 
 
+                        idsActuales.push(id);
+
+
+                        // =====================================
+                        // GUARDAR EN MEMORIA
+                        // =====================================
+
                         platillos[id] =
                             datos;
 
 
-                        const option =
-                            document.createElement(
-                                "option"
+                        // =====================================
+                        // AGREGAR AL SELECT
+                        // =====================================
+
+                        if (select) {
+
+                            const option =
+                                document.createElement(
+                                    "option"
+                                );
+
+
+                            option.value =
+                                id;
+
+
+                            option.textContent =
+                                datos.nombre ||
+                                "Platillo";
+
+
+                            select.appendChild(
+                                option
                             );
 
-
-                        option.value =
-                            id;
+                        }
 
 
-                        option.textContent =
-                            datos.nombre ||
-                            "Platillo";
+                        // =====================================
+                        // MOSTRAR EN RECIPES
+                        // =====================================
+
+                        if (contenedor) {
+
+                            const tarjetaExistente =
+                                document.getElementById(
+                                    "platillo_" + id
+                                );
 
 
-                        select.appendChild(
-                            option
-                        );
+                            if (!tarjetaExistente) {
+
+                                mostrarPlatilloEnIndex(
+                                    datos,
+                                    id
+                                );
+
+                            }
+                            else {
+
+                                actualizarPlatilloEnIndex(
+                                    datos,
+                                    id
+                                );
+
+                            }
+
+                        }
 
                     }
                 );
 
 
+                // =============================================
+                // ELIMINAR TARJETAS DE PLATILLOS QUE YA
+                // NO EXISTEN EN FIRESTORE
+                // =============================================
+
+                if (contenedor) {
+
+                    const tarjetasPlatillos =
+                        contenedor.querySelectorAll(
+                            ".recipe[data-tipo='platillo']"
+                        );
+
+
+                    tarjetasPlatillos.forEach(
+                        function (tarjeta) {
+
+                            const id =
+                                tarjeta.getAttribute(
+                                    "data-id"
+                                );
+
+
+                            if (
+                                id &&
+                                !idsActuales.includes(id)
+                            ) {
+
+                                tarjeta.remove();
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+                // =============================================
+                // MATERIALIZE
+                // =============================================
+
                 if (
+                    select &&
                     typeof M !== "undefined"
                 ) {
 
@@ -357,6 +531,413 @@ function cargarPlatillos() {
 
 
 // =========================================================
+// MOSTRAR PLATILLO EN INDEX
+// =========================================================
+
+function mostrarPlatilloEnIndex(
+    platillo,
+    id
+) {
+
+    const contenedor =
+        document.querySelector(
+            ".recipes"
+        );
+
+
+    if (!contenedor) {
+
+        return;
+
+    }
+
+
+    const tarjeta =
+        document.createElement(
+            "div"
+        );
+
+
+    tarjeta.className =
+        "card-panel recipe white row";
+
+
+    tarjeta.id =
+        "platillo_" + id;
+
+
+    tarjeta.setAttribute(
+        "data-id",
+        id
+    );
+
+
+    tarjeta.setAttribute(
+        "data-tipo",
+        "platillo"
+    );
+
+
+    tarjeta.innerHTML =
+        crearHTMLPlatillo(
+            platillo,
+            id
+        );
+
+
+    contenedor.appendChild(
+        tarjeta
+    );
+
+}
+
+
+// =========================================================
+// ACTUALIZAR PLATILLO EN INDEX
+// =========================================================
+
+function actualizarPlatilloEnIndex(
+    platillo,
+    id
+) {
+
+    const tarjeta =
+        document.getElementById(
+            "platillo_" + id
+        );
+
+
+    if (!tarjeta) {
+
+        return;
+
+    }
+
+
+    tarjeta.innerHTML =
+        crearHTMLPlatillo(
+            platillo,
+            id
+        );
+
+}
+
+
+// =========================================================
+// CREAR HTML DEL PLATILLO
+// =========================================================
+
+function crearHTMLPlatillo(
+    platillo,
+    id
+) {
+
+    let imagenHTML = "";
+
+
+    // =====================================================
+    // FOTO
+    // =====================================================
+
+    if (
+        platillo.foto &&
+        typeof platillo.foto === "string" &&
+        platillo.foto.trim() !== ""
+    ) {
+
+        imagenHTML = `
+            <img
+                src="${platillo.foto}"
+                alt="${platillo.nombre || "Platillo"}"
+                style="
+                    width:110px;
+                    height:110px;
+                    object-fit:cover;
+                    border-radius:10px;
+                    margin-right:15px;
+                    flex-shrink:0;
+                "
+            >
+        `;
+
+    }
+
+    else {
+
+        imagenHTML = `
+            <div
+                style="
+                    width:110px;
+                    height:110px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    background:#eeeeee;
+                    border-radius:10px;
+                    margin-right:15px;
+                    flex-shrink:0;
+                "
+            >
+
+                <i
+                    class="material-icons grey-text"
+                    style="font-size:50px;"
+                >
+                    restaurant
+                </i>
+
+            </div>
+        `;
+
+    }
+
+
+    // =====================================================
+    // PRECIO
+    // =====================================================
+
+    const precio =
+        parseFloat(
+            platillo.precio || 0
+        );
+
+
+    // =====================================================
+    // HTML
+    // =====================================================
+
+    return `
+
+        <div
+            style="
+                display:flex;
+                align-items:flex-start;
+                width:100%;
+            "
+        >
+
+            ${imagenHTML}
+
+
+            <div
+                class="recipe-details"
+                style="
+                    flex:1;
+                "
+            >
+
+                <div
+                    class="recipe-title"
+                    style="
+                        font-size:20px;
+                        font-weight:bold;
+                        margin-bottom:8px;
+                    "
+                >
+
+                    ${platillo.nombre || "Sin nombre"}
+
+                </div>
+
+
+                <div
+                    class="recipe-ingredients"
+                    style="
+                        margin-bottom:8px;
+                    "
+                >
+
+                    <strong>
+                        Ingredientes:
+                    </strong>
+
+                    ${platillo.ingredientes || "Sin ingredientes"}
+
+                </div>
+
+
+                <div
+                    class="recipe-price"
+                    style="
+                        font-weight:bold;
+                        margin-bottom:12px;
+                    "
+                >
+
+                    $${precio.toFixed(2)} MXN
+
+                </div>
+
+
+                <div
+                    class="recipe-delete"
+                >
+
+                    <button
+                        type="button"
+                        class="
+                            btn
+                            red
+                            waves-effect
+                            waves-light
+                            btn-eliminar-platillo
+                        "
+                        data-id="${id}"
+                    >
+
+                        <i class="material-icons left">
+                            delete
+                        </i>
+
+                        Eliminar
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+// =========================================================
+// ELIMINAR PLATILLO
+// =========================================================
+
+function eliminarPlatillo(
+    id
+) {
+
+    if (!id) {
+
+        return;
+
+    }
+
+
+    const confirmar =
+        confirm(
+            "¿Seguro que deseas eliminar este platillo?"
+        );
+
+
+    if (!confirmar) {
+
+        return;
+
+    }
+
+
+    if (typeof db === "undefined") {
+
+        alert(
+            "Firebase no está disponible."
+        );
+
+        return;
+
+    }
+
+
+    const tarjeta =
+        document.getElementById(
+            "platillo_" + id
+        );
+
+
+    if (tarjeta) {
+
+        tarjeta.style.transition =
+            "opacity 0.2s ease, transform 0.2s ease";
+
+
+        tarjeta.style.opacity =
+            "0";
+
+
+        tarjeta.style.transform =
+            "scale(0.95)";
+
+    }
+
+
+    db.collection("platillos")
+        .doc(id)
+        .delete()
+
+        .then(
+            function () {
+
+                console.log(
+                    "Platillo eliminado:",
+                    id
+                );
+
+
+                if (
+                    typeof M !== "undefined"
+                ) {
+
+                    M.toast({
+                        html:
+                            "Platillo eliminado correctamente."
+                    });
+
+                }
+
+            }
+        )
+
+        .catch(
+            function (error) {
+
+                console.error(
+                    "Error al eliminar platillo:",
+                    error
+                );
+
+
+                if (tarjeta) {
+
+                    tarjeta.style.opacity =
+                        "1";
+
+
+                    tarjeta.style.transform =
+                        "scale(1)";
+
+                }
+
+
+                if (
+                    typeof M !== "undefined"
+                ) {
+
+                    M.toast({
+                        html:
+                            "Error al eliminar el platillo."
+                    });
+
+                }
+                else {
+
+                    alert(
+                        "Error al eliminar el platillo."
+                    );
+
+                }
+
+            }
+        );
+
+}
+
+
+// =========================================================
 // CARGAR PEDIDOS EN INDEX
 // =========================================================
 
@@ -374,11 +955,15 @@ function cargarPedidosEnIndex() {
 
 
     const contenedor =
-        document.querySelector(".recipes");
+        document.querySelector(
+            ".recipes"
+        );
 
 
     if (!contenedor) {
+
         return;
+
     }
 
 
@@ -454,9 +1039,13 @@ function cargarPedidosEnIndex() {
                 );
 
 
+                // =============================================
+                // SOLO BORRAR TARJETAS QUE SON PEDIDOS
+                // =============================================
+
                 const tarjetas =
                     contenedor.querySelectorAll(
-                        ".recipe"
+                        ".recipe[data-tipo='pedido']"
                     );
 
 
@@ -508,16 +1097,22 @@ function mostrarPedidoEnIndex(
 ) {
 
     const contenedor =
-        document.querySelector(".recipes");
+        document.querySelector(
+            ".recipes"
+        );
 
 
     if (!contenedor) {
+
         return;
+
     }
 
 
     const tarjeta =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     tarjeta.className =
@@ -534,10 +1129,17 @@ function mostrarPedidoEnIndex(
     );
 
 
+    tarjeta.setAttribute(
+        "data-tipo",
+        "pedido"
+    );
+
+
     tarjeta.innerHTML =
         crearHTMLPedido(
             platillo,
-            pedido
+            pedido,
+            id
         );
 
 
@@ -565,14 +1167,17 @@ function actualizarPedidoEnIndex(
 
 
     if (!tarjeta) {
+
         return;
+
     }
 
 
     tarjeta.innerHTML =
         crearHTMLPedido(
             platillo,
-            pedido
+            pedido,
+            id
         );
 
 }
@@ -584,7 +1189,8 @@ function actualizarPedidoEnIndex(
 
 function crearHTMLPedido(
     platillo,
-    pedido
+    pedido,
+    id
 ) {
 
     let imagenHTML = "";
@@ -689,7 +1295,9 @@ function crearHTMLPedido(
                         margin-bottom:8px;
                     "
                 >
+
                     ${platillo.nombre}
+
                 </div>
 
 
@@ -699,8 +1307,13 @@ function crearHTMLPedido(
                         margin-bottom:6px;
                     "
                 >
-                    Ingredientes:
+
+                    <strong>
+                        Ingredientes:
+                    </strong>
+
                     ${platillo.ingredientes}
+
                 </div>
 
 
@@ -711,7 +1324,9 @@ function crearHTMLPedido(
                         margin-bottom:8px;
                     "
                 >
+
                     $${precio.toFixed(2)} MXN
+
                 </div>
 
 
@@ -775,7 +1390,7 @@ function crearHTMLPedido(
                             waves-light
                             btn-eliminar-pedido
                         "
-                        data-id="${pedido.id || ""}"
+                        data-id="${id}"
                     >
 
                         <i class="material-icons left">
@@ -801,10 +1416,14 @@ function crearHTMLPedido(
 // ELIMINAR PEDIDO
 // =========================================================
 
-function eliminarPedido(id) {
+function eliminarPedido(
+    id
+) {
 
     if (!id) {
+
         return;
+
     }
 
 
@@ -815,7 +1434,9 @@ function eliminarPedido(id) {
 
 
     if (!confirmar) {
+
         return;
+
     }
 
 
@@ -841,8 +1462,10 @@ function eliminarPedido(id) {
         tarjeta.style.transition =
             "opacity 0.2s ease, transform 0.2s ease";
 
+
         tarjeta.style.opacity =
             "0";
+
 
         tarjeta.style.transform =
             "scale(0.95)";
@@ -852,7 +1475,9 @@ function eliminarPedido(id) {
             function () {
 
                 if (tarjeta) {
+
                     tarjeta.remove();
+
                 }
 
             },
@@ -912,7 +1537,9 @@ function eliminarPedido(id) {
 // MOSTRAR INFORMACIÓN DEL PLATILLO
 // =========================================================
 
-function mostrarInformacionPlatillo(id) {
+function mostrarInformacionPlatillo(
+    id
+) {
 
     const ingredientesVista =
         document.getElementById(
@@ -938,7 +1565,10 @@ function mostrarInformacionPlatillo(id) {
         );
 
 
-    if (!id || !platillos[id]) {
+    if (
+        !id ||
+        !platillos[id]
+    ) {
 
         if (ingredientesVista) {
 
@@ -1024,7 +1654,9 @@ function mostrarInformacionPlatillo(id) {
     }
 
 
-    if (typeof M !== "undefined") {
+    if (
+        typeof M !== "undefined"
+    ) {
 
         M.updateTextFields();
 
@@ -1060,6 +1692,7 @@ function obtenerUbicacion() {
     if (btn) {
 
         btn.disabled = true;
+
 
         btn.innerHTML = `
             <i class="material-icons left">
@@ -1267,7 +1900,9 @@ async function obtenerDireccion(
     }
 
 
-    if (typeof M !== "undefined") {
+    if (
+        typeof M !== "undefined"
+    ) {
 
         M.updateTextFields();
 
@@ -1347,7 +1982,8 @@ async function obtenerDireccion(
             "";
 
 
-        let direccionFinal = "";
+        let direccionFinal =
+            "";
 
 
         if (calle) {
@@ -1415,7 +2051,9 @@ async function obtenerDireccion(
         }
 
 
-        if (typeof M !== "undefined") {
+        if (
+            typeof M !== "undefined"
+        ) {
 
             M.updateTextFields();
 
@@ -1428,7 +2066,9 @@ async function obtenerDireccion(
         );
 
 
-        restaurarBotonUbicacion(true);
+        restaurarBotonUbicacion(
+            true
+        );
 
 
         if (marcador) {
@@ -1460,7 +2100,9 @@ async function obtenerDireccion(
         }
 
 
-        if (typeof M !== "undefined") {
+        if (
+            typeof M !== "undefined"
+        ) {
 
             M.updateTextFields();
 
@@ -1496,7 +2138,9 @@ function mostrarEstado(
 
 
     if (!elemento) {
+
         return;
+
     }
 
 
@@ -1527,11 +2171,14 @@ function restaurarBotonUbicacion(
 
 
     if (!btn) {
+
         return;
+
     }
 
 
-    btn.disabled = false;
+    btn.disabled =
+        false;
 
 
     if (correcto) {
@@ -1607,7 +2254,10 @@ function guardarPedido() {
         );
 
 
-    if (!lista || !lista.value) {
+    if (
+        !lista ||
+        !lista.value
+    ) {
 
         alert(
             "Selecciona un platillo."
@@ -1663,7 +2313,9 @@ function guardarPedido() {
 
 
     const platillo =
-        platillos[lista.value];
+        platillos[
+            lista.value
+        ];
 
 
     if (!platillo) {
@@ -1709,13 +2361,17 @@ function guardarPedido() {
         latitud:
             latitud &&
             latitud.value
-                ? parseFloat(latitud.value)
+                ? parseFloat(
+                    latitud.value
+                )
                 : null,
 
         longitud:
             longitud &&
             longitud.value
-                ? parseFloat(longitud.value)
+                ? parseFloat(
+                    longitud.value
+                )
                 : null,
 
         fecha:
@@ -1724,7 +2380,9 @@ function guardarPedido() {
     };
 
 
-    if (typeof db === "undefined") {
+    if (
+        typeof db === "undefined"
+    ) {
 
         alert(
             "Firebase no está disponible."
@@ -1743,7 +2401,9 @@ function guardarPedido() {
 
     if (btn) {
 
-        btn.disabled = true;
+        btn.disabled =
+            true;
+
 
         btn.innerHTML = `
             <i class="material-icons left">
@@ -1767,11 +2427,16 @@ function guardarPedido() {
                 );
 
 
-                return db.collection("pedidos")
-                    .doc(docRef.id)
-                    .update({
-                        id: docRef.id
-                    });
+                return db.collection(
+                    "pedidos"
+                )
+                .doc(
+                    docRef.id
+                )
+                .update({
+                    id:
+                        docRef.id
+                });
 
             }
         )
@@ -1806,7 +2471,9 @@ function guardarPedido() {
 
                 if (btn) {
 
-                    btn.disabled = false;
+                    btn.disabled =
+                        false;
+
 
                     btn.innerHTML = `
                         <i class="material-icons left">
@@ -1955,7 +2622,9 @@ function limpiarPedido() {
     }
 
 
-    if (typeof M !== "undefined") {
+    if (
+        typeof M !== "undefined"
+    ) {
 
         M.updateTextFields();
 
@@ -2069,7 +2738,9 @@ function iniciarControlesCamara() {
 
 
                 if (!archivo) {
+
                     return;
+
                 }
 
 
@@ -2111,17 +2782,9 @@ function iniciarControlesCamara() {
                                     );
 
 
-                                // =================================
-                                // GUARDAR FOTO GLOBAL
-                                // =================================
-
                                 fotoActual =
                                     resultado;
 
-
-                                // =================================
-                                // GUARDAR FOTO EN INPUT
-                                // =================================
 
                                 if (fotoInput) {
 
@@ -2131,24 +2794,8 @@ function iniciarControlesCamara() {
                                 }
 
 
-                                // =================================
-                                // MOSTRAR FOTO
-                                // =================================
-
                                 mostrarFoto(
                                     resultado
-                                );
-
-
-                                console.log(
-                                    "Imagen seleccionada."
-                                );
-
-
-                                console.log(
-                                    "Tamaño:",
-                                    fotoActual.length,
-                                    "caracteres"
                                 );
 
 
@@ -2241,7 +2888,7 @@ function iniciarControlesCamara() {
 
 
     // =====================================================
-    // LIMPIAR
+    // LIMPIAR FOTO
     // =====================================================
 
     btnLimpiar.addEventListener(
@@ -2409,7 +3056,6 @@ async function abrirCamara() {
 
         }
 
-
         else if (
             error.name ===
             "NotFoundError"
@@ -2420,7 +3066,6 @@ async function abrirCamara() {
 
         }
 
-
         else if (
             error.name ===
             "NotReadableError"
@@ -2430,7 +3075,6 @@ async function abrirCamara() {
                 "La cámara está siendo utilizada por otra aplicación.";
 
         }
-
 
         else if (
             error.name ===
@@ -2558,10 +3202,6 @@ function capturarFoto() {
     }
 
 
-    // =====================================================
-    // TAMAÑO MÁXIMO
-    // =====================================================
-
     const maxWidth =
         1000;
 
@@ -2574,11 +3214,16 @@ function capturarFoto() {
         alto;
 
 
-    if (nuevoAncho > maxWidth) {
+    if (
+        nuevoAncho > maxWidth
+    ) {
 
         nuevoAlto =
             nuevoAlto *
-            (maxWidth / nuevoAncho);
+            (
+                maxWidth /
+                nuevoAncho
+            );
 
 
         nuevoAncho =
@@ -2610,10 +3255,6 @@ function capturarFoto() {
     );
 
 
-    // =====================================================
-    // COMPRESIÓN
-    // =====================================================
-
     const imagen =
         canvas.toDataURL(
             "image/jpeg",
@@ -2621,17 +3262,9 @@ function capturarFoto() {
         );
 
 
-    // =====================================================
-    // GUARDAR FOTO EN VARIABLE GLOBAL
-    // =====================================================
-
     fotoActual =
         imagen;
 
-
-    // =====================================================
-    // GUARDAR FOTO EN INPUT
-    // =====================================================
 
     if (fotoInput) {
 
@@ -2641,24 +3274,17 @@ function capturarFoto() {
     }
 
 
-    // =====================================================
-    // MOSTRAR FOTO
-    // =====================================================
-
     if (foto) {
 
         foto.src =
             imagen;
+
 
         foto.style.display =
             "block";
 
     }
 
-
-    // =====================================================
-    // DEBUG
-    // =====================================================
 
     console.log(
         "================================="
@@ -2680,15 +3306,6 @@ function capturarFoto() {
         "Tamaño:",
         fotoActual.length,
         "caracteres"
-    );
-
-
-    console.log(
-        "Inicio:",
-        fotoActual.substring(
-            0,
-            50
-        )
     );
 
 
@@ -2741,11 +3358,16 @@ function comprimirImagen(
         imagen.height;
 
 
-    if (ancho > maxWidth) {
+    if (
+        ancho > maxWidth
+    ) {
 
         alto =
             alto *
-            (maxWidth / ancho);
+            (
+                maxWidth /
+                ancho
+            );
 
 
         ancho =
@@ -2800,7 +3422,9 @@ function mostrarFoto(
 
 
     if (!foto) {
+
         return;
+
     }
 
 
@@ -2819,10 +3443,6 @@ function mostrarFoto(
 // =========================================================
 
 function limpiarFoto() {
-
-    // =====================================================
-    // LIMPIAR VARIABLE GLOBAL
-    // =====================================================
 
     fotoActual =
         "";
@@ -2862,6 +3482,7 @@ function limpiarFoto() {
 
         foto.src =
             "";
+
 
         foto.style.display =
             "none";
