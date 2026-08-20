@@ -2,21 +2,31 @@ let contenido = "";
 
 
 // =========================================================
-// INICIALIZAR MATERIALIZE
+// VARIABLES DEL MAPA
+// =========================================================
+
+let mapa = null;
+let marcador = null;
+
+
+// =========================================================
+// INICIALIZAR MATERIALIZE Y MAPA
 // =========================================================
 
 document.addEventListener("DOMContentLoaded", function () {
 
     // =========================================
-    // MENÚS LATERALES
+    // MENÚ LATERAL
     // =========================================
 
     const menus = document.querySelectorAll(".sidenav");
 
     if (typeof M !== "undefined") {
+
         M.Sidenav.init(menus, {
             edge: "right"
         });
+
     }
 
 
@@ -27,80 +37,35 @@ document.addEventListener("DOMContentLoaded", function () {
     const selects = document.querySelectorAll("select");
 
     if (typeof M !== "undefined") {
+
         M.FormSelect.init(selects);
-    }
-
-
-    // =========================================
-    // BOTÓN USAR CÁMARA
-    // =========================================
-
-    const btnCamara = document.getElementById("btnCamara");
-
-    if (btnCamara) {
-
-        btnCamara.addEventListener("click", function (event) {
-
-            event.preventDefault();
-
-            iniciarCamara();
-
-        });
 
     }
 
 
     // =========================================
-    // BOTÓN CAPTURAR
+    // INICIALIZAR MAPA
     // =========================================
 
-    const btnCapturar = document.getElementById("btnCapturar");
-
-    if (btnCapturar) {
-
-        btnCapturar.addEventListener("click", function (event) {
-
-            event.preventDefault();
-
-            tomarFoto();
-
-        });
-
-    }
+    inicializarMapa();
 
 
     // =========================================
-    // BOTÓN LIMPIAR
+    // BOTÓN UBICACIÓN
     // =========================================
 
-    const btnLimpiar = document.getElementById("btnLimpiar");
+    const btnUbicacion =
+        document.getElementById("btnUbicacion");
 
-    if (btnLimpiar) {
+    if (btnUbicacion) {
 
-        btnLimpiar.addEventListener("click", function (event) {
+        btnUbicacion.addEventListener(
+            "click",
+            function (event) {
 
-            event.preventDefault();
+                event.preventDefault();
 
-            limpiarFoto();
-
-        });
-
-    }
-
-
-    // =========================================
-    // DETENER CÁMARA AL CERRAR EL FORMULARIO
-    // =========================================
-
-    const sideForm = document.getElementById("side-form");
-
-    if (sideForm) {
-
-        sideForm.addEventListener(
-            "sidenav:close",
-            function () {
-
-                detenerCamara();
+                obtenerUbicacion();
 
             }
         );
@@ -109,19 +74,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =========================================
-    // FORMULARIO
+    // BOTÓN CANCELAR
     // =========================================
 
-    const formAgregar =
-        document.getElementById("formAgregar");
+    const btnCancelar =
+        document.getElementById("btnCancelar");
 
-    if (formAgregar) {
+    if (btnCancelar) {
 
-        formAgregar.addEventListener(
-            "submit",
-            function (event) {
+        btnCancelar.addEventListener(
+            "click",
+            function () {
 
-                event.preventDefault();
+                limpiarFormularioPedido();
+
+            }
+        );
+
+    }
+
+
+    // =========================================
+    // BOTÓN GUARDAR
+    // =========================================
+
+    const btnGuardar =
+        document.getElementById("btnGuardar");
+
+    if (btnGuardar) {
+
+        btnGuardar.addEventListener(
+            "click",
+            function () {
+
+                guardarPedido();
 
             }
         );
@@ -132,16 +118,676 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // =========================================================
+// MAPA
+// =========================================================
+
+function inicializarMapa() {
+
+    const elementoMapa =
+        document.getElementById("map");
+
+    if (!elementoMapa) {
+
+        console.error(
+            "No se encontró el elemento #map"
+        );
+
+        return;
+
+    }
+
+
+    // =========================================
+    // COMPROBAR LEAFLET
+    // =========================================
+
+    if (typeof L === "undefined") {
+
+        console.error(
+            "Leaflet no está cargado."
+        );
+
+        return;
+
+    }
+
+
+    // =========================================
+    // POSICIÓN INICIAL
+    // Ciudad de México como vista inicial
+    // =========================================
+
+    mapa = L.map("map").setView(
+        [19.4326, -99.1332],
+        13
+    );
+
+
+    // =========================================
+    // CAPA DEL MAPA
+    // =========================================
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom: 19,
+            attribution:
+                '&copy; OpenStreetMap contributors'
+        }
+    ).addTo(mapa);
+
+
+    console.log("Mapa inicializado correctamente.");
+
+}
+
+
+// =========================================================
+// OBTENER UBICACIÓN
+// =========================================================
+
+function obtenerUbicacion() {
+
+    const btnUbicacion =
+        document.getElementById("btnUbicacion");
+
+
+    const direccion =
+        document.getElementById("txtDireccion");
+
+
+    // =========================================
+    // COMPROBAR GEOLOCALIZACIÓN
+    // =========================================
+
+    if (!navigator.geolocation) {
+
+        alert(
+            "Tu navegador no permite obtener la ubicación."
+        );
+
+        return;
+
+    }
+
+
+    // =========================================
+    // CAMBIAR BOTÓN
+    // =========================================
+
+    if (btnUbicacion) {
+
+        btnUbicacion.disabled = true;
+
+        btnUbicacion.innerHTML = `
+            <i class="material-icons left">
+                gps_fixed
+            </i>
+            Obteniendo ubicación...
+        `;
+
+    }
+
+
+    if (direccion) {
+
+        direccion.value =
+            "Obteniendo ubicación...";
+
+    }
+
+
+    // =========================================
+    // SOLICITAR UBICACIÓN
+    // =========================================
+
+    navigator.geolocation.getCurrentPosition(
+
+        function (position) {
+
+            const lat =
+                position.coords.latitude;
+
+            const lng =
+                position.coords.longitude;
+
+
+            console.log(
+                "Latitud:",
+                lat
+            );
+
+            console.log(
+                "Longitud:",
+                lng
+            );
+
+
+            // =========================================
+            // MOSTRAR EN MAPA
+            // =========================================
+
+            mostrarUbicacionEnMapa(
+                lat,
+                lng
+            );
+
+
+            // =========================================
+            // OBTENER DIRECCIÓN
+            // =========================================
+
+            obtenerDireccion(
+                lat,
+                lng
+            );
+
+
+            // =========================================
+            // RESTAURAR BOTÓN
+            // =========================================
+
+            restaurarBotonUbicacion();
+
+        },
+
+
+        function (error) {
+
+            console.error(
+                "Error de geolocalización:",
+                error
+            );
+
+
+            if (direccion) {
+
+                direccion.value = "";
+
+            }
+
+
+            let mensaje =
+                "No se pudo obtener tu ubicación.";
+
+
+            switch (error.code) {
+
+                case error.PERMISSION_DENIED:
+
+                    mensaje =
+                        "Permiso de ubicación denegado. Activa la ubicación y permite el acceso al navegador.";
+
+                    break;
+
+
+                case error.POSITION_UNAVAILABLE:
+
+                    mensaje =
+                        "La ubicación no está disponible. Verifica el GPS o la conexión a Internet.";
+
+                    break;
+
+
+                case error.TIMEOUT:
+
+                    mensaje =
+                        "Se agotó el tiempo para obtener tu ubicación. Inténtalo nuevamente.";
+
+                    break;
+
+            }
+
+
+            alert(mensaje);
+
+
+            restaurarBotonUbicacion();
+
+        },
+
+        {
+            enableHighAccuracy: true,
+
+            timeout: 15000,
+
+            maximumAge: 0
+
+        }
+
+    );
+
+}
+
+
+// =========================================================
+// MOSTRAR UBICACIÓN EN EL MAPA
+// =========================================================
+
+function mostrarUbicacionEnMapa(
+    lat,
+    lng
+) {
+
+    if (!mapa) {
+
+        inicializarMapa();
+
+    }
+
+
+    if (!mapa) {
+
+        return;
+
+    }
+
+
+    // =========================================
+    // CENTRAR MAPA
+    // =========================================
+
+    mapa.setView(
+        [lat, lng],
+        17
+    );
+
+
+    // =========================================
+    // ELIMINAR MARCADOR ANTERIOR
+    // =========================================
+
+    if (marcador) {
+
+        mapa.removeLayer(
+            marcador
+        );
+
+    }
+
+
+    // =========================================
+    // CREAR MARCADOR
+    // =========================================
+
+    marcador =
+        L.marker([
+            lat,
+            lng
+        ]).addTo(mapa);
+
+
+    // =========================================
+    // POPUP
+    // =========================================
+
+    marcador.bindPopup(`
+        <strong>Ubicación del pedido</strong><br>
+        Latitud: ${lat.toFixed(6)}<br>
+        Longitud: ${lng.toFixed(6)}
+    `).openPopup();
+
+
+    // =========================================
+    // ACTUALIZAR MAPA
+    // =========================================
+
+    setTimeout(function () {
+
+        mapa.invalidateSize();
+
+    }, 300);
+
+}
+
+
+// =========================================================
+// OBTENER DIRECCIÓN A PARTIR DE COORDENADAS
+// =========================================================
+
+async function obtenerDireccion(
+    lat,
+    lng
+) {
+
+    const direccion =
+        document.getElementById("txtDireccion");
+
+
+    try {
+
+        const url =
+            "https://nominatim.openstreetmap.org/reverse" +
+            "?format=json" +
+            "&lat=" + encodeURIComponent(lat) +
+            "&lon=" + encodeURIComponent(lng) +
+            "&zoom=18" +
+            "&addressdetails=1";
+
+
+        const respuesta =
+            await fetch(url, {
+
+                headers: {
+
+                    "Accept":
+                        "application/json"
+
+                }
+
+            });
+
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No se pudo consultar la dirección."
+            );
+
+        }
+
+
+        const datos =
+            await respuesta.json();
+
+
+        console.log(
+            "Datos de dirección:",
+            datos
+        );
+
+
+        if (
+            datos &&
+            datos.display_name
+        ) {
+
+            if (direccion) {
+
+                direccion.value =
+                    datos.display_name;
+
+            }
+
+
+            // =========================================
+            // ACTUALIZAR POPUP
+            // =========================================
+
+            if (marcador) {
+
+                marcador.bindPopup(`
+                    <strong>Ubicación del pedido</strong><br>
+                    ${datos.display_name}
+                `).openPopup();
+
+            }
+
+        }
+        else {
+
+            if (direccion) {
+
+                direccion.value =
+                    "Ubicación obtenida: " +
+                    lat.toFixed(6) +
+                    ", " +
+                    lng.toFixed(6);
+
+            }
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "Error obteniendo dirección:",
+            error
+        );
+
+
+        if (direccion) {
+
+            direccion.value =
+                "Ubicación: " +
+                lat.toFixed(6) +
+                ", " +
+                lng.toFixed(6);
+
+        }
+
+    }
+
+}
+
+
+// =========================================================
+// RESTAURAR BOTÓN UBICACIÓN
+// =========================================================
+
+function restaurarBotonUbicacion() {
+
+    const btnUbicacion =
+        document.getElementById("btnUbicacion");
+
+
+    if (!btnUbicacion) {
+
+        return;
+
+    }
+
+
+    btnUbicacion.disabled =
+        false;
+
+
+    btnUbicacion.innerHTML = `
+        <i class="material-icons left">
+            location_on
+        </i>
+        Obtener ubicación
+    `;
+
+}
+
+
+// =========================================================
+// AGREGAR PLATILLO AL SELECT
+// =========================================================
+
+function agregarPlatilloAlSelect(
+    platillo,
+    id
+) {
+
+    /*
+     * IMPORTANTE:
+     * En pedidos.html tienes:
+     *
+     * id="listaplatillos"
+     *
+     * No "listaPlatillos".
+     */
+
+    const select =
+        document.getElementById(
+            "listaplatillos"
+        );
+
+
+    if (!select) {
+
+        console.error(
+            "No se encontró #listaplatillos"
+        );
+
+        return;
+
+    }
+
+
+    // =========================================
+    // EVITAR DUPLICADOS
+    // =========================================
+
+    if (
+        select.querySelector(
+            `option[value="${id}"]`
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    const option =
+        document.createElement(
+            "option"
+        );
+
+
+    option.value =
+        id;
+
+
+    option.textContent =
+        platillo.nombre ||
+        "Platillo";
+
+
+    select.appendChild(
+        option
+    );
+
+
+    actualizarSelect(
+        select
+    );
+
+}
+
+
+// =========================================================
+// ACTUALIZAR SELECT MATERIALIZE
+// =========================================================
+
+function actualizarSelect(
+    select
+) {
+
+    if (
+        typeof M === "undefined"
+    ) {
+
+        return;
+
+    }
+
+
+    const instancia =
+        M.FormSelect.getInstance(
+            select
+        );
+
+
+    if (instancia) {
+
+        instancia.destroy();
+
+    }
+
+
+    M.FormSelect.init([
+        select
+    ]);
+
+}
+
+
+// =========================================================
+// LIMPIAR LISTA DE PLATILLOS
+// =========================================================
+
+function limpiarListaPlatillos() {
+
+    const select =
+        document.getElementById(
+            "listaplatillos"
+        );
+
+
+    if (!select) {
+
+        return;
+
+    }
+
+
+    select.innerHTML = `
+
+        <option
+            value=""
+            selected
+        >
+            -- Selecciona un platillo --
+        </option>
+
+    `;
+
+
+    actualizarSelect(
+        select
+    );
+
+}
+
+
+// =========================================================
+// OBTENER PLATILLO SELECCIONADO
+// =========================================================
+
+function obtenerPlatilloSeleccionado() {
+
+    const select =
+        document.getElementById(
+            "listaplatillos"
+        );
+
+
+    if (!select) {
+
+        return null;
+
+    }
+
+
+    return select.value;
+
+}
+
+
+// =========================================================
 // MOSTRAR PLATILLO
 // =========================================================
 
-function mostrarPlatillo(platillo, id) {
+function mostrarPlatillo(
+    platillo,
+    id
+) {
 
     const recipes =
-        document.querySelector(".recipes");
+        document.querySelector(
+            ".recipes"
+        );
+
 
     if (!recipes) {
+
         return;
+
     }
 
 
@@ -167,17 +813,6 @@ function mostrarPlatillo(platillo, id) {
                     $${platillo.precio || 0} MXN
                 </div>
 
-                <div class="recipe-delete">
-
-                    <i
-                        class="material-icons"
-                        data-id="${id}"
-                    >
-                        delete_outline
-                    </i>
-
-                </div>
-
             </div>
 
         </div>
@@ -185,7 +820,8 @@ function mostrarPlatillo(platillo, id) {
     `;
 
 
-    recipes.innerHTML += contenido;
+    recipes.innerHTML +=
+        contenido;
 
 }
 
@@ -194,24 +830,38 @@ function mostrarPlatillo(platillo, id) {
 // ACTUALIZAR PLATILLO
 // =========================================================
 
-function actualizarPlatillo(platillo, id) {
+function actualizarPlatillo(
+    platillo,
+    id
+) {
 
     const tarjeta =
         document.getElementById(id);
 
+
     if (!tarjeta) {
+
         return;
+
     }
 
 
     const titulo =
-        tarjeta.querySelector(".recipe-title");
+        tarjeta.querySelector(
+            ".recipe-title"
+        );
+
 
     const ingredientes =
-        tarjeta.querySelector(".recipe-ingredients");
+        tarjeta.querySelector(
+            ".recipe-ingredients"
+        );
+
 
     const precio =
-        tarjeta.querySelector(".recipe-price");
+        tarjeta.querySelector(
+            ".recipe-price"
+        );
 
 
     if (titulo) {
@@ -244,148 +894,199 @@ function actualizarPlatillo(platillo, id) {
 // BORRAR PLATILLO
 // =========================================================
 
-const borrarPlatillo = (id) => {
+const borrarPlatillo =
+    (id) => {
+
+        const platillo =
+            document.querySelector(
+                `.recipe[data-id="${id}"]`
+            );
+
+
+        if (platillo) {
+
+            platillo.remove();
+
+        }
+
+    };
+
+
+// =========================================================
+// LIMPIAR FORMULARIO DE PEDIDO
+// =========================================================
+
+function limpiarFormularioPedido() {
 
     const platillo =
-        document.querySelector(
-            `.recipe[data-id="${id}"]`
+        document.getElementById(
+            "listaplatillos"
+        );
+
+
+    const nombre =
+        document.getElementById(
+            "txtNombre"
+        );
+
+
+    const direccion =
+        document.getElementById(
+            "txtDireccion"
         );
 
 
     if (platillo) {
 
-        platillo.remove();
+        platillo.value = "";
+
+        actualizarSelect(
+            platillo
+        );
 
     }
 
-};
 
+    if (nombre) {
 
-// =========================================================
-// AGREGAR PLATILLO AL SELECT
-// =========================================================
+        nombre.value = "";
 
-function agregarPlatilloAlSelect(platillo, id) {
-
-    const select =
-        document.getElementById("listaPlatillos");
-
-    if (!select) {
-        return;
     }
 
 
-    const option =
-        document.createElement("option");
+    if (direccion) {
+
+        direccion.value = "";
+
+    }
 
 
-    option.value = id;
+    // =========================================
+    // LIMPIAR MARCADOR
+    // =========================================
 
-    option.textContent =
-        platillo.nombre || "Platillo";
+    if (marcador && mapa) {
+
+        mapa.removeLayer(
+            marcador
+        );
+
+        marcador = null;
+
+    }
 
 
-    select.appendChild(option);
+    // =========================================
+    // REGRESAR MAPA A VISTA INICIAL
+    // =========================================
 
+    if (mapa) {
 
-    actualizarSelect(select);
+        mapa.setView(
+            [19.4326, -99.1332],
+            13
+        );
+
+    }
 
 }
 
 
 // =========================================================
-// ACTUALIZAR SELECT MATERIALIZE
+// GUARDAR PEDIDO
 // =========================================================
 
-function actualizarSelect(select) {
+function guardarPedido() {
 
-    if (typeof M === "undefined") {
+    const platillo =
+        document.getElementById(
+            "listaplatillos"
+        );
+
+
+    const nombre =
+        document.getElementById(
+            "txtNombre"
+        );
+
+
+    const direccion =
+        document.getElementById(
+            "txtDireccion"
+        );
+
+
+    if (!platillo || !platillo.value) {
+
+        alert(
+            "Selecciona un platillo."
+        );
+
         return;
-    }
-
-
-    const instancia =
-        M.FormSelect.getInstance(select);
-
-
-    if (instancia) {
-
-        instancia.destroy();
 
     }
 
 
-    M.FormSelect.init(select);
+    if (
+        !nombre ||
+        !nombre.value.trim()
+    ) {
 
-}
+        alert(
+            "Ingresa tu nombre."
+        );
 
-
-// =========================================================
-// LIMPIAR LISTA DE PLATILLOS
-// =========================================================
-
-function limpiarListaPlatillos() {
-
-    const select =
-        document.getElementById("listaPlatillos");
-
-    if (!select) {
         return;
+
     }
 
 
-    select.innerHTML = `
+    if (
+        !direccion ||
+        !direccion.value.trim()
+    ) {
 
-        <option
-            value=""
-            disabled
-            selected
-        >
-            Elige un platillo
-        </option>
+        alert(
+            "Obtén tu ubicación o escribe una dirección."
+        );
 
-    `;
-
-
-    actualizarSelect(select);
-
-}
-
-
-// =========================================================
-// OBTENER PLATILLO SELECCIONADO
-// =========================================================
-
-function obtenerPlatilloSeleccionado() {
-
-    const select =
-        document.getElementById("listaPlatillos");
-
-    if (!select) {
-        return null;
-    }
-
-
-    return select.value;
-
-}
-
-
-// =========================================================
-// LIMPIAR FORMULARIO
-// =========================================================
-
-function limpiarFormularioPlatillo() {
-
-    const form =
-        document.getElementById("formAgregar");
-
-    if (!form) {
         return;
+
     }
 
 
-    form.reset();
+    const pedido = {
+
+        platilloId:
+            platillo.value,
+
+        nombre:
+            nombre.value.trim(),
+
+        direccion:
+            direccion.value.trim(),
+
+        fecha:
+            new Date().toISOString()
+
+    };
+
+
+    console.log(
+        "Pedido:",
+        pedido
+    );
+
+
+    /*
+     * Aquí puedes guardar el pedido
+     * en Firestore cuando quieras.
+     */
+
+
+    alert(
+        "Pedido preparado correctamente."
+    );
 
 }
 
@@ -410,30 +1111,27 @@ let streamCamara = null;
 
 
 // =========================================================
-// OBTENER ELEMENTOS DE LA CÁMARA
+// PREPARAR CÁMARA
 // =========================================================
 
 function prepararCamara() {
 
-    /*
-     * IMPORTANTE:
-     * En tu index.html los IDs son:
-     *
-     * Video
-     * Canvas
-     * foto
-     *
-     * Por eso deben escribirse exactamente igual.
-     */
-
     video =
-        document.getElementById("Video");
+        document.getElementById(
+            "Video"
+        );
+
 
     canvas =
-        document.getElementById("Canvas");
+        document.getElementById(
+            "Canvas"
+        );
+
 
     foto =
-        document.getElementById("foto");
+        document.getElementById(
+            "foto"
+        );
 
 }
 
@@ -448,26 +1146,27 @@ async function iniciarCamara() {
 
 
     const status =
-        document.getElementById("cameraStatus");
+        document.getElementById(
+            "cameraStatus"
+        );
+
 
     const error =
-        document.getElementById("cameraError");
+        document.getElementById(
+            "cameraError"
+        );
 
 
     if (!video) {
 
         console.error(
-            "No se encontró el elemento #Video"
+            "No se encontró #Video"
         );
 
         return;
 
     }
 
-
-    // =========================================
-    // COMPROBAR SOPORTE DE CÁMARA
-    // =========================================
 
     if (
         !navigator.mediaDevices ||
@@ -477,13 +1176,9 @@ async function iniciarCamara() {
         if (error) {
 
             error.textContent =
-                "La cámara no está disponible en este dispositivo.";
+                "La cámara no está disponible.";
 
         }
-
-        console.error(
-            "getUserMedia no está disponible."
-        );
 
         return;
 
@@ -491,10 +1186,6 @@ async function iniciarCamara() {
 
 
     try {
-
-        // =========================================
-        // DETENER STREAM ANTERIOR
-        // =========================================
 
         if (streamCamara) {
 
@@ -510,10 +1201,6 @@ async function iniciarCamara() {
 
         }
 
-
-        // =========================================
-        // SOLICITAR ACCESO A LA CÁMARA
-        // =========================================
 
         streamCamara =
             await navigator.mediaDevices.getUserMedia({
@@ -531,23 +1218,12 @@ async function iniciarCamara() {
             });
 
 
-        // =========================================
-        // COLOCAR STREAM EN EL VIDEO
-        // =========================================
-
         video.srcObject =
             streamCamara;
 
 
-        // Esperar a que el navegador permita
-        // reproducir el video.
-
         await video.play();
 
-
-        // =========================================
-        // CONFIGURAR DIMENSIONES
-        // =========================================
 
         video.onloadedmetadata =
             function () {
@@ -556,7 +1232,10 @@ async function iniciarCamara() {
 
                     height =
                         video.videoHeight /
-                        (video.videoWidth / width);
+                        (
+                            video.videoWidth /
+                            width
+                        );
 
 
                     if (
@@ -569,30 +1248,20 @@ async function iniciarCamara() {
                     }
 
 
-                    video.setAttribute(
-                        "width",
-                        width
-                    );
+                    video.width =
+                        width;
 
-
-                    video.setAttribute(
-                        "height",
-                        height
-                    );
+                    video.height =
+                        height;
 
 
                     if (canvas) {
 
-                        canvas.setAttribute(
-                            "width",
-                            width
-                        );
+                        canvas.width =
+                            width;
 
-
-                        canvas.setAttribute(
-                            "height",
-                            height
-                        );
+                        canvas.height =
+                            height;
 
                     }
 
@@ -604,10 +1273,6 @@ async function iniciarCamara() {
             };
 
 
-        // =========================================
-        // ESTADO
-        // =========================================
-
         if (status) {
 
             status.textContent =
@@ -618,7 +1283,8 @@ async function iniciarCamara() {
 
         if (error) {
 
-            error.textContent = "";
+            error.textContent =
+                "";
 
         }
 
@@ -642,7 +1308,7 @@ async function iniciarCamara() {
         if (error) {
 
             error.textContent =
-                "Verifica los permisos de cámara y que la página utilice HTTPS.";
+                "Verifica los permisos de cámara y HTTPS.";
 
         }
 
@@ -660,39 +1326,29 @@ function tomarFoto() {
     prepararCamara();
 
 
-    if (!video || !canvas || !foto) {
-
-        console.error(
-            "No se encontraron los elementos necesarios para tomar la foto."
-        );
+    if (
+        !video ||
+        !canvas ||
+        !foto
+    ) {
 
         return;
 
     }
 
 
-    // =========================================
-    // OBTENER CONTEXTO DEL CANVAS
-    // =========================================
-
     const context =
-        canvas.getContext("2d");
+        canvas.getContext(
+            "2d"
+        );
 
 
     if (!context) {
 
-        console.error(
-            "No se pudo obtener el contexto del canvas."
-        );
-
         return;
 
     }
 
-
-    // =========================================
-    // COMPROBAR DIMENSIONES
-    // =========================================
 
     if (!streaming) {
 
@@ -702,7 +1358,10 @@ function tomarFoto() {
 
             height =
                 video.videoHeight /
-                (video.videoWidth / width);
+                (
+                    video.videoWidth /
+                    width
+                );
 
         }
         else {
@@ -714,20 +1373,13 @@ function tomarFoto() {
     }
 
 
-    // =========================================
-    // CONFIGURAR CANVAS
-    // =========================================
-
     canvas.width =
         width;
+
 
     canvas.height =
         height;
 
-
-    // =========================================
-    // COPIAR VIDEO AL CANVAS
-    // =========================================
 
     context.drawImage(
         video,
@@ -738,42 +1390,25 @@ function tomarFoto() {
     );
 
 
-    // =========================================
-    // CONVERTIR A IMAGEN
-    // =========================================
-
     const fotoFinal =
-        canvas.toDataURL("image/png");
+        canvas.toDataURL(
+            "image/png"
+        );
 
 
-    // =========================================
-    // MOSTRAR FOTO
-    // =========================================
-
-    foto.setAttribute(
-        "src",
-        fotoFinal
-    );
+    foto.src =
+        fotoFinal;
 
 
     foto.style.display =
         "block";
 
 
-    // =========================================
-    // GUARDAR FOTO
-    // =========================================
-
-    foto.dataset.imagen =
-        fotoFinal;
-
-
-    // =========================================
-    // GUARDAR TAMBIÉN EN FOTO INPUT
-    // =========================================
-
     const fotoInput =
-        document.getElementById("fotoInput");
+        document.getElementById(
+            "fotoInput"
+        );
+
 
     if (fotoInput) {
 
@@ -783,19 +1418,13 @@ function tomarFoto() {
     }
 
 
-    // =========================================
-    // DETENER CÁMARA
-    // =========================================
-
     detenerCamara();
 
 
-    // =========================================
-    // ACTUALIZAR ESTADO
-    // =========================================
-
     const status =
-        document.getElementById("cameraStatus");
+        document.getElementById(
+            "cameraStatus"
+        );
 
 
     if (status) {
@@ -816,15 +1445,15 @@ function detenerCamara() {
 
     if (streamCamara) {
 
-        const tracks =
-            streamCamara.getTracks();
+        streamCamara
+            .getTracks()
+            .forEach(
+                function (track) {
 
+                    track.stop();
 
-        tracks.forEach(function (track) {
-
-            track.stop();
-
-        });
+                }
+            );
 
 
         streamCamara = null;
@@ -840,7 +1469,8 @@ function detenerCamara() {
     }
 
 
-    streaming = false;
+    streaming =
+        false;
 
 }
 
@@ -861,35 +1491,29 @@ function limpiarFoto() {
         foto.style.display =
             "none";
 
-        foto.removeAttribute(
-            "data-imagen"
-        );
-
     }
 
 
-    // =========================================
-    // LIMPIAR INPUT OCULTO
-    // =========================================
-
     const fotoInput =
-        document.getElementById("fotoInput");
+        document.getElementById(
+            "fotoInput"
+        );
+
 
     if (fotoInput) {
 
-        fotoInput.value = "";
+        fotoInput.value =
+            "";
 
     }
 
-
-    // =========================================
-    // LIMPIAR CANVAS
-    // =========================================
 
     if (canvas) {
 
         const context =
-            canvas.getContext("2d");
+            canvas.getContext(
+                "2d"
+            );
 
 
         if (context) {
@@ -906,23 +1530,19 @@ function limpiarFoto() {
     }
 
 
-    // =========================================
-    // DETENER CÁMARA
-    // =========================================
-
     detenerCamara();
 
 
-    // =========================================
-    // ACTUALIZAR ESTADO
-    // =========================================
-
     const status =
-        document.getElementById("cameraStatus");
+        document.getElementById(
+            "cameraStatus"
+        );
 
 
     const error =
-        document.getElementById("cameraError");
+        document.getElementById(
+            "cameraError"
+        );
 
 
     if (status) {
@@ -935,7 +1555,8 @@ function limpiarFoto() {
 
     if (error) {
 
-        error.textContent = "";
+        error.textContent =
+            "";
 
     }
 
@@ -943,7 +1564,7 @@ function limpiarFoto() {
 
 
 // =========================================================
-// CERRAR CÁMARA AL SALIR
+// DETENER CÁMARA AL SALIR
 // =========================================================
 
 window.addEventListener(
