@@ -271,13 +271,6 @@ function cargarPlatillos() {
 // =========================================================
 // CARGAR PEDIDOS DE FIREBASE EN INDEX
 // =========================================================
-//
-// ESTA ES LA PARTE NUEVA.
-//
-// Lee la colección "pedidos" y muestra cada pedido
-// dentro de .recipes.
-//
-// =========================================================
 
 function cargarPedidosEnIndex() {
 
@@ -314,16 +307,16 @@ function cargarPedidosEnIndex() {
 
             function (coleccion) {
 
-                // =============================================
-                // LIMPIAR LAS TARJETAS ANTERIORES
-                // =============================================
+                // =================================================
+                // LIMPIAR LAS TARJETAS
+                // =================================================
 
                 contenedor.innerHTML = "";
 
 
-                // =============================================
+                // =================================================
                 // SI NO HAY PEDIDOS
-                // =============================================
+                // =================================================
 
                 if (coleccion.empty) {
 
@@ -332,9 +325,9 @@ function cargarPedidosEnIndex() {
                 }
 
 
-                // =============================================
+                // =================================================
                 // RECORRER PEDIDOS
-                // =============================================
+                // =================================================
 
                 coleccion.forEach(
                     function (documento) {
@@ -347,9 +340,9 @@ function cargarPedidosEnIndex() {
                             documento.id;
 
 
-                        // =====================================
+                        // =================================================
                         // CREAR OBJETO PARA LA TARJETA
-                        // =====================================
+                        // =================================================
 
                         const platillo = {
 
@@ -372,9 +365,9 @@ function cargarPedidosEnIndex() {
                         };
 
 
-                        // =====================================
+                        // =================================================
                         // MOSTRAR TARJETA
-                        // =====================================
+                        // =================================================
 
                         mostrarPedidoEnIndex(
                             platillo,
@@ -587,7 +580,12 @@ function mostrarPedidoEnIndex(
 
             <div
                 class="recipe-delete"
-                style="cursor:pointer;"
+                data-id="${id}"
+                style="
+                    cursor:pointer;
+                    margin-top:10px;
+                "
+                title="Eliminar pedido"
             >
 
                 <i
@@ -609,6 +607,177 @@ function mostrarPedidoEnIndex(
     );
 
 }
+
+
+// =========================================================
+// ELIMINAR PEDIDO DEL INDEX
+// =========================================================
+//
+// El pedido desaparece inmediatamente de la pantalla.
+// Después se elimina de Firestore.
+//
+// =========================================================
+
+document.addEventListener(
+    "click",
+    function (e) {
+
+        // =====================================================
+        // DETECTAR BOTÓN DE ELIMINAR
+        // =====================================================
+
+        const botonEliminar =
+            e.target.closest(
+                ".recipe-delete"
+            );
+
+
+        if (!botonEliminar) {
+            return;
+        }
+
+
+        // =====================================================
+        // OBTENER ID
+        // =====================================================
+
+        const id =
+            botonEliminar.getAttribute(
+                "data-id"
+            );
+
+
+        if (!id) {
+
+            console.error(
+                "No se encontró el ID del pedido."
+            );
+
+            return;
+
+        }
+
+
+        // =====================================================
+        // CONFIRMAR
+        // =====================================================
+
+        const confirmar =
+            confirm(
+                "¿Seguro que deseas eliminar este pedido?"
+            );
+
+
+        if (!confirmar) {
+            return;
+        }
+
+
+        // =====================================================
+        // OBTENER TARJETA
+        // =====================================================
+
+        const tarjeta =
+            document.getElementById(
+                "pedido_" + id
+            );
+
+
+        // =====================================================
+        // ELIMINAR VISUALMENTE INMEDIATAMENTE
+        // =====================================================
+
+        if (tarjeta) {
+
+            tarjeta.style.transition =
+                "opacity 0.2s ease, transform 0.2s ease";
+
+            tarjeta.style.opacity =
+                "0";
+
+            tarjeta.style.transform =
+                "translateX(30px)";
+
+
+            setTimeout(
+                function () {
+
+                    if (tarjeta.parentNode) {
+
+                        tarjeta.parentNode.removeChild(
+                            tarjeta
+                        );
+
+                    }
+
+                },
+                200
+            );
+
+        }
+
+
+        // =====================================================
+        // VERIFICAR FIREBASE
+        // =====================================================
+
+        if (
+            typeof db === "undefined"
+        ) {
+
+            console.error(
+                "Firebase no está disponible."
+            );
+
+            return;
+
+        }
+
+
+        // =====================================================
+        // ELIMINAR DE FIRESTORE
+        // =====================================================
+
+        db.collection("pedidos")
+            .doc(id)
+            .delete()
+
+            .then(
+                function () {
+
+                    console.log(
+                        "Pedido eliminado correctamente:",
+                        id
+                    );
+
+                }
+            )
+
+            .catch(
+                function (error) {
+
+                    console.error(
+                        "Error eliminando pedido:",
+                        error
+                    );
+
+
+                    alert(
+                        "No se pudo eliminar el pedido."
+                    );
+
+
+                    // =================================================
+                    // VOLVER A CARGAR LOS PEDIDOS
+                    // =================================================
+
+                    cargarPedidosEnIndex();
+
+                }
+            );
+
+    }
+);
 
 
 // =========================================================
@@ -641,7 +810,10 @@ function mostrarInformacionPlatillo(id) {
         );
 
 
-    if (!id || !platillos[id]) {
+    if (
+        !id ||
+        !platillos[id]
+    ) {
 
         if (ingredientesVista) {
 
@@ -727,7 +899,9 @@ function mostrarInformacionPlatillo(id) {
     }
 
 
-    if (typeof M !== "undefined") {
+    if (
+        typeof M !== "undefined"
+    ) {
 
         M.updateTextFields();
 
@@ -804,6 +978,10 @@ function obtenerUbicacion() {
             );
 
 
+            // =================================================
+            // GUARDAR COORDENADAS
+            // =================================================
+
             const txtLatitud =
                 document.getElementById(
                     "txtLatitud"
@@ -831,6 +1009,10 @@ function obtenerUbicacion() {
 
             }
 
+
+            // =================================================
+            // MOSTRAR COORDENADAS
+            // =================================================
 
             const latitudVista =
                 document.getElementById(
@@ -860,6 +1042,10 @@ function obtenerUbicacion() {
             }
 
 
+            // =================================================
+            // MOVER MAPA
+            // =================================================
+
             if (map) {
 
                 map.setView(
@@ -872,6 +1058,10 @@ function obtenerUbicacion() {
 
             }
 
+
+            // =================================================
+            // MOVER MARCADOR
+            // =================================================
 
             if (marcador) {
 
@@ -888,6 +1078,10 @@ function obtenerUbicacion() {
 
             }
 
+
+            // =================================================
+            // OBTENER DIRECCIÓN
+            // =================================================
 
             obtenerDireccion(
                 latitud,
@@ -980,7 +1174,9 @@ async function obtenerDireccion(
     }
 
 
-    if (typeof M !== "undefined") {
+    if (
+        typeof M !== "undefined"
+    ) {
 
         M.updateTextFields();
 
@@ -1070,37 +1266,50 @@ async function obtenerDireccion(
 
 
         if (calle) {
-            direccionFinal += calle;
+
+            direccionFinal +=
+                calle;
+
         }
 
 
         if (numero) {
+
             direccionFinal +=
                 " " + numero;
+
         }
 
 
         if (colonia) {
+
             direccionFinal +=
                 ", " + colonia;
+
         }
 
 
         if (ciudad) {
+
             direccionFinal +=
                 ", " + ciudad;
+
         }
 
 
         if (estado) {
+
             direccionFinal +=
                 ", " + estado;
+
         }
 
 
         if (codigoPostal) {
+
             direccionFinal +=
                 ", C.P. " + codigoPostal;
+
         }
 
 
@@ -1121,7 +1330,9 @@ async function obtenerDireccion(
         }
 
 
-        if (typeof M !== "undefined") {
+        if (
+            typeof M !== "undefined"
+        ) {
 
             M.updateTextFields();
 
@@ -1167,7 +1378,9 @@ async function obtenerDireccion(
         }
 
 
-        if (typeof M !== "undefined") {
+        if (
+            typeof M !== "undefined"
+        ) {
 
             M.updateTextFields();
 
@@ -1323,7 +1536,14 @@ function guardarPedido() {
         );
 
 
-    if (!lista || !lista.value) {
+    // =====================================================
+    // VALIDAR PLATILLO
+    // =====================================================
+
+    if (
+        !lista ||
+        !lista.value
+    ) {
 
         alert(
             "Selecciona un platillo."
@@ -1333,6 +1553,10 @@ function guardarPedido() {
 
     }
 
+
+    // =====================================================
+    // VALIDAR NOMBRE
+    // =====================================================
 
     if (
         !nombre ||
@@ -1352,6 +1576,10 @@ function guardarPedido() {
     }
 
 
+    // =====================================================
+    // VALIDAR DIRECCIÓN
+    // =====================================================
+
     if (
         !direccion ||
         !direccion.value.trim()
@@ -1369,6 +1597,10 @@ function guardarPedido() {
 
     }
 
+
+    // =====================================================
+    // VALIDAR GPS
+    // =====================================================
 
     if (
         !latitud ||
@@ -1390,6 +1622,10 @@ function guardarPedido() {
     }
 
 
+    // =====================================================
+    // DATOS DEL PLATILLO
+    // =====================================================
+
     const platillo =
         platillos[lista.value];
 
@@ -1410,6 +1646,10 @@ function guardarPedido() {
             platillo.precio || 0
         );
 
+
+    // =====================================================
+    // CREAR PEDIDO
+    // =====================================================
 
     const pedido = {
 
@@ -1453,6 +1693,10 @@ function guardarPedido() {
     };
 
 
+    // =====================================================
+    // FIREBASE
+    // =====================================================
+
     if (
         typeof db === "undefined"
     ) {
@@ -1490,6 +1734,10 @@ function guardarPedido() {
     }
 
 
+    // =====================================================
+    // GUARDAR EN FIREBASE
+    // =====================================================
+
     db.collection("pedidos")
         .add(pedido)
 
@@ -1502,46 +1750,9 @@ function guardarPedido() {
                 );
 
 
-                const platilloParaIndex = {
-
-                    id:
-                        "pedido_" +
-                        docRef.id,
-
-                    nombre:
-                        platillo.nombre ||
-                        "Sin nombre",
-
-                    ingredientes:
-                        platillo.ingredientes ||
-                        "Sin ingredientes",
-
-                    precio:
-                        precio,
-
-                    foto:
-                        platillo.foto ||
-                        "",
-
-                    pedidoId:
-                        docRef.id,
-
-                    cliente:
-                        nombre.value.trim(),
-
-                    direccion:
-                        direccion.value.trim()
-
-                };
-
-
-                localStorage.setItem(
-                    "nuevoPlatilloIndex",
-                    JSON.stringify(
-                        platilloParaIndex
-                    )
-                );
-
+                // =================================================
+                // REDIRECCIÓN AL INDEX
+                // =================================================
 
                 window.location.href =
                     "../index.html";
@@ -1670,6 +1881,10 @@ function limpiarPedido() {
     }
 
 
+    // =====================================================
+    // INFORMACIÓN VISUAL
+    // =====================================================
+
     const ingredientesVista =
         document.getElementById(
             "ingredientesVista"
@@ -1726,6 +1941,10 @@ function limpiarPedido() {
     }
 
 
+    // =====================================================
+    // MAPA
+    // =====================================================
+
     if (map) {
 
         map.setView(
@@ -1753,7 +1972,13 @@ function limpiarPedido() {
     }
 
 
-    if (typeof M !== "undefined") {
+    // =====================================================
+    // MATERIALIZE
+    // =====================================================
+
+    if (
+        typeof M !== "undefined"
+    ) {
 
         M.updateTextFields();
 
