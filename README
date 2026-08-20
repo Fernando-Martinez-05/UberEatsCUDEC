@@ -1,0 +1,458 @@
+# 🍽️ DITS
+
+### Aplicación PWA para la gestión y registro de platillos
+
+<p align="center">
+  <img src="icon-192x192.png" alt="Logo DITS" width="150">
+</p>
+
+<p align="center">
+  <strong>DITS</strong> es una Progressive Web App desarrollada para facilitar el registro,
+  consulta y gestión de platillos y pedidos desde dispositivos móviles.
+</p>
+
+---
+
+## 📱 Información del proyecto
+
+| Información | Datos |
+|---|---|
+| **Nombre** | DITS |
+| **Tipo de aplicación** | Progressive Web App (PWA) |
+| **Materia** | Programación avanzada |
+| **Carrera** | Sistemas computacionales |
+| **Alumno** | Martínez Merlín Luis Fernando |
+| **Grupo** | ISC181 |
+| **Institución** | Universidad Multicultural CUDEC |
+| **Año** | 2026 |
+
+---
+
+# 📖 1. Descripción del proyecto
+
+**DITS** es una aplicación web progresiva orientada a la gestión de platillos y pedidos.
+
+El proyecto busca facilitar el registro y administración de información relacionada con alimentos, permitiendo al usuario agregar platillos indicando su:
+
+- 🍕 Nombre
+- 🧂 Ingredientes
+- 💰 Precio
+- 📷 Fotografía
+
+Además, la aplicación incorpora diferentes funcionalidades que aprovechan las capacidades de los dispositivos actuales, como el acceso a la cámara, selección de imágenes, geolocalización y visualización de mapas.
+
+### 🎯 Propósito
+
+El propósito principal de DITS es proporcionar una herramienta sencilla, accesible y adaptable a dispositivos móviles para administrar información de platillos y realizar la gestión básica de pedidos.
+
+---
+
+# 🎯 2. Objetivos
+
+## Objetivo general
+
+Desarrollar una aplicación web progresiva que permita gestionar platillos y pedidos de manera sencilla, utilizando tecnologías web modernas y servicios en la nube.
+
+## Objetivos específicos
+
+- 📱 Crear una interfaz adaptable a dispositivos móviles.
+- 🍽️ Permitir el registro de nuevos platillos.
+- ☁️ Almacenar la información de los platillos utilizando Firebase Firestore.
+- 🔎 Permitir consultar los platillos registrados.
+- 🛒 Implementar un sistema básico de gestión de pedidos.
+- 📷 Integrar el uso de la cámara del dispositivo.
+- 🖼️ Permitir seleccionar fotografías desde la galería.
+- 📍 Obtener la ubicación actual del usuario.
+- 🗺️ Mostrar la ubicación mediante un mapa.
+- ⚡ Implementar características de una Progressive Web App.
+- ☰ Facilitar la navegación mediante un menú lateral.
+
+---
+
+# 🚀 3. Características principales
+
+## 🏠 Inicio
+
+La pantalla principal permite:
+
+- Visualizar los platillos registrados.
+- Acceder al menú de navegación.
+- Acceder a las diferentes secciones.
+- Agregar nuevos platillos.
+
+---
+
+## 🍽️ Registro de platillos
+
+El usuario puede registrar nuevos platillos proporcionando:
+
+- **Nombre**
+- **Ingredientes**
+- **Precio**
+- **Fotografía**
+
+La información registrada es almacenada en Firebase Firestore.
+
+---
+
+## 📷 Cámara
+
+DITS permite utilizar la cámara del dispositivo para obtener fotografías de los platillos.
+
+Funciones disponibles:
+
+- 📸 Abrir la cámara.
+- 👁️ Visualizar la cámara en tiempo real.
+- 📷 Capturar una fotografía.
+- 🖼️ Seleccionar una imagen desde la galería.
+- 🗑️ Limpiar o cambiar la fotografía seleccionada.
+
+---
+
+## 🛒 Pedidos
+
+La aplicación permite consultar los platillos disponibles y realizar la gestión correspondiente de pedidos.
+
+---
+
+## 📍 Ubicación
+
+DITS utiliza la geolocalización del dispositivo para:
+
+- Obtener la ubicación actual.
+- Mostrar la latitud.
+- Mostrar la longitud.
+- Visualizar la ubicación mediante un mapa.
+
+---
+
+## ℹ️ Acerca de
+
+La sección **Acerca de** contiene información sobre:
+
+- Nombre de la aplicación.
+- Logotipo.
+- Número de versión.
+- Descripción de la aplicación.
+- Propósito del proyecto.
+- Información general.
+
+---
+
+## 📧 Contacto
+
+La sección de contacto permite al usuario comunicarse con el soporte técnico de la aplicación.
+
+**Correo de soporte:**
+
+📩 `luisfernandomartinezmerlin@gmail.com`
+
+---
+
+## 📲 Progressive Web App
+
+DITS cuenta con características propias de una **PWA**, permitiendo una experiencia similar a una aplicación móvil.
+
+Entre sus características se encuentran:
+
+- 📄 Web App Manifest.
+- ⚙️ Service Worker.
+- 📱 Diseño adaptable.
+- 🖼️ Iconos para diferentes tamaños de pantalla.
+- 📥 Posibilidad de instalación en dispositivos compatibles.
+
+---
+
+# 🛠️ 4. Tecnologías utilizadas
+
+## Frontend
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+
+![Materialize](https://img.shields.io/badge/Materialize-CSS-orange?style=for-the-badge)
+
+![Material Icons](https://img.shields.io/badge/Material-Icons-757575?style=for-the-badge&logo=materialdesign)
+
+---
+
+## ☁️ Base de datos
+
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+
+**Firebase Firestore** es utilizado como base de datos NoSQL para almacenar la información de los platillos.
+
+---
+
+## 🌐 Servicios
+
+- Firebase
+- Google Maps
+
+---
+
+## 🔌 APIs utilizadas
+
+- **Geolocation API**
+- **MediaDevices / Camera API**
+- **Service Worker API**
+
+---
+
+## ⚡ PWA
+
+- Web App Manifest
+- Service Worker
+- Iconos adaptados a diferentes resoluciones
+- Diseño responsive
+
+---
+
+# 📂 5. Estructura del proyecto
+
+La estructura principal del proyecto es:
+
+```text
+DITS/
+│
+├── 📄 index.html
+├── 📄 manifest.json
+├── 📄 README.md
+├── 📄 sw.js
+│
+├── 📁 css/
+│   ├── materialize.min.css
+│   └── styles.css
+│
+├── 📁 js/
+│   ├── materialize.min.js
+│   ├── firebase.js
+│   ├── index.js
+│   ├── db.js
+│   └── pedidos.js
+│
+├── 📁 pages/
+│   ├── about.html
+│   ├── contact.html
+│   └── pedidos.html
+│
+├── 📁 img/
+│   └── default.jpg
+│
+├── 🖼️ icon-16x16.png
+├── 🖼️ icon-32x32.png
+├── 🖼️ icon-64x64.png
+├── 🖼️ icon-128x128.png
+├── 🖼️ icon-192x192.png
+└── 🖼️ icon-512x512.png
+```
+
+> **Nota:** Los nombres de las carpetas deben coincidir exactamente con los nombres existentes en el repositorio de GitHub.
+
+---
+
+# 📸 6. Evidencias / capturas de pantalla
+
+A continuación se muestran las principales pantallas de la aplicación.
+
+## 🏠 Pantalla de inicio
+
+Pantalla principal donde se muestran los platillos registrados y las opciones de navegación.
+
+<p align="center">
+  <img src="img/inicio.png" alt="Pantalla de inicio" width="300">
+</p>
+
+---
+
+## 🍽️ Registrar platillo
+
+Pantalla utilizada para registrar un nuevo platillo.
+
+<p align="center">
+  <img src="img/registrar-platillo.png" alt="Registrar platillo" width="300">
+</p>
+
+---
+
+## 🛒 Realizar pedido
+
+Pantalla utilizada para seleccionar y gestionar un pedido.
+
+<p align="center">
+  <img src="img/realizar-pedido.png" alt="Realizar pedido" width="300">
+</p>
+
+---
+
+## ✅ Pedido terminado
+
+Evidencia del pedido una vez finalizado el proceso.
+
+<p align="center">
+  <img src="img/pedido-terminado.png" alt="Pedido terminado" width="300">
+</p>
+
+---
+
+## ℹ️ Acerca
+
+Pantalla con información general de la aplicación.
+
+<p align="center">
+  <img src="img/acerca.png" alt="Acerca de DITS" width="300">
+</p>
+
+---
+
+## 📧 Contacto
+
+Pantalla de contacto y soporte técnico.
+
+<p align="center">
+  <img src="img/contacto.png" alt="Contacto" width="300">
+</p>
+
+---
+
+# 🗄️ 7. Base de datos
+
+## Motor utilizado
+
+DITS utiliza:
+
+**Firebase Firestore**
+
+Firestore es una base de datos NoSQL en la nube que permite almacenar y consultar la información de los platillos.
+
+---
+
+## Colección `platillos`
+
+La aplicación utiliza principalmente la colección:
+
+```text
+platillos
+```
+
+Cada documento contiene información de un platillo.
+
+### Estructura
+
+```text
+platillos
+│
+├── documento
+│   ├── nombre
+│   ├── ingredientes
+│   └── precio
+│
+├── documento
+│   ├── nombre
+│   ├── ingredientes
+│   └── precio
+│
+└── ...
+```
+
+### Campos
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| `nombre` | String | Nombre del platillo |
+| `ingredientes` | String | Ingredientes del platillo |
+| `precio` | Number | Precio del platillo |
+
+---
+
+# 📱 8. Compatibilidad
+
+DITS está diseñada principalmente para dispositivos móviles y navegadores modernos.
+
+La interfaz utiliza un diseño responsive para adaptarse a diferentes tamaños de pantalla.
+
+### Funcionalidades dependientes del dispositivo
+
+| Funcionalidad | Requisito |
+|---|---|
+| 📷 Cámara | Dispositivo con cámara y permisos |
+| 📍 Ubicación | GPS/geolocalización y permisos |
+| 🗺️ Mapa | Conexión a Internet |
+| ☁️ Firebase | Conexión a Internet |
+| 📲 PWA | Navegador compatible |
+
+---
+
+# 🔐 9. Seguridad
+
+La aplicación utiliza Firebase Firestore para almacenar los datos.
+
+El acceso a la base de datos debe estar protegido mediante las reglas de seguridad correspondientes de Firebase.
+
+> **Importante:** Las credenciales privadas o claves sensibles no deben publicarse en el repositorio.
+
+---
+
+# 📚 10. Proyecto académico
+
+DITS fue desarrollado como parte de un proyecto académico para aplicar conocimientos relacionados con:
+
+- Desarrollo web.
+- JavaScript.
+- Bases de datos.
+- Aplicaciones PWA.
+- Diseño responsive.
+- APIs del navegador.
+- Servicios en la nube.
+- Geolocalización.
+- Acceso a dispositivos móviles.
+
+---
+
+# 👨‍💻 11. Autor
+
+### Martínez Merlín Luis Fernando
+
+**Carrera:** Sistemas computacionales  
+**Grupo:** ISC181  
+**Institución:** Universidad Multicultural CUDEC  
+**Materia:** Programación avanzada
+
+---
+
+# 📩 12. Contacto
+
+Para soporte técnico, comentarios o dudas relacionadas con la aplicación:
+
+### Soporte técnico
+
+📧 **luisfernandomartinezmerlin@gmail.com**
+
+---
+
+# 📄 13. Licencia
+
+Este proyecto fue desarrollado exclusivamente con fines académicos como parte de la carrera **Sistemas computacionales**, para la materia **Programación avanzada**, del grupo **ISC181**, en la **Universidad Multicultural CUDEC**.
+
+## Licencia académica
+
+Copyright © 2026 Martínez Merlín Luis Fernando
+
+Este proyecto se distribuye exclusivamente con fines educativos y académicos.
+
+No se permite la comercialización, redistribución o utilización del proyecto con fines comerciales sin autorización del autor.
+
+---
+
+<p align="center">
+
+### 🍽️ DITS
+
+**Gestión sencilla de platillos y pedidos**
+
+Desarrollado con ❤️ para fines académicos.
+
+</p>
