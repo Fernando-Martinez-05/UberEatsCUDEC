@@ -1,6 +1,6 @@
 // =========================================================
 // DITS - DB.JS
-// FIREBASE FIRESTORE
+// FIREBASE FIRESTORE + STORAGE
 // =========================================================
 
 
@@ -9,16 +9,14 @@
 // =========================================================
 
 const formularioAgregar =
-    document.getElementById(
-        "formAgregar"
-    );
+    document.getElementById("formAgregar");
 
 
 if (formularioAgregar) {
 
     formularioAgregar.addEventListener(
         "submit",
-        function (e) {
+        async function (e) {
 
             e.preventDefault();
 
@@ -28,27 +26,19 @@ if (formularioAgregar) {
             // =================================================
 
             const nombreElemento =
-                document.getElementById(
-                    "title"
-                );
+                document.getElementById("title");
 
 
             const ingredientesElemento =
-                document.getElementById(
-                    "ingredients"
-                );
+                document.getElementById("ingredients");
 
 
             const precioElemento =
-                document.getElementById(
-                    "price"
-                );
+                document.getElementById("price");
 
 
             const fotoElemento =
-                document.getElementById(
-                    "fotoInput"
-                );
+                document.getElementById("fotoInput");
 
 
             // =================================================
@@ -73,7 +63,7 @@ if (formularioAgregar) {
                     : "";
 
 
-            const foto =
+            const fotoBase64 =
                 fotoElemento
                     ? fotoElemento.value
                     : "";
@@ -89,24 +79,9 @@ if (formularioAgregar) {
                 precio === ""
             ) {
 
-                if (
-                    typeof M !== "undefined"
-                ) {
-
-                    M.toast({
-                        html:
-                            "Por favor completa todos los campos."
-                    });
-
-                }
-                else {
-
-                    alert(
-                        "Por favor completa todos los campos."
-                    );
-
-                }
-
+                mostrarMensaje(
+                    "Por favor completa todos los campos."
+                );
 
                 return;
 
@@ -118,33 +93,14 @@ if (formularioAgregar) {
             // =================================================
 
             const precioNumero =
-                parseFloat(
-                    precio
+                parseFloat(precio);
+
+
+            if (isNaN(precioNumero)) {
+
+                mostrarMensaje(
+                    "El precio debe ser un número válido."
                 );
-
-
-            if (
-                isNaN(precioNumero)
-            ) {
-
-                if (
-                    typeof M !== "undefined"
-                ) {
-
-                    M.toast({
-                        html:
-                            "El precio debe ser un número válido."
-                    });
-
-                }
-                else {
-
-                    alert(
-                        "El precio debe ser un número válido."
-                    );
-
-                }
-
 
                 return;
 
@@ -160,14 +116,12 @@ if (formularioAgregar) {
             ) {
 
                 console.error(
-                    "Firebase no está disponible."
+                    "Firebase Firestore no está disponible."
                 );
 
-
-                alert(
+                mostrarMensaje(
                     "Firebase no está disponible."
                 );
-
 
                 return;
 
@@ -175,34 +129,29 @@ if (formularioAgregar) {
 
 
             // =================================================
-            // CREAR OBJETO
+            // VERIFICAR STORAGE
             // =================================================
 
-            const platilloNuevo = {
+            if (
+                typeof firebase === "undefined" ||
+                !firebase.storage
+            ) {
 
-                nombre:
-                    nombre,
+                console.error(
+                    "Firebase Storage no está disponible."
+                );
 
-                ingredientes:
-                    ingredientes,
+                mostrarMensaje(
+                    "Firebase Storage no está disponible."
+                );
 
-                precio:
-                    precioNumero,
+                return;
 
-                foto:
-                    foto || ""
-
-            };
-
-
-            console.log(
-                "Platillo que se guardará:",
-                platilloNuevo
-            );
+            }
 
 
             // =================================================
-            // DESACTIVAR BOTÓN
+            // BOTÓN
             // =================================================
 
             const boton =
@@ -213,197 +162,423 @@ if (formularioAgregar) {
 
             if (boton) {
 
-                boton.disabled =
-                    true;
-
+                boton.disabled = true;
 
                 boton.innerHTML = `
                     <i class="material-icons left">
-                        hourglass_empty
+                        cloud_upload
                     </i>
-                    Guardando...
+                    Subiendo foto...
                 `;
 
             }
 
 
-            // =================================================
-            // GUARDAR FIRESTORE
-            // =================================================
+            try {
 
-            db.collection("platillos")
-                .add(
+                // =================================================
+                // URL FINAL DE LA FOTO
+                // =================================================
+
+                let urlFoto = "";
+
+
+                // =================================================
+                // SI HAY FOTO
+                // =================================================
+
+                if (
+                    fotoBase64 &&
+                    fotoBase64.trim() !== ""
+                ) {
+
+                    console.log(
+                        "Preparando imagen para Firebase Storage..."
+                    );
+
+
+                    // =================================================
+                    // CONVERTIR BASE64 A BLOB
+                    // =================================================
+
+                    const blob =
+                        convertirBase64ABlob(
+                            fotoBase64
+                        );
+
+
+                    // =================================================
+                    // NOMBRE ÚNICO
+                    // =================================================
+
+                    const nombreArchivo =
+                        "platillos/" +
+                        Date.now() +
+                        "_" +
+                        generarIdAleatorio() +
+                        ".jpg";
+
+
+                    // =================================================
+                    // REFERENCIA STORAGE
+                    // =================================================
+
+                    const referencia =
+                        firebase
+                            .storage()
+                            .ref()
+                            .child(nombreArchivo);
+
+
+                    // =================================================
+                    // SUBIR FOTO
+                    // =================================================
+
+                    if (boton) {
+
+                        boton.innerHTML = `
+                            <i class="material-icons left">
+                                cloud_upload
+                            </i>
+                            Subiendo foto...
+                        `;
+
+                    }
+
+
+                    const resultadoUpload =
+                        await referencia.put(
+                            blob,
+                            {
+                                contentType:
+                                    "image/jpeg"
+                            }
+                        );
+
+
+                    console.log(
+                        "Foto subida correctamente."
+                    );
+
+
+                    // =================================================
+                    // OBTENER URL
+                    // =================================================
+
+                    urlFoto =
+                        await resultadoUpload
+                            .ref
+                            .getDownloadURL();
+
+
+                    console.log(
+                        "URL de la foto:",
+                        urlFoto
+                    );
+
+                }
+
+
+                // =================================================
+                // CREAR PLATILLO
+                // =================================================
+
+                const platilloNuevo = {
+
+                    nombre:
+                        nombre,
+
+                    ingredientes:
+                        ingredientes,
+
+                    precio:
+                        precioNumero,
+
+                    foto:
+                        urlFoto
+
+                };
+
+
+                console.log(
+                    "Platillo que se guardará:",
                     platilloNuevo
-                )
-
-                .then(
-                    function (docRef) {
-
-                        console.log(
-                            "Platillo agregado correctamente:",
-                            docRef.id
-                        );
-
-
-                        // =================================================
-                        // MENSAJE
-                        // =================================================
-
-                        if (
-                            typeof M !== "undefined"
-                        ) {
-
-                            M.toast({
-                                html:
-                                    "Platillo agregado correctamente."
-                            });
-
-                        }
-                        else {
-
-                            alert(
-                                "Platillo agregado correctamente."
-                            );
-
-                        }
-
-
-                        // =================================================
-                        // LIMPIAR FORMULARIO
-                        // =================================================
-
-                        formularioAgregar.reset();
-
-
-                        // =================================================
-                        // LIMPIAR FOTO
-                        // =================================================
-
-                        if (
-                            typeof limpiarFoto ===
-                            "function"
-                        ) {
-
-                            limpiarFoto();
-
-                        }
-                        else {
-
-                            const foto =
-                                document.getElementById(
-                                    "foto"
-                                );
-
-
-                            const fotoInput =
-                                document.getElementById(
-                                    "fotoInput"
-                                );
-
-
-                            const btnFoto =
-                                document.getElementById(
-                                    "btnFoto"
-                                );
-
-
-                            if (foto) {
-
-                                foto.src =
-                                    "";
-
-                                foto.style.display =
-                                    "none";
-
-                            }
-
-
-                            if (fotoInput) {
-
-                                fotoInput.value =
-                                    "";
-
-                            }
-
-
-                            if (btnFoto) {
-
-                                btnFoto.value =
-                                    "";
-
-                            }
-
-                        }
-
-
-                        // =================================================
-                        // MATERIALIZE
-                        // =================================================
-
-                        if (
-                            typeof M !== "undefined"
-                        ) {
-
-                            M.updateTextFields();
-
-                        }
-
-                    }
-                )
-
-                .catch(
-                    function (error) {
-
-                        console.error(
-                            "Error al agregar platillo:",
-                            error
-                        );
-
-
-                        if (
-                            typeof M !== "undefined"
-                        ) {
-
-                            M.toast({
-                                html:
-                                    "Error al guardar el platillo."
-                            });
-
-                        }
-                        else {
-
-                            alert(
-                                "Error al guardar el platillo."
-                            );
-
-                        }
-
-                    }
-                )
-
-                .finally(
-                    function () {
-
-                        if (boton) {
-
-                            boton.disabled =
-                                false;
-
-
-                            boton.innerHTML = `
-                                <i class="material-icons left">
-                                    add
-                                </i>
-                                Agregar platillo
-                            `;
-
-                        }
-
-                    }
                 );
+
+
+                // =================================================
+                // GUARDAR EN FIRESTORE
+                // =================================================
+
+                if (boton) {
+
+                    boton.innerHTML = `
+                        <i class="material-icons left">
+                            save
+                        </i>
+                        Guardando...
+                    `;
+
+                }
+
+
+                const docRef =
+                    await db
+                        .collection("platillos")
+                        .add(
+                            platilloNuevo
+                        );
+
+
+                console.log(
+                    "Platillo agregado correctamente:",
+                    docRef.id
+                );
+
+
+                // =================================================
+                // MENSAJE
+                // =================================================
+
+                mostrarMensaje(
+                    "Platillo agregado correctamente."
+                );
+
+
+                // =================================================
+                // LIMPIAR FORMULARIO
+                // =================================================
+
+                formularioAgregar.reset();
+
+
+                // =================================================
+                // LIMPIAR FOTO
+                // =================================================
+
+                if (
+                    typeof limpiarFoto ===
+                    "function"
+                ) {
+
+                    limpiarFoto();
+
+                }
+                else {
+
+                    const foto =
+                        document.getElementById(
+                            "foto"
+                        );
+
+
+                    const fotoInput =
+                        document.getElementById(
+                            "fotoInput"
+                        );
+
+
+                    const btnFoto =
+                        document.getElementById(
+                            "btnFoto"
+                        );
+
+
+                    if (foto) {
+
+                        foto.src = "";
+
+                        foto.style.display =
+                            "none";
+
+                    }
+
+
+                    if (fotoInput) {
+
+                        fotoInput.value = "";
+
+                    }
+
+
+                    if (btnFoto) {
+
+                        btnFoto.value = "";
+
+                    }
+
+                }
+
+
+                // =================================================
+                // MATERIALIZE
+                // =================================================
+
+                if (
+                    typeof M !== "undefined"
+                ) {
+
+                    M.updateTextFields();
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Error al agregar platillo:",
+                    error
+                );
+
+
+                let mensaje =
+                    "Error al guardar el platillo.";
+
+
+                if (
+                    error &&
+                    error.code
+                ) {
+
+                    console.error(
+                        "Código de error:",
+                        error.code
+                    );
+
+                }
+
+
+                mostrarMensaje(
+                    mensaje
+                );
+
+            }
+
+            finally {
+
+                // =================================================
+                // RESTAURAR BOTÓN
+                // =================================================
+
+                if (boton) {
+
+                    boton.disabled =
+                        false;
+
+
+                    boton.innerHTML = `
+                        <i class="material-icons left">
+                            add
+                        </i>
+                        Agregar platillo
+                    `;
+
+                }
+
+            }
 
         }
     );
+
+}
+
+
+// =========================================================
+// CONVERTIR BASE64 A BLOB
+// =========================================================
+
+function convertirBase64ABlob(
+    base64
+) {
+
+    const partes =
+        base64.split(",");
+
+
+    const tipo =
+        partes[0]
+            .match(
+                /:(.*?);/
+            );
+
+
+    const contenido =
+        atob(
+            partes[1]
+        );
+
+
+    const arreglo =
+        new Uint8Array(
+            contenido.length
+        );
+
+
+    for (
+        let i = 0;
+        i < contenido.length;
+        i++
+    ) {
+
+        arreglo[i] =
+            contenido.charCodeAt(i);
+
+    }
+
+
+    return new Blob(
+        [
+            arreglo
+        ],
+        {
+            type:
+                tipo
+                    ? tipo[1]
+                    : "image/jpeg"
+        }
+    );
+
+}
+
+
+// =========================================================
+// GENERAR ID ALEATORIO
+// =========================================================
+
+function generarIdAleatorio() {
+
+    return Math.random()
+        .toString(36)
+        .substring(2, 10);
+
+}
+
+
+// =========================================================
+// MOSTRAR MENSAJE
+// =========================================================
+
+function mostrarMensaje(
+    mensaje
+) {
+
+    if (
+        typeof M !== "undefined"
+    ) {
+
+        M.toast({
+            html: mensaje
+        });
+
+    }
+    else {
+
+        alert(
+            mensaje
+        );
+
+    }
 
 }
 
@@ -423,10 +598,6 @@ if (contenedorPlatillos) {
     contenedorPlatillos.addEventListener(
         "click",
         function (e) {
-
-            // =================================================
-            // BUSCAR BOTÓN DE ELIMINAR
-            // =================================================
 
             const boton =
                 e.target.closest(
@@ -492,37 +663,24 @@ function eliminarPlatillo(
     }
 
 
-    // =================================================
-    // FIREBASE
-    // =================================================
-
     if (
         typeof db === "undefined"
     ) {
 
-        alert(
+        mostrarMensaje(
             "Firebase no está disponible."
         );
-
 
         return;
 
     }
 
 
-    // =================================================
-    // TARJETA
-    // =================================================
-
     const tarjeta =
         document.getElementById(
             id
         );
 
-
-    // =================================================
-    // ANIMACIÓN
-    // =================================================
 
     if (tarjeta) {
 
@@ -540,10 +698,6 @@ function eliminarPlatillo(
     }
 
 
-    // =================================================
-    // ELIMINAR FIRESTORE
-    // =================================================
-
     db.collection("platillos")
         .doc(id)
         .delete()
@@ -557,10 +711,6 @@ function eliminarPlatillo(
                 );
 
 
-                // =================================================
-                // ELIMINAR VISUALMENTE
-                // =================================================
-
                 if (tarjeta) {
 
                     tarjeta.remove();
@@ -568,16 +718,9 @@ function eliminarPlatillo(
                 }
 
 
-                if (
-                    typeof M !== "undefined"
-                ) {
-
-                    M.toast({
-                        html:
-                            "Platillo eliminado correctamente."
-                    });
-
-                }
+                mostrarMensaje(
+                    "Platillo eliminado correctamente."
+                );
 
             }
         )
@@ -591,10 +734,6 @@ function eliminarPlatillo(
                 );
 
 
-                // =================================================
-                // RESTAURAR TARJETA
-                // =================================================
-
                 if (tarjeta) {
 
                     tarjeta.style.opacity =
@@ -607,23 +746,9 @@ function eliminarPlatillo(
                 }
 
 
-                if (
-                    typeof M !== "undefined"
-                ) {
-
-                    M.toast({
-                        html:
-                            "Error al eliminar el platillo."
-                    });
-
-                }
-                else {
-
-                    alert(
-                        "Error al eliminar el platillo."
-                    );
-
-                }
+                mostrarMensaje(
+                    "Error al eliminar el platillo."
+                );
 
             }
         );
@@ -632,7 +757,7 @@ function eliminarPlatillo(
 
 
 // =========================================================
-// HACER FUNCIONES DISPONIBLES
+// HACER FUNCIÓN DISPONIBLE
 // =========================================================
 
 window.eliminarPlatillo =
