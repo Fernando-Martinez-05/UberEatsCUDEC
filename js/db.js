@@ -1,56 +1,44 @@
-// =========================================
-// DITS - BASE DE DATOS FIRESTORE
-// =========================================
+// =========================================================
+// DITS - DB.JS
+// Firebase Firestore
+// =========================================================
 
 
-// =========================================
-// CARGAR PLATILLOS
-// =========================================
+// =========================================================
+// MOSTRAR PLATILLOS DESDE FIRESTORE
+// =========================================================
 
 db.collection("platillos").onSnapshot((coleccion) => {
 
     coleccion.docChanges().forEach((registro) => {
 
-        const platillo = registro.doc.data();
-        const id = registro.doc.id;
-
-
-        // -------------------------------------
-        // PLATILLO AGREGADO
-        // -------------------------------------
-
+        // Nuevo platillo
         if (registro.type === "added") {
 
             mostrarPlatillo(
-                platillo,
-                id
+                registro.doc.data(),
+                registro.doc.id
             );
 
         }
 
 
-        // -------------------------------------
-        // PLATILLO MODIFICADO
-        // -------------------------------------
-
+        // Platillo modificado
         if (registro.type === "modified") {
 
             actualizarPlatillo(
-                platillo,
-                id
+                registro.doc.data(),
+                registro.doc.id
             );
 
         }
 
 
-        // -------------------------------------
-        // PLATILLO ELIMINADO
-        // -------------------------------------
-
+        // Platillo eliminado
         if (registro.type === "removed") {
 
             borrarPlatillo(
-                id
+                registro.doc.id
             );
 
         }
@@ -60,43 +48,46 @@ db.collection("platillos").onSnapshot((coleccion) => {
 });
 
 
-// =========================================
+// =========================================================
 // FORMULARIO AGREGAR PLATILLO
-// =========================================
+// =========================================================
 
 const formularioAgregar =
-    document.querySelector(".add-recipe");
+    document.getElementById("formAgregar");
 
 
 if (formularioAgregar) {
 
     formularioAgregar.addEventListener(
         "submit",
-        (e) => {
+        function (e) {
 
             e.preventDefault();
 
 
-            // ---------------------------------
+            // =================================================
             // OBTENER DATOS
-            // ---------------------------------
+            // =================================================
 
             const nombre =
                 document.getElementById("title").value.trim();
 
+
             const ingredientes =
                 document.getElementById("ingredients").value.trim();
 
+
             const precio =
                 document.getElementById("price").value;
+
 
             const foto =
                 document.getElementById("fotoInput").value;
 
 
-            // ---------------------------------
+            // =================================================
             // VALIDAR
-            // ---------------------------------
+            // =================================================
 
             if (
                 nombre === "" ||
@@ -109,12 +100,13 @@ if (formularioAgregar) {
                 );
 
                 return;
+
             }
 
 
-            // ---------------------------------
-            // CREAR PLATILLO
-            // ---------------------------------
+            // =================================================
+            // OBJETO PLATILLO
+            // =================================================
 
             const platilloNuevo = {
 
@@ -122,16 +114,16 @@ if (formularioAgregar) {
 
                 ingredientes: ingredientes,
 
-                precio: precio,
+                precio: parseFloat(precio),
 
-                foto: foto || "img/default.jpg"
+                foto: foto || ""
 
             };
 
 
-            // ---------------------------------
+            // =================================================
             // GUARDAR EN FIRESTORE
-            // ---------------------------------
+            // =================================================
 
             db.collection("platillos")
                 .add(platilloNuevo)
@@ -148,14 +140,15 @@ if (formularioAgregar) {
                     formularioAgregar.reset();
 
 
-                    // Restaurar imagen
+                    // Restaurar foto
 
-                    const fotoElemento =
+                    const fotoElement =
                         document.getElementById("foto");
 
-                    if (fotoElemento) {
 
-                        fotoElemento.src =
+                    if (fotoElement) {
+
+                        fotoElement.src =
                             "img/default.jpg";
 
                     }
@@ -164,20 +157,39 @@ if (formularioAgregar) {
                     const fotoInput =
                         document.getElementById("fotoInput");
 
+
                     if (fotoInput) {
 
                         fotoInput.value = "";
 
                     }
 
+
+                    const btnFoto =
+                        document.getElementById("btnFoto");
+
+
+                    if (btnFoto) {
+
+                        btnFoto.value = "";
+
+                    }
+
+
+                    // Actualizar campos Materialize
+
+                    M.updateTextFields();
+
+
                 })
 
                 .catch((error) => {
 
                     console.error(
-                        "Error al agregar el platillo:",
+                        "Error al agregar platillo:",
                         error
                     );
+
 
                     alert(
                         "Error al agregar el platillo."
@@ -186,14 +198,15 @@ if (formularioAgregar) {
                 });
 
         }
+
     );
 
 }
 
 
-// =========================================
+// =========================================================
 // ELIMINAR PLATILLO
-// =========================================
+// =========================================================
 
 const platilloBorrar =
     document.querySelector(".recipes");
@@ -203,27 +216,17 @@ if (platilloBorrar) {
 
     platilloBorrar.addEventListener(
         "click",
-        (e) => {
+        function (e) {
 
-
-            // Verificar que se presionó
-            // el icono de eliminar
+            // Detectar icono eliminar
 
             if (
-                e.target.tagName === "I"
+                e.target.tagName === "I" &&
+                e.target.getAttribute("data-id")
             ) {
 
                 const id =
-                    e.target.getAttribute(
-                        "data-id"
-                    );
-
-
-                if (!id) {
-
-                    return;
-
-                }
+                    e.target.getAttribute("data-id");
 
 
                 const confirmar =
@@ -238,8 +241,6 @@ if (platilloBorrar) {
 
                 }
 
-
-                // Eliminar de Firebase
 
                 db.collection("platillos")
                     .doc(id)
@@ -256,9 +257,10 @@ if (platilloBorrar) {
                     .catch((error) => {
 
                         console.error(
-                            "Error al eliminar el platillo:",
+                            "Error al eliminar:",
                             error
                         );
+
 
                         alert(
                             "Error al eliminar el platillo."
@@ -269,6 +271,7 @@ if (platilloBorrar) {
             }
 
         }
+
     );
 
 }
