@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 
@@ -76,83 +77,214 @@
 
     <style>
 
-        /* =====================================
+        /* =========================================
+           VARIABLES
+        ========================================== */
+
+        :root {
+            --primary: #edb90c;
+            --primary-dark: #d69f00;
+            --primary-light: #fff8df;
+            --orange: #ff9800;
+            --dark: #292929;
+            --text: #666;
+            --muted: #999;
+            --background: #f6f6f6;
+            --white: #ffffff;
+            --border: #eeeeee;
+        }
+
+
+        /* =========================================
            GENERAL
-        ====================================== */
+        ========================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
+            margin: 0;
             min-height: 100vh;
-            background: #f5f5f5;
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(237, 185, 12, 0.10),
+                    transparent 35%
+                ),
+                var(--background);
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: var(--dark);
         }
 
 
-        /* =====================================
+        /* =========================================
            NAVBAR
-        ====================================== */
+        ========================================== */
 
         nav {
-            background: #edb90c;
+            background: var(--primary);
+            height: 64px;
+            line-height: 64px;
         }
 
-        nav .brand-logo,
-        nav a {
+        nav .nav-wrapper {
+            width: 92%;
+            max-width: 1100px;
+        }
+
+        nav .brand-logo {
             color: white;
-            font-weight: 600;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1px;
         }
 
         nav .sidenav-trigger {
             color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        nav .sidenav-trigger:hover {
+            transform: scale(1.08);
         }
 
 
-        /* =====================================
+        /* =========================================
+           SIDENAV
+        ========================================== */
+
+        .sidenav {
+            padding-top: 10px;
+        }
+
+        .sidenav .subheader {
+            color: var(--primary-dark);
+            font-size: 22px;
+            font-weight: 800;
+            padding-bottom: 12px;
+        }
+
+        .sidenav li > a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+        }
+
+        .sidenav li > a i {
+            color: var(--primary);
+        }
+
+        .sidenav li > a:hover {
+            background: var(--primary-light);
+        }
+
+
+        /* =========================================
            CONTENEDOR
-        ====================================== */
+        ========================================== */
 
         .about-container {
             width: 92%;
-            max-width: 900px;
-            margin: 35px auto 60px;
+            max-width: 980px;
+            margin: 40px auto 60px;
         }
 
 
-        /* =====================================
+        /* =========================================
            TARJETA PRINCIPAL
-        ====================================== */
+        ========================================== */
 
         .about-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            background: var(--white);
+            border-radius: 24px;
+            padding: 45px;
+            box-shadow:
+                0 10px 35px rgba(0, 0, 0, 0.08);
+
+            animation: fadeUp 0.5s ease;
         }
 
 
-        /* =====================================
+        /* =========================================
+           ANIMACIÓN
+        ========================================== */
+
+        @keyframes fadeUp {
+
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+
+        /* =========================================
+           HEADER DE LA APP
+        ========================================== */
+
+        .app-header {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+
+        /* =========================================
            LOGO
-        ====================================== */
+        ========================================== */
 
         .app-logo {
-            width: 110px;
-            height: 110px;
-            margin: 0 auto 18px;
+            width: 115px;
+            height: 115px;
 
-            border-radius: 28px;
+            margin: 0 auto 20px;
 
-            background: linear-gradient(
-                135deg,
-                #edb90c,
-                #ff9000
-            );
+            border-radius: 30px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--orange)
+                );
 
             display: flex;
             align-items: center;
             justify-content: center;
 
             box-shadow:
-                0 8px 20px rgba(237, 185, 12, 0.30);
+                0 12px 25px rgba(237, 185, 12, 0.30);
+
+            position: relative;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
         }
 
+        .app-logo:hover {
+            transform: translateY(-4px) rotate(-2deg);
+
+            box-shadow:
+                0 16px 30px rgba(237, 185, 12, 0.38);
+        }
 
         .app-logo i {
             font-size: 62px;
@@ -160,30 +292,42 @@
         }
 
 
-        /* =====================================
+        /* =========================================
            NOMBRE
-        ====================================== */
+        ========================================== */
 
         .app-name {
             text-align: center;
-            font-size: 34px;
-            font-weight: 700;
-            margin: 5px 0;
-            color: #333;
+
+            font-size: 38px;
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+            margin: 0 0 8px;
+
+            color: var(--dark);
         }
 
 
         .app-type {
-            text-align: center;
+            display: inline-block;
+
             color: #777;
-            font-size: 15px;
-            margin-bottom: 35px;
+
+            font-size: 14px;
+
+            background: #f8f8f8;
+
+            border-radius: 20px;
+
+            padding: 7px 15px;
         }
 
 
-        /* =====================================
+        /* =========================================
            SECCIONES
-        ====================================== */
+        ========================================== */
 
         .about-section {
             margin-top: 35px;
@@ -193,211 +337,603 @@
         .section-title {
             display: flex;
             align-items: center;
+
             gap: 10px;
 
-            font-size: 21px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 700;
 
-            color: #333;
+            color: var(--dark);
 
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
 
         .section-title i {
-            color: #edb90c;
-            font-size: 27px;
+            color: var(--primary);
+            font-size: 29px;
         }
 
 
         .about-section p {
-            color: #666;
+            color: var(--text);
+
             font-size: 16px;
-            line-height: 1.7;
-            margin: 8px 0;
+
+            line-height: 1.75;
+
+            margin: 9px 0;
         }
 
 
-        /* =====================================
-           INFORMACIÓN DE LA APP
-        ====================================== */
+        /* =========================================
+           INFORMACIÓN
+        ========================================== */
 
-        .info-box {
-            background: #fff8df;
-            border-left: 5px solid #edb90c;
+        .info-grid {
+            display: grid;
 
-            border-radius: 10px;
+            grid-template-columns:
+                repeat(3, 1fr);
 
-            padding: 18px 20px;
-
-            margin-top: 10px;
+            gap: 15px;
         }
 
 
-        .info-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .info-card {
+            background:
+                linear-gradient(
+                    145deg,
+                    #fffdf5,
+                    #fff8df
+                );
 
-            margin: 10px 0;
-
-            color: #555;
-        }
-
-
-        .info-row i {
-            color: #edb90c;
-            font-size: 21px;
-        }
-
-
-        .info-row strong {
-            color: #333;
-        }
-
-
-        /* =====================================
-           DESCRIPCIÓN
-        ====================================== */
-
-        .description-box {
-            background: #fafafa;
-            border-radius: 12px;
-            padding: 20px;
-        }
-
-
-        /* =====================================
-           SOPORTE
-        ====================================== */
-
-        .support-box {
-            background: linear-gradient(
-                135deg,
-                #fff8df,
-                #fff3c4
-            );
+            border: 1px solid #f5e7ae;
 
             border-radius: 15px;
 
-            padding: 25px;
+            padding: 20px;
 
-            text-align: center;
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
         }
 
 
-        .support-box i {
-            font-size: 42px;
-            color: #edb90c;
-            margin-bottom: 10px;
+        .info-card:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.07);
+        }
+
+
+        .info-icon {
+            width: 45px;
+            height: 45px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background: var(--primary);
+
+            margin-bottom: 13px;
+        }
+
+
+        .info-icon i {
+            color: white;
+            font-size: 24px;
+        }
+
+
+        .info-label {
+            color: #888;
+
+            font-size: 13px;
+
+            margin-bottom: 4px;
+        }
+
+
+        .info-value {
+            color: var(--dark);
+
+            font-size: 16px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================================
+           DESCRIPCIÓN
+        ========================================== */
+
+        .description-box {
+            background: #fafafa;
+
+            border: 1px solid var(--border);
+
+            border-radius: 16px;
+
+            padding: 24px;
+        }
+
+
+        .description-box p:first-child {
+            margin-top: 0;
+        }
+
+
+        .description-box p:last-child {
+            margin-bottom: 0;
+        }
+
+
+        .description-highlight {
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+
+        /* =========================================
+           CARACTERÍSTICAS
+        ========================================== */
+
+        .features-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 15px;
+        }
+
+
+        .feature-card {
+            display: flex;
+            align-items: flex-start;
+
+            gap: 15px;
+
+            padding: 20px;
+
+            border-radius: 15px;
+
+            background: white;
+
+            border: 1px solid var(--border);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 8px 22px rgba(0, 0, 0, 0.07);
+        }
+
+
+        .feature-icon {
+            min-width: 48px;
+            height: 48px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 13px;
+
+            background: var(--primary-light);
+        }
+
+
+        .feature-icon i {
+            color: var(--primary-dark);
+            font-size: 25px;
+        }
+
+
+        .feature-content h6 {
+            margin: 0 0 6px;
+
+            color: var(--dark);
+
+            font-size: 16px;
+
+            font-weight: 700;
+        }
+
+
+        .feature-content p {
+            margin: 0;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================================
+           PROPÓSITO
+        ========================================== */
+
+        .purpose-box {
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff8df,
+                    #fff1bc
+                );
+
+            border-radius: 18px;
+
+            padding: 25px 28px;
+
+            border: 1px solid #f4e3a5;
+        }
+
+
+        .purpose-box::after {
+            content: "restaurant";
+
+            font-family: "Material Icons";
+
+            position: absolute;
+
+            right: -10px;
+            bottom: -25px;
+
+            font-size: 130px;
+
+            color: rgba(237, 185, 12, 0.12);
+        }
+
+
+        .purpose-box p {
+            position: relative;
+            z-index: 1;
+
+            margin: 0;
+
+            max-width: 85%;
+        }
+
+
+        /* =========================================
+           SOPORTE
+        ========================================== */
+
+        .support-box {
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff8df,
+                    #fff3c4
+                );
+
+            border-radius: 18px;
+
+            padding: 30px;
+
+            text-align: center;
+
+            border: 1px solid #f4e3a5;
+        }
+
+
+        .support-icon {
+            width: 65px;
+            height: 65px;
+
+            margin: 0 auto 12px;
+
+            border-radius: 50%;
+
+            background: var(--primary);
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .support-icon i {
+            color: white;
+            font-size: 32px;
         }
 
 
         .support-box h6 {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
+            font-size: 20px;
+
+            font-weight: 700;
+
+            color: var(--dark);
+
+            margin: 8px 0;
+        }
+
+
+        .support-box p {
+            max-width: 600px;
+
+            margin: 10px auto;
+
+            font-size: 15px;
         }
 
 
         .support-email {
-            display: inline-block;
+            display: inline-flex;
 
-            margin-top: 10px;
+            align-items: center;
 
-            color: #e09f00;
+            gap: 7px;
 
-            font-weight: 600;
+            margin-top: 12px;
+
+            padding: 10px 18px;
+
+            border-radius: 25px;
+
+            background: white;
+
+            color: var(--primary-dark);
+
+            font-weight: 700;
 
             text-decoration: none;
+
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.06);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
         }
 
 
         .support-email:hover {
-            text-decoration: underline;
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 7px 16px rgba(0, 0, 0, 0.09);
         }
 
 
-        /* =====================================
+        /* =========================================
            SEPARADOR
-        ====================================== */
+        ========================================== */
 
         .about-divider {
-            margin: 30px 0;
+            margin: 38px 0;
+
             border: 0;
-            border-top: 1px solid #eee;
+
+            border-top:
+                1px solid var(--border);
         }
 
 
-        /* =====================================
-           FOOTER
-        ====================================== */
-
-        .about-footer {
-            text-align: center;
-
-            margin-top: 30px;
-
-            color: #999;
-
-            font-size: 14px;
-        }
-
-
-        /* =====================================
-           BOTÓN REGRESAR
-        ====================================== */
+        /* =========================================
+           BOTÓN
+        ========================================== */
 
         .back-button {
-            margin-top: 25px;
-            background: #edb90c;
+            margin-top: 35px;
+
+            height: 48px;
+
+            line-height: 48px;
+
+            padding: 0 25px;
+
+            border-radius: 25px;
+
+            background: var(--primary);
+
+            font-weight: 700;
+
+            box-shadow:
+                0 6px 15px rgba(237, 185, 12, 0.25);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
         }
 
 
         .back-button:hover {
-            background: #dba900;
+            background: var(--primary-dark);
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 9px 20px rgba(237, 185, 12, 0.32);
         }
 
 
-        /* =====================================
+        /* =========================================
+           FOOTER
+        ========================================== */
+
+        .about-footer {
+            text-align: center;
+
+            margin-top: 35px;
+
+            padding-top: 25px;
+
+            border-top:
+                1px solid var(--border);
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+            line-height: 1.7;
+        }
+
+
+        .about-footer strong {
+            color: #777;
+        }
+
+
+        /* =========================================
            MÓVILES
-        ====================================== */
+        ========================================== */
+
+        @media only screen and (max-width: 750px) {
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
 
         @media only screen and (max-width: 600px) {
 
-            .about-container {
-                width: 94%;
-                margin-top: 20px;
+            nav {
+                height: 58px;
+                line-height: 58px;
             }
 
-            .about-card {
-                padding: 25px 20px;
-                border-radius: 15px;
+            nav .nav-wrapper {
+                width: 90%;
             }
+
+            nav .brand-logo {
+                font-size: 21px;
+            }
+
+
+            .about-container {
+                width: 94%;
+
+                margin:
+                    20px auto 35px;
+            }
+
+
+            .about-card {
+                padding:
+                    28px 20px;
+
+                border-radius: 18px;
+            }
+
+
+            .app-header {
+                margin-bottom: 35px;
+            }
+
 
             .app-logo {
                 width: 90px;
                 height: 90px;
+
+                border-radius: 24px;
             }
+
 
             .app-logo i {
-                font-size: 50px;
+                font-size: 48px;
             }
 
+
             .app-name {
-                font-size: 28px;
+                font-size: 30px;
             }
+
+
+            .app-type {
+                font-size: 12px;
+            }
+
+
+            .about-section {
+                margin-top: 28px;
+            }
+
 
             .section-title {
                 font-size: 19px;
             }
 
+
+            .section-title i {
+                font-size: 25px;
+            }
+
+
             .about-section p {
                 font-size: 15px;
             }
 
-            .info-row {
-                align-items: flex-start;
+
+            .info-card {
+                padding: 17px;
+            }
+
+
+            .description-box {
+                padding: 18px;
+            }
+
+
+            .feature-card {
+                padding: 17px;
+            }
+
+
+            .purpose-box {
+                padding: 20px;
+            }
+
+
+            .purpose-box p {
+                max-width: 100%;
+            }
+
+
+            .support-box {
+                padding: 24px 18px;
+            }
+
+
+            .support-email {
+                font-size: 13px;
+            }
+
+
+            .about-divider {
+                margin: 30px 0;
+            }
+
+
+            .back-button {
+                width: 100%;
+
+                padding: 0 15px;
             }
 
         }
@@ -411,27 +947,32 @@
 
 
     <!-- =========================================
-         MENÚ SUPERIOR
+         NAVBAR
     ========================================== -->
 
     <nav class="z-depth-0">
 
         <div class="nav-wrapper container">
 
-            <a href="../">
+            <a
+                href="../"
+                class="brand-logo"
+            >
                 DITS
             </a>
 
-            <span class="right">
 
-                <i
-                    class="material-icons sidenav-trigger"
-                    data-target="side-menu"
-                >
+            <a
+                href="#"
+                data-target="side-menu"
+                class="sidenav-trigger right"
+            >
+
+                <i class="material-icons">
                     menu
                 </i>
 
-            </span>
+            </a>
 
         </div>
 
@@ -444,14 +985,33 @@
 
     <ul
         id="side-menu"
-        class="sidenav side-menu"
+        class="sidenav"
     >
 
         <li>
 
-            <a class="subheader">
-                DITS
-            </a>
+            <div class="user-view">
+
+                <div class="background"
+                     style="background: linear-gradient(135deg, #edb90c, #ff9800);">
+                </div>
+
+                <br>
+
+                <span class="white-text"
+                      style="font-size: 28px; font-weight: 800;">
+                    DITS
+                </span>
+
+                <br>
+
+                <span class="white-text">
+                    Sistema de pedidos
+                </span>
+
+                <br><br>
+
+            </div>
 
         </li>
 
@@ -503,7 +1063,7 @@
                     info
                 </i>
 
-                Acerca
+                Acerca de
 
             </a>
 
@@ -538,44 +1098,43 @@
 
 
     <!-- =========================================
-         CONTENIDO
+         CONTENIDO PRINCIPAL
     ========================================== -->
 
     <main class="about-container">
-
 
         <div class="about-card">
 
 
             <!-- =================================
-                 LOGO
+                 HEADER
             ================================== -->
 
-            <div class="app-logo">
+            <header class="app-header">
 
-                <i class="material-icons">
-                    restaurant
-                </i>
+                <div class="app-logo">
 
-            </div>
+                    <i class="material-icons">
+                        restaurant
+                    </i>
+
+                </div>
+
+
+                <h1 class="app-name">
+                    DITS
+                </h1>
+
+
+                <div class="app-type">
+                    Aplicación Web Progresiva · PWA
+                </div>
+
+            </header>
 
 
             <!-- =================================
-                 NOMBRE
-            ================================== -->
-
-            <h1 class="app-name">
-                DITS
-            </h1>
-
-
-            <div class="app-type">
-                Aplicación Web Progresiva (PWA)
-            </div>
-
-
-            <!-- =================================
-                 INFORMACIÓN DE LA APLICACIÓN
+                 INFORMACIÓN
             ================================== -->
 
             <section class="about-section">
@@ -591,48 +1150,71 @@
                 </div>
 
 
-                <div class="info-box">
+                <div class="info-grid">
 
-                    <div class="info-row">
 
-                        <i class="material-icons">
-                            restaurant
-                        </i>
+                    <div class="info-card">
 
-                        <span>
-                            <strong>Nombre:</strong>
+                        <div class="info-icon">
+
+                            <i class="material-icons">
+                                restaurant
+                            </i>
+
+                        </div>
+
+                        <div class="info-label">
+                            Nombre
+                        </div>
+
+                        <div class="info-value">
                             DITS
-                        </span>
+                        </div>
 
                     </div>
 
 
-                    <div class="info-row">
+                    <div class="info-card">
 
-                        <i class="material-icons">
-                            system_update
-                        </i>
+                        <div class="info-icon">
 
-                        <span>
-                            <strong>Versión:</strong>
+                            <i class="material-icons">
+                                system_update
+                            </i>
+
+                        </div>
+
+                        <div class="info-label">
+                            Versión
+                        </div>
+
+                        <div class="info-value">
                             1.0.0
-                        </span>
+                        </div>
 
                     </div>
 
 
-                    <div class="info-row">
+                    <div class="info-card">
 
-                        <i class="material-icons">
-                            phone_android
-                        </i>
+                        <div class="info-icon">
 
-                        <span>
-                            <strong>Tipo:</strong>
-                            Aplicación Web Progresiva (PWA)
-                        </span>
+                            <i class="material-icons">
+                                phone_android
+                            </i>
+
+                        </div>
+
+                        <div class="info-label">
+                            Plataforma
+                        </div>
+
+                        <div class="info-value">
+                            PWA
+                        </div>
 
                     </div>
+
 
                 </div>
 
@@ -654,7 +1236,7 @@
                         description
                     </i>
 
-                    Descripción de la aplicación
+                    ¿Qué es DITS?
 
                 </div>
 
@@ -662,27 +1244,175 @@
                 <div class="description-box">
 
                     <p>
-                        <strong>DITS</strong> es una aplicación web
-                        diseñada para facilitar la consulta y
-                        administración de platillos, así como la
-                        realización de pedidos.
+
+                        <strong class="description-highlight">
+                            DITS
+                        </strong>
+                        es una aplicación web diseñada para
+                        facilitar la consulta de platillos,
+                        selección de alimentos y gestión de pedidos.
+
                     </p>
 
 
                     <p>
-                        La aplicación permite a los usuarios consultar
-                        los platillos disponibles, seleccionar sus
-                        alimentos y registrar la información necesaria
-                        para realizar un pedido.
+
+                        Los usuarios pueden consultar los
+                        platillos disponibles, seleccionar los
+                        productos que desean y registrar la
+                        información necesaria para realizar
+                        un pedido.
+
                     </p>
 
 
                     <p>
-                        DITS utiliza tecnologías web modernas y está
-                        diseñada como una PWA, permitiendo que pueda
-                        utilizarse desde dispositivos móviles y
-                        computadoras.
+
+                        La aplicación está desarrollada como una
+                        <strong class="description-highlight">
+                            Aplicación Web Progresiva (PWA)
+                        </strong>,
+                        por lo que puede utilizarse desde
+                        computadoras y dispositivos móviles.
+
                     </p>
+
+                </div>
+
+            </section>
+
+
+            <hr class="about-divider">
+
+
+            <!-- =================================
+                 CARACTERÍSTICAS
+            ================================== -->
+
+            <section class="about-section">
+
+                <div class="section-title">
+
+                    <i class="material-icons">
+                        auto_awesome
+                    </i>
+
+                    Características
+
+                </div>
+
+
+                <div class="features-grid">
+
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="material-icons">
+                                restaurant_menu
+                            </i>
+
+                        </div>
+
+
+                        <div class="feature-content">
+
+                            <h6>
+                                Consulta de platillos
+                            </h6>
+
+                            <p>
+                                Visualización de los alimentos
+                                disponibles para seleccionar.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="material-icons">
+                                shopping_cart
+                            </i>
+
+                        </div>
+
+
+                        <div class="feature-content">
+
+                            <h6>
+                                Gestión de pedidos
+                            </h6>
+
+                            <p>
+                                Selección y organización de
+                                productos antes de realizar
+                                un pedido.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="material-icons">
+                                location_on
+                            </i>
+
+                        </div>
+
+
+                        <div class="feature-content">
+
+                            <h6>
+                                Geolocalización
+                            </h6>
+
+                            <p>
+                                Integración de herramientas de
+                                ubicación y mapas.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <div class="feature-icon">
+
+                            <i class="material-icons">
+                                devices
+                            </i>
+
+                        </div>
+
+
+                        <div class="feature-content">
+
+                            <h6>
+                                Diseño adaptable
+                            </h6>
+
+                            <p>
+                                Interfaz adaptada para
+                                computadoras y dispositivos móviles.
+                            </p>
+
+                        </div>
+
+                    </div>
+
 
                 </div>
 
@@ -704,19 +1434,25 @@
                         lightbulb
                     </i>
 
-                    Propósito de la aplicación
+                    Propósito de DITS
 
                 </div>
 
 
-                <p>
+                <div class="purpose-box">
 
-                    El propósito de DITS es ofrecer una solución
-                    sencilla para la gestión de platillos y pedidos,
-                    integrando herramientas como geolocalización,
-                    mapas y almacenamiento de información en la nube.
+                    <p>
 
-                </p>
+                        El propósito de DITS es proporcionar una
+                        solución sencilla, moderna y accesible
+                        para la gestión de platillos y pedidos,
+                        integrando tecnologías web actuales como
+                        aplicaciones progresivas, geolocalización,
+                        mapas y almacenamiento de información.
+
+                    </p>
+
+                </div>
 
             </section>
 
@@ -743,9 +1479,14 @@
 
                 <div class="support-box">
 
-                    <i class="material-icons">
-                        mail
-                    </i>
+
+                    <div class="support-icon">
+
+                        <i class="material-icons">
+                            mail
+                        </i>
+
+                    </div>
 
 
                     <h6>
@@ -754,10 +1495,11 @@
 
 
                     <p>
-                        Para dudas, problemas o comentarios
-                        relacionados con la aplicación,
-                        puedes comunicarte mediante el correo
-                        electrónico de soporte.
+
+                        Si tienes dudas, problemas o comentarios
+                        relacionados con DITS, puedes comunicarte
+                        mediante el correo electrónico de soporte.
+
                     </p>
 
 
@@ -765,7 +1507,14 @@
                         href="mailto:soporte@dits.com"
                         class="support-email"
                     >
+
+                        <i class="material-icons"
+                           style="font-size: 18px;">
+                            email
+                        </i>
+
                         soporte@dits.com
+
                     </a>
 
                 </div>
@@ -799,15 +1548,19 @@
                  FOOTER
             ================================== -->
 
-            <div class="about-footer">
+            <footer class="about-footer">
 
-                DITS © 2026
+                <strong>
+                    DITS
+                </strong>
+
+                © 2026
 
                 <br>
 
                 Proyecto desarrollado con fines académicos.
 
-            </div>
+            </footer>
 
 
         </div>
@@ -837,6 +1590,7 @@
                 const sidenavs =
                     document.querySelectorAll(".sidenav");
 
+
                 M.Sidenav.init(
                     sidenavs,
                     {
@@ -853,3 +1607,4 @@
 </body>
 
 </html>
+```
