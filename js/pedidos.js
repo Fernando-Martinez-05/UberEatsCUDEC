@@ -1,133 +1,103 @@
-let contenido = "";
+// =========================================================
+// DITS - PEDIDOS.JS
+// Gestión de pedidos, Firebase, ubicación, mapa y QR
+// =========================================================
 
 
 // =========================================================
-// INICIALIZAR MATERIALIZE
+// VARIABLES
+// =========================================================
+
+let contenidoLista = "";
+
+let mapa = null;
+
+let marcador = null;
+
+
+// =========================================================
+// INICIALIZAR PÁGINA
 // =========================================================
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // =========================================
-    // MENÚS LATERALES
-    // =========================================
 
-    const menus = document.querySelectorAll(".sidenav");
+    // =====================================================
+    // MENÚ LATERAL
+    // =====================================================
+
+    const menus =
+        document.querySelectorAll(".side-menu");
+
 
     if (typeof M !== "undefined") {
 
-        M.Sidenav.init(menus, {
-            edge: "right"
-        });
-
-    }
-
-
-    // =========================================
-    // SELECTS
-    // =========================================
-
-    const selects = document.querySelectorAll("select");
-
-    if (typeof M !== "undefined") {
-
-        M.FormSelect.init(selects);
-
-    }
-
-
-    // =========================================
-    // BOTÓN USAR CÁMARA
-    // =========================================
-
-    const btnCamara = document.getElementById("btnCamara");
-
-    if (btnCamara) {
-
-        btnCamara.addEventListener("click", function (event) {
-
-            event.preventDefault();
-
-            iniciarCamara();
-
-        });
-
-    }
-
-
-    // =========================================
-    // BOTÓN CAPTURAR
-    // =========================================
-
-    const btnCapturar = document.getElementById("btnCapturar");
-
-    if (btnCapturar) {
-
-        btnCapturar.addEventListener("click", function (event) {
-
-            event.preventDefault();
-
-            tomarFoto();
-
-        });
-
-    }
-
-
-    // =========================================
-    // BOTÓN LIMPIAR
-    // =========================================
-
-    const btnLimpiar = document.getElementById("btnLimpiar");
-
-    if (btnLimpiar) {
-
-        btnLimpiar.addEventListener("click", function (event) {
-
-            event.preventDefault();
-
-            limpiarFoto();
-
-        });
-
-    }
-
-
-    // =========================================
-    // DETENER CÁMARA AL CERRAR FORMULARIO
-    // =========================================
-
-    const sideForm = document.getElementById("side-form");
-
-    if (sideForm) {
-
-        sideForm.addEventListener(
-            "sidenav:close",
-            function () {
-
-                detenerCamara();
-
+        M.Sidenav.init(
+            menus,
+            {
+                edge: "right"
             }
         );
 
     }
 
 
-    // =========================================
-    // FORMULARIO
-    // =========================================
+    // =====================================================
+    // INICIALIZAR LISTA DE PLATILLOS
+    // =====================================================
 
-    const formAgregar =
-        document.getElementById("formAgregar");
+    cargarPlatillos();
 
-    if (formAgregar) {
 
-        formAgregar.addEventListener(
-            "submit",
-            function (event) {
+    // =====================================================
+    // BOTÓN GUARDAR
+    // =====================================================
 
-                event.preventDefault();
+    const btnGuardar =
+        document.getElementById("btnGuardar");
 
-            }
+
+    if (btnGuardar) {
+
+        btnGuardar.addEventListener(
+            "click",
+            guardarPedido
+        );
+
+    }
+
+
+    // =====================================================
+    // BOTÓN CANCELAR
+    // =====================================================
+
+    const btnCancelar =
+        document.getElementById("btnCancelar");
+
+
+    if (btnCancelar) {
+
+        btnCancelar.addEventListener(
+            "click",
+            cancelarPedido
+        );
+
+    }
+
+
+    // =====================================================
+    // BOTÓN UBICACIÓN
+    // =====================================================
+
+    const btnUbicacion =
+        document.getElementById("btnUbicacion");
+
+
+    if (btnUbicacion) {
+
+        btnUbicacion.addEventListener(
+            "click",
+            obtenerUbicacion
         );
 
     }
@@ -136,265 +106,449 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // =========================================================
-// MOSTRAR PLATILLO
+// CARGAR PLATILLOS DESDE FIREBASE
 // =========================================================
 
-function mostrarPlatillo(platillo, id) {
+function cargarPlatillos() {
 
-    const recipes =
-        document.querySelector(".recipes");
+    if (typeof db === "undefined") {
 
-    if (!recipes) {
+        console.error(
+            "Firebase / db no está disponible."
+        );
 
         return;
 
     }
 
 
-    contenido = `
+    db.collection("platillos")
+        .onSnapshot(
+            function (coleccion) {
 
-        <div
-            class="card-panel recipe white row"
-            id="${id}"
-            data-id="${id}"
-        >
+                coleccion.docChanges()
+                    .forEach(
+                        function (registro) {
 
-            <div class="recipe-details">
+                            if (
+                                registro.type === "added"
+                            ) {
 
-                <div class="recipe-title">
+                                agregarALista(
+                                    registro.doc.data(),
+                                    registro.doc.id
+                                );
 
-                    ${platillo.nombre || ""}
+                            }
 
-                </div>
+                        }
+                    );
 
-                <div class="recipe-ingredients">
+            },
+            function (error) {
 
-                    ${platillo.ingredientes || ""}
+                console.error(
+                    "Error al cargar platillos:",
+                    error
+                );
 
-                </div>
-
-                <div class="recipe-price">
-
-                    $${platillo.precio || 0} MXN
-
-                </div>
-
-                <div class="recipe-delete">
-
-                    <i
-                        class="material-icons"
-                        data-id="${id}"
-                    >
-
-                        delete_outline
-
-                    </i>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    recipes.innerHTML += contenido;
+            }
+        );
 
 }
 
 
 // =========================================================
-// ACTUALIZAR PLATILLO
+// AGREGAR PLATILLO A LA LISTA
 // =========================================================
 
-function actualizarPlatillo(platillo, id) {
+function agregarALista(
+    platillo,
+    id
+) {
 
-    const tarjeta =
-        document.getElementById(id);
-
-    if (!tarjeta) {
-
-        return;
-
-    }
-
-
-    const titulo =
-        tarjeta.querySelector(".recipe-title");
-
-    const ingredientes =
-        tarjeta.querySelector(".recipe-ingredients");
-
-    const precio =
-        tarjeta.querySelector(".recipe-price");
-
-
-    if (titulo) {
-
-        titulo.innerHTML =
-            platillo.nombre || "";
-
-    }
-
-
-    if (ingredientes) {
-
-        ingredientes.innerHTML =
-            platillo.ingredientes || "";
-
-    }
-
-
-    if (precio) {
-
-        precio.innerHTML =
-            `$${platillo.precio || 0} MXN`;
-
-    }
-
-}
-
-
-// =========================================================
-// BORRAR PLATILLO
-// =========================================================
-
-const borrarPlatillo = (id) => {
-
-    const platillo =
-        document.querySelector(
-            `.recipe[data-id="${id}"]`
+    const lista =
+        document.getElementById(
+            "listaPlatillos"
         );
 
 
-    if (platillo) {
+    if (!lista) {
 
-        platillo.remove();
-
-    }
-
-};
-
-
-// =========================================================
-// AGREGAR PLATILLO AL SELECT
-// =========================================================
-
-function agregarPlatilloAlSelect(platillo, id) {
-
-    const select =
-        document.getElementById("listaPlatillos");
-
-    if (!select) {
+        console.error(
+            "No se encontró #listaPlatillos."
+        );
 
         return;
 
     }
 
 
-    const option =
+    // =====================================================
+    // EVITAR DUPLICADOS
+    // =====================================================
+
+    const existe =
+        lista.querySelector(
+            `option[value="${id}"]`
+        );
+
+
+    if (existe) {
+
+        return;
+
+    }
+
+
+    // =====================================================
+    // CREAR OPCIÓN
+    // =====================================================
+
+    const opcion =
         document.createElement("option");
 
 
-    option.value =
+    opcion.value =
         id;
 
 
-    option.textContent =
+    opcion.textContent =
         platillo.nombre || "Platillo";
 
 
-    select.appendChild(option);
-
-
-    actualizarSelect(select);
+    lista.appendChild(
+        opcion
+    );
 
 }
 
 
 // =========================================================
-// ACTUALIZAR SELECT MATERIALIZE
+// GUARDAR PEDIDO
 // =========================================================
 
-function actualizarSelect(select) {
+function guardarPedido() {
 
-    if (typeof M === "undefined") {
+
+    // =====================================================
+    // OBTENER ELEMENTOS
+    // =====================================================
+
+    const lista =
+        document.getElementById(
+            "listaPlatillos"
+        );
+
+
+    const nombre =
+        document.getElementById(
+            "txtNombre"
+        );
+
+
+    const direccion =
+        document.getElementById(
+            "txtDireccion"
+        );
+
+
+    // =====================================================
+    // COMPROBAR ELEMENTOS
+    // =====================================================
+
+    if (
+        !lista ||
+        !nombre ||
+        !direccion
+    ) {
+
+        console.error(
+            "No se encontraron los elementos del formulario."
+        );
 
         return;
 
     }
 
 
-    const instancia =
-        M.FormSelect.getInstance(select);
+    // =====================================================
+    // OBTENER DATOS
+    // =====================================================
+
+    const opcionSeleccionada =
+        lista.options[
+            lista.selectedIndex
+        ];
 
 
-    if (instancia) {
-
-        instancia.destroy();
-
-    }
-
-
-    M.FormSelect.init(select);
-
-}
+    const platillo =
+        opcionSeleccionada
+            ? opcionSeleccionada.text
+            : "";
 
 
-// =========================================================
-// LIMPIAR LISTA DE PLATILLOS
-// =========================================================
+    const nombreValor =
+        nombre.value.trim();
 
-function limpiarListaPlatillos() {
 
-    const select =
-        document.getElementById("listaPlatillos");
+    const direccionValor =
+        direccion.value.trim();
 
-    if (!select) {
+
+    // =====================================================
+    // VALIDAR
+    // =====================================================
+
+    if (
+        !lista.value ||
+        !nombreValor ||
+        !direccionValor
+    ) {
+
+        mostrarMensaje(
+            "Por favor completa todos los campos.",
+            "error"
+        );
 
         return;
 
     }
 
 
-    select.innerHTML = `
+    // =====================================================
+    // COMPROBAR FIREBASE
+    // =====================================================
 
-        <option
-            value=""
-            disabled
-            selected
-        >
+    if (typeof db === "undefined") {
 
-            Elige un platillo
+        console.error(
+            "Firebase no está disponible."
+        );
 
-        </option>
+        mostrarMensaje(
+            "No se pudo conectar con la base de datos.",
+            "error"
+        );
 
-    `;
+        return;
+
+    }
 
 
-    actualizarSelect(select);
+    // =====================================================
+    // DESACTIVAR BOTÓN
+    // =====================================================
+
+    const btnGuardar =
+        document.getElementById(
+            "btnGuardar"
+        );
+
+
+    if (btnGuardar) {
+
+        btnGuardar.disabled =
+            true;
+
+        btnGuardar.innerHTML = `
+            <i class="material-icons left">
+                hourglass_empty
+            </i>
+            Guardando...
+        `;
+
+    }
+
+
+    // =====================================================
+    // GUARDAR EN FIREBASE
+    // =====================================================
+
+    db.collection("pedidos")
+        .add({
+
+            direccion:
+                direccionValor,
+
+            nombre:
+                nombreValor,
+
+            platillo:
+                platillo,
+
+            fecha:
+                new Date()
+
+        })
+        .then(
+            function (docRef) {
+
+                console.log(
+                    "Pedido registrado:",
+                    docRef.id
+                );
+
+
+                // =========================================
+                // GENERAR QR
+                // =========================================
+
+                generarQR(
+                    docRef.id,
+                    platillo
+                );
+
+
+                // =========================================
+                // MOSTRAR MENSAJE
+                // =========================================
+
+                mostrarMensaje(
+                    "Pedido registrado correctamente.",
+                    "success"
+                );
+
+
+                // =========================================
+                // LIMPIAR FORMULARIO
+                // =========================================
+
+                limpiarFormulario();
+
+            }
+        )
+        .catch(
+            function (error) {
+
+                console.error(
+                    "Error al guardar el pedido:",
+                    error
+                );
+
+
+                mostrarMensaje(
+                    "Ocurrió un error al guardar el pedido.",
+                    "error"
+                );
+
+            }
+        )
+        .finally(
+            function () {
+
+                restaurarBotonGuardar();
+
+            }
+        );
 
 }
 
 
 // =========================================================
-// OBTENER PLATILLO SELECCIONADO
+// GENERAR CÓDIGO QR
 // =========================================================
 
-function obtenerPlatilloSeleccionado() {
+function generarQR(
+    idPedido,
+    platillo
+) {
 
-    const select =
-        document.getElementById("listaPlatillos");
+    const contenedor =
+        document.getElementById(
+            "qr"
+        );
 
-    if (!select) {
 
-        return null;
+    if (!contenedor) {
+
+        return;
 
     }
 
 
-    return select.value;
+    // =====================================================
+    // LIMPIAR QR ANTERIOR
+    // =====================================================
+
+    contenedor.innerHTML = "";
+
+
+    // =====================================================
+    // COMPROBAR LIBRERÍA
+    // =====================================================
+
+    if (
+        typeof QRCode === "undefined"
+    ) {
+
+        console.error(
+            "QRCode no está disponible."
+        );
+
+        return;
+
+    }
+
+
+    // =====================================================
+    // INFORMACIÓN DEL QR
+    // =====================================================
+
+    const informacion =
+        JSON.stringify({
+
+            id:
+                idPedido,
+
+            platillo:
+                platillo,
+
+            sistema:
+                "DITS"
+
+        });
+
+
+    // =====================================================
+    // GENERAR QR
+    // =====================================================
+
+    new QRCode(
+        contenedor,
+        {
+
+            text:
+                informacion,
+
+            width:
+                180,
+
+            height:
+                180,
+
+            colorDark:
+                "#000000",
+
+            colorLight:
+                "#ffffff",
+
+            correctLevel:
+                QRCode.CorrectLevel.H
+
+        }
+    );
+
+}
+
+
+// =========================================================
+// CANCELAR PEDIDO
+// =========================================================
+
+function cancelarPedido() {
+
+    limpiarFormulario();
 
 }
 
@@ -403,507 +557,370 @@ function obtenerPlatilloSeleccionado() {
 // LIMPIAR FORMULARIO
 // =========================================================
 
-function limpiarFormularioPlatillo() {
+function limpiarFormulario() {
 
-    const form =
-        document.getElementById("formAgregar");
-
-    if (!form) {
-
-        return;
-
-    }
-
-
-    form.reset();
-
-}
-
-
-// =========================================================
-// VARIABLES DE CÁMARA
-// =========================================================
-
-let streaming = false;
-
-let width = 640;
-
-let height = 480;
-
-let video = null;
-
-let canvas = null;
-
-let foto = null;
-
-let streamCamara = null;
-
-
-// =========================================================
-// OBTENER ELEMENTOS DE CÁMARA
-// =========================================================
-
-function prepararCamara() {
-
-    video =
-        document.getElementById("Video");
-
-    canvas =
-        document.getElementById("Canvas");
-
-    foto =
-        document.getElementById("foto");
-
-}
-
-
-// =========================================================
-// INICIAR CÁMARA
-// =========================================================
-
-async function iniciarCamara() {
-
-    prepararCamara();
-
-
-    const status =
-        document.getElementById("cameraStatus");
-
-    const error =
-        document.getElementById("cameraError");
-
-
-    // =========================================
-    // COMPROBAR VIDEO
-    // =========================================
-
-    if (!video) {
-
-        console.error(
-            "No se encontró el elemento #Video."
+    const lista =
+        document.getElementById(
+            "listaPlatillos"
         );
 
-        if (error) {
 
-            error.textContent =
-                "No se encontró el elemento de cámara.";
+    const nombre =
+        document.getElementById(
+            "txtNombre"
+        );
 
-        }
 
-        return;
+    const direccion =
+        document.getElementById(
+            "txtDireccion"
+        );
+
+
+    // =====================================================
+    // LIMPIAR SELECT
+    // =====================================================
+
+    if (lista) {
+
+        lista.selectedIndex =
+            0;
 
     }
 
 
-    // =========================================
-    // COMPROBAR CONTEXTO SEGURO
-    // =========================================
+    // =====================================================
+    // LIMPIAR NOMBRE
+    // =====================================================
 
-    const esLocalhost =
-        location.hostname === "localhost" ||
-        location.hostname === "127.0.0.1";
+    if (nombre) {
 
+        nombre.value =
+            "";
+
+    }
+
+
+    // =====================================================
+    // LIMPIAR DIRECCIÓN
+    // =====================================================
+
+    if (direccion) {
+
+        direccion.value =
+            "";
+
+    }
+
+
+    // =====================================================
+    // LIMPIAR MAPA
+    // =====================================================
+
+    if (mapa) {
+
+        mapa.remove();
+
+        mapa = null;
+
+        marcador = null;
+
+    }
+
+
+    // =====================================================
+    // LIMPIAR CONTENEDOR QR
+    // =====================================================
+
+    const qr =
+        document.getElementById(
+            "qr"
+        );
+
+
+    if (qr) {
+
+        qr.innerHTML =
+            "";
+
+    }
+
+}
+
+
+// =========================================================
+// OBTENER UBICACIÓN
+// =========================================================
+
+function obtenerUbicacion() {
+
+
+    // =====================================================
+    // COMPROBAR SOPORTE
+    // =====================================================
 
     if (
-        !window.isSecureContext &&
-        !esLocalhost
+        !navigator.geolocation
     ) {
 
-        if (status) {
-
-            status.textContent =
-                "No se puede acceder a la cámara.";
-
-        }
-
-
-        if (error) {
-
-            error.textContent =
-                "La cámara del teléfono requiere HTTPS.";
-
-        }
+        mostrarMensaje(
+            "Este navegador no soporta geolocalización.",
+            "error"
+        );
 
         return;
 
     }
 
 
-    // =========================================
-    // COMPROBAR getUserMedia
-    // =========================================
+    // =====================================================
+    // MENSAJE
+    // =====================================================
 
-    if (
-        !navigator.mediaDevices ||
-        !navigator.mediaDevices.getUserMedia
-    ) {
-
-        if (status) {
-
-            status.textContent =
-                "Cámara no disponible.";
-
-        }
+    const btn =
+        document.getElementById(
+            "btnUbicacion"
+        );
 
 
-        if (error) {
+    if (btn) {
 
-            error.textContent =
-                "Tu navegador no permite utilizar la cámara.";
+        btn.disabled =
+            true;
 
-        }
-
-        return;
+        btn.innerHTML = `
+            <i class="material-icons left">
+                location_searching
+            </i>
+            Obteniendo...
+        `;
 
     }
 
 
-    try {
+    // =====================================================
+    // SOLICITAR UBICACIÓN
+    // =====================================================
 
-        // =========================================
-        // DETENER STREAM ANTERIOR
-        // =========================================
+    navigator.geolocation.getCurrentPosition(
 
-        detenerCamara();
+        ubicacionExitosa,
 
+        ubicacionError,
 
-        if (status) {
+        {
 
-            status.textContent =
-                "Solicitando permiso para usar la cámara...";
+            enableHighAccuracy:
+                true,
 
-        }
+            timeout:
+                15000,
 
-
-        if (error) {
-
-            error.textContent = "";
-
-        }
-
-
-        // =========================================
-        // PRIMER INTENTO
-        // CÁMARA TRASERA
-        // =========================================
-
-        try {
-
-            streamCamara =
-                await navigator.mediaDevices.getUserMedia({
-
-                    video: {
-
-                        facingMode: {
-                            exact: "environment"
-                        },
-
-                        width: {
-                            ideal: 1280
-                        },
-
-                        height: {
-                            ideal: 720
-                        }
-
-                    },
-
-                    audio: false
-
-                });
-
-        }
-        catch (primerError) {
-
-            console.warn(
-                "No se pudo seleccionar environment exacto.",
-                primerError
-            );
-
-
-            // =========================================
-            // SEGUNDO INTENTO
-            // MÁS COMPATIBLE
-            // =========================================
-
-            streamCamara =
-                await navigator.mediaDevices.getUserMedia({
-
-                    video: {
-
-                        facingMode: {
-                            ideal: "environment"
-                        },
-
-                        width: {
-                            ideal: 1280
-                        },
-
-                        height: {
-                            ideal: 720
-                        }
-
-                    },
-
-                    audio: false
-
-                });
+            maximumAge:
+                0
 
         }
 
+    );
 
-        // =========================================
-        // ASIGNAR STREAM
-        // =========================================
-
-        video.srcObject =
-            streamCamara;
+}
 
 
-        video.autoplay =
-            true;
+// =========================================================
+// UBICACIÓN EXITOSA
+// =========================================================
+
+function ubicacionExitosa(
+    posicion
+) {
+
+    const latitud =
+        posicion.coords.latitude;
 
 
-        video.muted =
-            true;
+    const longitud =
+        posicion.coords.longitude;
 
 
-        video.playsInline =
-            true;
+    console.log(
+        "Latitud:",
+        latitud
+    );
 
 
-        // =========================================
-        // ESPERAR METADATA
-        // =========================================
+    console.log(
+        "Longitud:",
+        longitud
+    );
 
-        await new Promise(function (resolve) {
 
-            if (
-                video.readyState >= 1 &&
-                video.videoWidth > 0
-            ) {
+    // =====================================================
+    // MOSTRAR MAPA
+    // =====================================================
 
-                resolve();
+    mostrarMapa(
+        latitud,
+        longitud
+    );
+
+
+    // =====================================================
+    // OBTENER DIRECCIÓN
+    // =====================================================
+
+    obtenerDireccion(
+        latitud,
+        longitud
+    );
+
+
+    restaurarBotonUbicacion();
+
+}
+
+
+// =========================================================
+// OBTENER DIRECCIÓN MEDIANTE NOMINATIM
+// =========================================================
+
+function obtenerDireccion(
+    latitud,
+    longitud
+) {
+
+    const url =
+        `https://nominatim.openstreetmap.org/reverse?lat=${latitud}&lon=${longitud}&format=json&addressdetails=1`;
+
+
+    fetch(
+        url,
+        {
+
+            headers: {
+
+                "Accept":
+                    "application/json",
+
+                "User-Agent":
+                    "DITS-App"
+
+            }
+
+        }
+    )
+    .then(
+        function (respuesta) {
+
+            if (!respuesta.ok) {
+
+                throw new Error(
+                    "No se pudo obtener la dirección."
+                );
+
+            }
+
+            return respuesta.json();
+
+        }
+    )
+    .then(
+        function (data) {
+
+            const direccion =
+                document.getElementById(
+                    "txtDireccion"
+                );
+
+
+            if (!direccion) {
 
                 return;
 
             }
 
 
-            video.addEventListener(
-                "loadedmetadata",
-                function () {
+            // =================================================
+            // OBTENER DIRECCIÓN COMPLETA
+            // =================================================
 
-                    resolve();
+            if (data.display_name) {
 
-                },
-                {
-                    once: true
-                }
-            );
+                direccion.value =
+                    data.display_name;
 
-        });
+            }
+            else {
 
+                const ciudad =
+                    data.address?.city ||
+                    data.address?.town ||
+                    data.address?.village ||
+                    "";
 
-        // =========================================
-        // REPRODUCIR
-        // =========================================
 
-        await video.play();
+                const pais =
+                    data.address?.country ||
+                    "";
 
 
-        // =========================================
-        // OBTENER DIMENSIONES
-        // =========================================
+                direccion.value =
+                    `${ciudad}, ${pais}`;
 
-        if (
-            video.videoWidth > 0 &&
-            video.videoHeight > 0
-        ) {
+            }
 
-            width =
-                video.videoWidth;
 
-            height =
-                video.videoHeight;
+            // =================================================
+            // ACTUALIZAR LABEL MATERIALIZE
+            // =================================================
 
-        }
-        else {
+            if (typeof M !== "undefined") {
 
-            width =
-                640;
-
-            height =
-                480;
-
-        }
-
-
-        // =========================================
-        // CONFIGURAR CANVAS
-        // =========================================
-
-        if (canvas) {
-
-            canvas.width =
-                width;
-
-            canvas.height =
-                height;
-
-        }
-
-
-        // =========================================
-        // ACTIVAR STREAMING
-        // =========================================
-
-        streaming =
-            true;
-
-
-        // =========================================
-        // INFORMACIÓN DE LA CÁMARA
-        // =========================================
-
-        const tracks =
-            streamCamara.getVideoTracks();
-
-
-        if (tracks.length > 0) {
-
-            const settings =
-                tracks[0].getSettings();
-
-
-            console.log(
-                "Cámara utilizada:",
-                settings
-            );
-
-        }
-
-
-        // =========================================
-        // ESTADO
-        // =========================================
-
-        if (status) {
-
-            status.textContent =
-                "Cámara trasera activada.";
-
-        }
-
-
-        if (error) {
-
-            error.textContent = "";
-
-        }
-
-    }
-    catch (err) {
-
-        console.error(
-            "Error al acceder a la cámara:",
-            err
-        );
-
-
-        detenerCamara();
-
-
-        if (status) {
-
-            status.textContent =
-                "No se pudo iniciar la cámara.";
-
-        }
-
-
-        if (error) {
-
-            switch (err.name) {
-
-                case "NotAllowedError":
-
-                    error.textContent =
-                        "Permiso de cámara rechazado. Permite el acceso a la cámara en el navegador.";
-
-                    break;
-
-
-                case "NotFoundError":
-
-                    error.textContent =
-                        "No se encontró ninguna cámara disponible.";
-
-                    break;
-
-
-                case "NotReadableError":
-
-                    error.textContent =
-                        "La cámara está siendo utilizada por otra aplicación.";
-
-                    break;
-
-
-                case "SecurityError":
-
-                    error.textContent =
-                        "El navegador bloqueó el acceso a la cámara.";
-
-                    break;
-
-
-                case "OverconstrainedError":
-
-                    error.textContent =
-                        "No se pudo seleccionar la cámara trasera.";
-
-                    break;
-
-
-                default:
-
-                    error.textContent =
-                        "Error de cámara: " +
-                        err.message;
-
-                    break;
+                M.updateTextFields();
 
             }
 
         }
+    )
+    .catch(
+        function (error) {
 
-    }
+            console.error(
+                "Error al obtener dirección:",
+                error
+            );
+
+
+            mostrarMensaje(
+                "Se obtuvo la ubicación, pero no fue posible obtener la dirección.",
+                "error"
+            );
+
+        }
+    );
 
 }
 
 
 // =========================================================
-// TOMAR FOTO
+// MOSTRAR MAPA
 // =========================================================
 
-function tomarFoto() {
+function mostrarMapa(
+    latitud,
+    longitud
+) {
 
-    prepararCamara();
 
-
-    // =========================================
-    // COMPROBAR ELEMENTOS
-    // =========================================
+    // =====================================================
+    // COMPROBAR LEAFLET
+    // =====================================================
 
     if (
-        !video ||
-        !canvas ||
-        !foto
+        typeof L === "undefined"
     ) {
 
         console.error(
-            "No se encontraron los elementos necesarios para tomar la foto."
+            "Leaflet no está disponible."
         );
 
         return;
@@ -911,57 +928,20 @@ function tomarFoto() {
     }
 
 
-    // =========================================
-    // COMPROBAR STREAM
-    // =========================================
+    // =====================================================
+    // CONTENEDOR
+    // =====================================================
 
-    if (
-        !streamCamara ||
-        !streaming ||
-        video.videoWidth === 0 ||
-        video.videoHeight === 0
-    ) {
-
-        const status =
-            document.getElementById("cameraStatus");
+    const contenedor =
+        document.getElementById(
+            "map"
+        );
 
 
-        const error =
-            document.getElementById("cameraError");
-
-
-        if (status) {
-
-            status.textContent =
-                "La cámara todavía no está lista.";
-
-        }
-
-
-        if (error) {
-
-            error.textContent =
-                "Pulsa primero 'Usar cámara'.";
-
-        }
-
-        return;
-
-    }
-
-
-    // =========================================
-    // CONTEXTO DEL CANVAS
-    // =========================================
-
-    const context =
-        canvas.getContext("2d");
-
-
-    if (!context) {
+    if (!contenedor) {
 
         console.error(
-            "No se pudo obtener el contexto del canvas."
+            "No se encontró #map."
         );
 
         return;
@@ -969,116 +949,178 @@ function tomarFoto() {
     }
 
 
-    // =========================================
-    // DIMENSIONES REALES
-    // =========================================
+    // =====================================================
+    // ELIMINAR MAPA ANTERIOR
+    // =====================================================
 
-    const videoWidth =
-        video.videoWidth;
+    if (mapa) {
 
+        mapa.remove();
 
-    const videoHeight =
-        video.videoHeight;
+        mapa = null;
 
+        marcador = null;
 
-    canvas.width =
-        videoWidth;
-
-
-    canvas.height =
-        videoHeight;
+    }
 
 
-    // =========================================
-    // CAPTURAR VIDEO
-    // =========================================
+    // =====================================================
+    // CREAR MAPA
+    // =====================================================
 
-    context.drawImage(
-        video,
-        0,
-        0,
-        videoWidth,
-        videoHeight
+    mapa =
+        L.map(
+            "map"
+        ).setView(
+            [
+                latitud,
+                longitud
+            ],
+            16
+        );
+
+
+    // =====================================================
+    // CAPA DE OPENSTREETMAP
+    // =====================================================
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+
+            maxZoom:
+                19,
+
+            attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+
+        }
+    )
+    .addTo(
+        mapa
     );
 
 
-    // =========================================
-    // CONVERTIR A IMAGEN
-    // =========================================
+    // =====================================================
+    // MARCADOR
+    // =====================================================
 
-    const fotoFinal =
-        canvas.toDataURL(
-            "image/jpeg",
-            0.90
+    marcador =
+        L.marker(
+            [
+                latitud,
+                longitud
+            ]
+        )
+        .addTo(
+            mapa
         );
 
 
-    // =========================================
-    // MOSTRAR FOTO
-    // =========================================
-
-    foto.src =
-        fotoFinal;
+    marcador.bindPopup(
+        "<b>Ubicación de entrega</b>"
+    )
+    .openPopup();
 
 
-    foto.style.display =
-        "block";
+    // =====================================================
+    // FORZAR ACTUALIZACIÓN DEL MAPA
+    // =====================================================
+
+    setTimeout(
+        function () {
+
+            mapa.invalidateSize();
+
+        },
+        300
+    );
+
+}
 
 
-    // =========================================
-    // GUARDAR FOTO
-    // =========================================
+// =========================================================
+// ERROR DE GEOLOCALIZACIÓN
+// =========================================================
 
-    foto.dataset.imagen =
-        fotoFinal;
+function ubicacionError(
+    error
+) {
 
-
-    // =========================================
-    // GUARDAR EN INPUT
-    // =========================================
-
-    const fotoInput =
-        document.getElementById("fotoInput");
+    console.error(
+        "Error de geolocalización:",
+        error
+    );
 
 
-    if (fotoInput) {
+    let mensaje =
+        "No se pudo obtener la ubicación.";
 
-        fotoInput.value =
-            fotoFinal;
+
+    switch (
+        error.code
+    ) {
+
+        case 1:
+
+            mensaje =
+                "Permiso de ubicación rechazado. Permite la ubicación en tu navegador.";
+
+            break;
+
+
+        case 2:
+
+            mensaje =
+                "No fue posible determinar tu ubicación.";
+
+            break;
+
+
+        case 3:
+
+            mensaje =
+                "La solicitud de ubicación tardó demasiado.";
+
+            break;
 
     }
 
 
-    // =========================================
-    // DETENER CÁMARA
-    // =========================================
-
-    detenerCamara();
-
-
-    // =========================================
-    // ACTUALIZAR ESTADO
-    // =========================================
-
-    const status =
-        document.getElementById("cameraStatus");
+    mostrarMensaje(
+        mensaje,
+        "error"
+    );
 
 
-    const error =
-        document.getElementById("cameraError");
+    restaurarBotonUbicacion();
+
+}
 
 
-    if (status) {
+// =========================================================
+// RESTAURAR BOTÓN UBICACIÓN
+// =========================================================
 
-        status.textContent =
-            "Foto tomada correctamente.";
+function restaurarBotonUbicacion() {
 
-    }
+    const btn =
+        document.getElementById(
+            "btnUbicacion"
+        );
 
 
-    if (error) {
+    if (btn) {
 
-        error.textContent = "";
+        btn.disabled =
+            false;
+
+        btn.innerHTML = `
+            <i class="material-icons left">
+                location_on
+            </i>
+            Obtener ubicación
+        `;
 
     }
 
@@ -1086,172 +1128,95 @@ function tomarFoto() {
 
 
 // =========================================================
-// DETENER CÁMARA
+// RESTAURAR BOTÓN GUARDAR
 // =========================================================
 
-function detenerCamara() {
+function restaurarBotonGuardar() {
 
-    if (streamCamara) {
+    const btn =
+        document.getElementById(
+            "btnGuardar"
+        );
 
-        const tracks =
-            streamCamara.getTracks();
+
+    if (btn) {
+
+        btn.disabled =
+            false;
+
+        btn.innerHTML = `
+            <i class="material-icons left">
+                save
+            </i>
+            Guardar
+        `;
+
+    }
+
+}
 
 
-        tracks.forEach(function (track) {
+// =========================================================
+// MOSTRAR MENSAJE
+// =========================================================
 
-            track.stop();
+function mostrarMensaje(
+    mensaje,
+    tipo
+) {
+
+    // =====================================================
+    // MATERIALIZE
+    // =====================================================
+
+    if (
+        typeof M !== "undefined" &&
+        M.toast
+    ) {
+
+        let clase =
+            "";
+
+
+        if (tipo === "success") {
+
+            clase =
+                "green";
+
+        }
+        else if (tipo === "error") {
+
+            clase =
+                "red";
+
+        }
+
+
+        M.toast({
+
+            html:
+                mensaje,
+
+            classes:
+                clase,
+
+            displayLength:
+                4000
 
         });
 
 
-        streamCamara =
-            null;
+        return;
 
     }
 
 
-    if (video) {
+    // =====================================================
+    // FALLBACK
+    // =====================================================
 
-        try {
-
-            video.pause();
-
-        }
-        catch (e) {
-
-            console.warn(e);
-
-        }
-
-
-        video.srcObject =
-            null;
-
-    }
-
-
-    streaming =
-        false;
+    alert(
+        mensaje
+    );
 
 }
-
-
-// =========================================================
-// LIMPIAR FOTO
-// =========================================================
-
-function limpiarFoto() {
-
-    prepararCamara();
-
-
-    // =========================================
-    // RESTAURAR FOTO
-    // =========================================
-
-    if (foto) {
-
-        foto.src =
-            "img/default.jpg";
-
-
-        foto.style.display =
-            "block";
-
-
-        foto.removeAttribute(
-            "data-imagen"
-        );
-
-    }
-
-
-    // =========================================
-    // LIMPIAR INPUT
-    // =========================================
-
-    const fotoInput =
-        document.getElementById("fotoInput");
-
-
-    if (fotoInput) {
-
-        fotoInput.value =
-            "";
-
-    }
-
-
-    // =========================================
-    // LIMPIAR CANVAS
-    // =========================================
-
-    if (canvas) {
-
-        const context =
-            canvas.getContext("2d");
-
-
-        if (context) {
-
-            context.clearRect(
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
-
-        }
-
-    }
-
-
-    // =========================================
-    // DETENER CÁMARA
-    // =========================================
-
-    detenerCamara();
-
-
-    // =========================================
-    // ESTADO
-    // =========================================
-
-    const status =
-        document.getElementById("cameraStatus");
-
-
-    const error =
-        document.getElementById("cameraError");
-
-
-    if (status) {
-
-        status.textContent =
-            "Cámara lista para tomar una foto.";
-
-    }
-
-
-    if (error) {
-
-        error.textContent =
-            "";
-
-    }
-
-}
-
-
-// =========================================================
-// DETENER CÁMARA AL CERRAR LA PÁGINA
-// =========================================================
-
-window.addEventListener(
-    "beforeunload",
-    function () {
-
-        detenerCamara();
-
-    }
-);
