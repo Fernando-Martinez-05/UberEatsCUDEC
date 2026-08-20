@@ -5,9 +5,15 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta
+        http-equiv="X-UA-Compatible"
+        content="ie=edge"
+    >
 
     <title>DITS - Pedidos</title>
 
@@ -28,7 +34,9 @@
     >
 
 
-    <!-- CSS DEL PROYECTO -->
+    <!-- =========================================
+         CSS DEL PROYECTO
+    ========================================== -->
 
     <link
         type="text/css"
@@ -44,17 +52,21 @@
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        crossorigin=""
     >
 
 
     <!-- =========================================
-         PWA
+         MANIFEST
     ========================================== -->
 
     <link
         rel="manifest"
         href="../manifest.json"
+    >
+
+    <meta
+        name="theme-color"
+        content="#ff8c00"
     >
 
     <meta
@@ -68,26 +80,25 @@
     >
 
     <meta
-        name="application-name"
-        content="DITS"
-    >
-
-    <meta
         name="apple-mobile-web-app-title"
         content="DITS"
     >
 
-    <meta
-        name="theme-color"
-        content="#4dc7e4"
-    >
-
 
     <!-- =========================================
-         DISEÑO DE PEDIDOS
+         ESTILOS
     ========================================== -->
 
     <style>
+
+        :root {
+            --naranja: #ff8c00;
+            --naranja-oscuro: #e87500;
+            --naranja-claro: #fff3e0;
+            --texto: #333333;
+            --gris: #777777;
+        }
+
 
         * {
             box-sizing: border-box;
@@ -96,440 +107,465 @@
 
         body {
             margin: 0;
-            background: #f4f7f9;
-            color: #37474f;
+            min-height: 100vh;
+            background: #f7f7f7;
+            color: var(--texto);
         }
 
 
-        /* =====================================
+        /* =========================================
            NAVBAR
-        ====================================== */
+        ========================================== */
 
         nav {
-            background: #ffffff;
-            border-bottom: 1px solid #e5e5e5;
+            background: var(--naranja);
+            height: 64px;
+            line-height: 64px;
         }
 
+
+        nav .nav-wrapper {
+            width: 92%;
+            max-width: 1100px;
+        }
+
+
         nav a {
-            color: #263238;
-            font-size: 21px;
+            color: white !important;
+            font-size: 23px;
             font-weight: 600;
         }
 
+
         nav .material-icons {
-            color: #546e7a;
+            color: white;
+            cursor: pointer;
         }
 
 
-        /* =====================================
+        /* =========================================
+           MENÚ LATERAL
+        ========================================== */
+
+        .side-menu {
+            padding-top: 10px;
+        }
+
+
+        .side-menu .subheader {
+            color: var(--naranja);
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+
+        .side-menu a {
+            color: #444;
+        }
+
+
+        .side-menu a i {
+            color: var(--naranja);
+        }
+
+
+        /* =========================================
            CONTENEDOR
-        ====================================== */
+        ========================================== */
 
         .pedidos-wrapper {
             width: 92%;
-            max-width: 950px;
+            max-width: 1050px;
             margin: 35px auto 60px;
         }
 
 
-        /* =====================================
+        /* =========================================
            ENCABEZADO
-        ====================================== */
+        ========================================== */
 
         .pedido-header {
             text-align: center;
             margin-bottom: 30px;
         }
 
+
         .pedido-header-icon {
-            width: 70px;
-            height: 70px;
+            width: 75px;
+            height: 75px;
             margin: 0 auto 15px;
-
             border-radius: 50%;
-
-            background: #4dc7e4;
-
+            background: var(--naranja-claro);
             display: flex;
             align-items: center;
             justify-content: center;
-
-            box-shadow: 0 6px 18px rgba(77, 199, 228, 0.30);
         }
+
 
         .pedido-header-icon i {
-            color: white;
-            font-size: 36px;
+            color: var(--naranja);
+            font-size: 40px;
         }
+
 
         .pedido-header h4 {
             margin: 0;
-            color: #263238;
-            font-weight: 600;
+            font-weight: 700;
+            color: #333;
         }
 
+
         .pedido-header p {
-            margin-top: 8px;
-            color: #78909c;
+            margin: 10px 0 0;
+            color: #777;
             font-size: 15px;
         }
 
 
-        /* =====================================
-           TARJETA
-        ====================================== */
+        /* =========================================
+           GRID
+        ========================================== */
+
+        .pedido-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+
+        /* =========================================
+           TARJETAS
+        ========================================== */
 
         .pedido-card {
-            background: #ffffff;
-
+            background: white;
             border-radius: 18px;
-
-            padding: 30px;
-
-            margin-bottom: 25px;
-
-            box-shadow:
-                0 4px 18px rgba(0, 0, 0, 0.06);
+            padding: 28px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+            border: 1px solid #eeeeee;
         }
 
 
-        /* =====================================
-           TITULO DE SECCIÓN
-        ====================================== */
+        .pedido-card-full {
+            grid-column: 1 / -1;
+        }
 
-        .section-heading {
+
+        /* =========================================
+           TÍTULOS
+        ========================================== */
+
+        .card-title-custom {
             display: flex;
             align-items: center;
-
+            gap: 12px;
             margin-bottom: 25px;
-
-            padding-bottom: 15px;
-
-            border-bottom: 1px solid #eeeeee;
         }
 
-        .section-heading .heading-icon {
-            width: 42px;
-            height: 42px;
 
-            border-radius: 10px;
-
-            background: #e8f8fc;
-
+        .card-title-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: var(--naranja-claro);
             display: flex;
             align-items: center;
             justify-content: center;
-
-            margin-right: 13px;
         }
 
-        .section-heading .heading-icon i {
-            color: #26a9c8;
-            font-size: 23px;
+
+        .card-title-icon i {
+            color: var(--naranja);
+            font-size: 25px;
         }
 
-        .section-heading h5 {
+
+        .card-title-custom h5 {
             margin: 0;
-            color: #263238;
             font-size: 20px;
             font-weight: 600;
         }
 
-        .section-heading span {
+
+        .card-title-custom span {
             display: block;
-            margin-top: 3px;
-            color: #90a4ae;
+            color: #888;
             font-size: 13px;
+            margin-top: 3px;
         }
 
 
-        /* =====================================
+        /* =========================================
            CAMPOS
-        ====================================== */
+        ========================================== */
 
         .input-field {
             margin-top: 25px;
-            margin-bottom: 25px;
         }
 
+
         .input-field label {
-            color: #78909c;
+            color: #777;
         }
+
 
         .input-field input:focus,
         .input-field textarea:focus {
-            border-bottom: 1px solid #4dc7e4 !important;
-            box-shadow: 0 1px 0 0 #4dc7e4 !important;
+            border-bottom: 1px solid var(--naranja) !important;
+            box-shadow: 0 1px 0 0 var(--naranja) !important;
         }
+
+
+        .input-field input:focus + label,
+        .input-field textarea:focus + label {
+            color: var(--naranja) !important;
+        }
+
 
         .input-field .prefix {
-            color: #90a4ae;
+            color: #999;
         }
+
 
         .input-field .prefix.active {
-            color: #4dc7e4;
+            color: var(--naranja);
         }
 
 
-        /* =====================================
+        /* =========================================
            SELECT
-        ====================================== */
-
-        .select-container {
-            margin-bottom: 25px;
-        }
+        ========================================== */
 
         .select-label {
             display: block;
-
-            margin-bottom: 8px;
-
-            color: #607d8b;
-
-            font-size: 14px;
-
-            font-weight: 500;
-        }
-
-        #listaplatillos {
-
-            width: 100%;
-
-            height: 48px;
-
-            padding: 0 14px;
-
-            border: 1px solid #cfd8dc;
-
-            border-radius: 9px;
-
-            background: #ffffff;
-
-            color: #37474f;
-
-            font-size: 15px;
-
-            outline: none;
-
-            transition: 0.2s;
-        }
-
-        #listaplatillos:focus {
-            border-color: #4dc7e4;
-            box-shadow: 0 0 0 2px rgba(77, 199, 228, 0.12);
-        }
-
-
-        /* =====================================
-           DIRECCIÓN
-        ====================================== */
-
-        #txtDireccion {
-
-            min-height: 115px;
-
-            resize: vertical;
-
-            padding-top: 12px;
-        }
-
-
-        /* =====================================
-           BOTONES
-        ====================================== */
-
-        .pedido-buttons {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 12px;
-
-            margin-top: 30px;
-        }
-
-        .pedido-buttons button {
-
-            width: 100%;
-
-            height: 48px;
-
-            border-radius: 9px;
-
-            font-weight: 500;
-
-            box-shadow: none;
-
-            text-transform: none;
-        }
-
-
-        .btn-location {
-            background: #4dc7e4;
-        }
-
-        .btn-location:hover {
-            background: #2fb3d3;
-        }
-
-
-        .btn-cancel {
-            background: #eceff1;
-            color: #546e7a;
-        }
-
-        .btn-cancel:hover {
-            background: #dfe4e6;
-        }
-
-
-        .btn-save {
-            background: #43b581;
-        }
-
-        .btn-save:hover {
-            background: #389c70;
-        }
-
-
-        /* =====================================
-           MAPA
-        ====================================== */
-
-        .map-section {
-            padding-bottom: 25px;
-        }
-
-        .map-info {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 8px;
-
-            padding: 10px 13px;
-
-            margin-bottom: 15px;
-
-            border-radius: 8px;
-
-            background: #f1f9fb;
-
-            color: #607d8b;
-
             font-size: 13px;
+            color: #777;
+            margin-bottom: 8px;
         }
 
-        .map-info i {
-            color: #4dc7e4;
-            font-size: 20px;
+
+        #listaPlatillos {
+            width: 100%;
+            height: 48px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 0 15px;
+            background: white;
+            font-size: 15px;
+            outline: none;
         }
 
+
+        #listaPlatillos:focus {
+            border-color: var(--naranja);
+        }
+
+
+        /* =========================================
+           UBICACIÓN
+        ========================================== */
+
+        .location-box {
+            background: #fff8ef;
+            border: 1px solid #ffe0b2;
+            border-radius: 14px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+
+        .location-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #777;
+            font-size: 14px;
+        }
+
+
+        .location-status i {
+            color: var(--naranja);
+        }
+
+
+        #ubicacionTexto {
+            margin-top: 10px;
+            color: #444;
+            font-size: 13px;
+            word-break: break-word;
+        }
+
+
+        /* =========================================
+           MAPA
+        ========================================== */
 
         #map {
-
             width: 100%;
-
-            height: 380px;
-
-            border-radius: 14px;
-
+            height: 390px;
+            border-radius: 15px;
             overflow: hidden;
-
-            border: 1px solid #e0e0e0;
-
-            box-shadow:
-                inset 0 0 0 1px rgba(0,0,0,0.02);
+            border: 1px solid #ddd;
         }
 
 
-        /* =====================================
-           MENSAJE DE UBICACIÓN
-        ====================================== */
-
-        #ubicacionEstado {
-
-            display: none;
-
+        .map-help {
             margin-top: 12px;
-
-            padding: 10px 13px;
-
-            border-radius: 8px;
-
-            background: #e8f5e9;
-
-            color: #388e3c;
-
+            color: #888;
             font-size: 13px;
         }
 
 
-        /* =====================================
+        /* =========================================
+           BOTONES
+        ========================================== */
+
+        .pedido-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+
+        .pedido-buttons button {
+            flex: 1;
+            min-width: 150px;
+            height: 48px;
+            border-radius: 10px;
+            box-shadow: none;
+            text-transform: none;
+            font-weight: 500;
+        }
+
+
+        .btn-ubicacion {
+            background: var(--naranja) !important;
+        }
+
+
+        .btn-ubicacion:hover {
+            background: var(--naranja-oscuro) !important;
+        }
+
+
+        .btn-guardar {
+            background: #43a047 !important;
+        }
+
+
+        .btn-cancelar {
+            background: #777 !important;
+        }
+
+
+        /* =========================================
+           MENSAJE
+        ========================================== */
+
+        #mensajeUbicacion {
+            margin-top: 12px;
+            font-size: 13px;
+        }
+
+
+        /* =========================================
+           ESTADO DEL PEDIDO
+        ========================================== */
+
+        .pedido-status {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+
+        .pedido-status i {
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+
+        /* =========================================
            RESPONSIVE
-        ====================================== */
+        ========================================== */
 
-        @media only screen and (max-width: 700px) {
+        @media only screen and (max-width: 800px) {
 
-            .pedidos-wrapper {
-
-                width: 94%;
-
-                margin-top: 25px;
-            }
-
-
-            .pedido-card {
-
-                padding: 22px 18px;
-
-                border-radius: 15px;
-            }
-
-
-            .pedido-header-icon {
-
-                width: 60px;
-                height: 60px;
-            }
-
-
-            .pedido-header-icon i {
-
-                font-size: 30px;
-            }
-
-
-            .pedido-header h4 {
-
-                font-size: 26px;
-            }
-
-
-            .section-heading h5 {
-
-                font-size: 18px;
-            }
-
-
-            .pedido-buttons {
-
+            .pedido-grid {
                 grid-template-columns: 1fr;
             }
 
 
-            .pedido-buttons button {
+            .pedido-card-full {
+                grid-column: auto;
+            }
 
-                height: 48px;
+        }
+
+
+        @media only screen and (max-width: 600px) {
+
+            nav {
+                height: 58px;
+                line-height: 58px;
+            }
+
+
+            nav a {
+                font-size: 20px;
+            }
+
+
+            .pedidos-wrapper {
+                width: 94%;
+                margin-top: 22px;
+            }
+
+
+            .pedido-header {
+                margin-bottom: 22px;
+            }
+
+
+            .pedido-header-icon {
+                width: 65px;
+                height: 65px;
+            }
+
+
+            .pedido-header-icon i {
+                font-size: 34px;
+            }
+
+
+            .pedido-header h4 {
+                font-size: 25px;
+            }
+
+
+            .pedido-card {
+                padding: 20px;
+                border-radius: 15px;
             }
 
 
             #map {
-
                 height: 300px;
+            }
+
+
+            .pedido-buttons {
+                flex-direction: column;
+            }
+
+
+            .pedido-buttons button {
+                width: 100%;
+                flex: none;
             }
 
         }
@@ -546,13 +582,14 @@
          NAVBAR
     ========================================== -->
 
-    <nav class="z-depth-0">
+    <nav>
 
         <div class="nav-wrapper container">
 
             <a href="../">
                 DITS
             </a>
+
 
             <span class="right">
 
@@ -580,10 +617,13 @@
     >
 
         <li>
+
             <a class="subheader">
                 DITS
             </a>
+
         </li>
+
 
         <li>
 
@@ -602,10 +642,11 @@
 
         </li>
 
+
         <li>
 
             <a
-                href="pedidos.html"
+                href="../pages/pedidos.html"
                 class="waves-effect"
             >
 
@@ -619,10 +660,11 @@
 
         </li>
 
+
         <li>
 
             <a
-                href="about.html"
+                href="../pages/about.html"
                 class="waves-effect"
             >
 
@@ -636,14 +678,18 @@
 
         </li>
 
+
         <li>
+
             <div class="divider"></div>
+
         </li>
+
 
         <li>
 
             <a
-                href="contact.html"
+                href="../pages/contact.html"
                 class="waves-effect"
             >
 
@@ -671,247 +717,292 @@
              ENCABEZADO
         ====================================== -->
 
-        <header class="pedido-header">
+        <div class="pedido-header">
 
             <div class="pedido-header-icon">
 
                 <i class="material-icons">
-                    shopping_bag
+                    restaurant
                 </i>
 
             </div>
+
 
             <h4>
                 Realizar pedido
             </h4>
 
+
             <p>
-                Completa los datos para registrar tu pedido
+                Selecciona tu platillo y proporciona tu ubicación.
             </p>
 
-        </header>
+        </div>
 
 
         <!-- =====================================
-             DATOS DEL PEDIDO
+             GRID
         ====================================== -->
 
-        <section class="pedido-card">
+        <div class="pedido-grid">
 
 
-            <div class="section-heading">
+            <!-- =================================
+                 DATOS DEL PEDIDO
+            ================================== -->
 
-                <div class="heading-icon">
+            <div class="pedido-card">
 
-                    <i class="material-icons">
-                        restaurant_menu
-                    </i>
+                <div class="card-title-custom">
+
+                    <div class="card-title-icon">
+
+                        <i class="material-icons">
+                            shopping_cart
+                        </i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h5>
+                            Tu pedido
+                        </h5>
+
+                        <span>
+                            Selecciona lo que deseas pedir
+                        </span>
+
+                    </div>
 
                 </div>
+
+
+                <!-- PLATILLO -->
 
                 <div>
 
-                    <h5>
-                        Datos del pedido
-                    </h5>
-
-                    <span>
-                        Selecciona tu platillo y proporciona tus datos
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- PLATILLO -->
-
-            <div class="select-container">
-
-                <label
-                    class="select-label"
-                    for="listaplatillos"
-                >
-                    Platillo
-                </label>
-
-                <select
-                    id="listaplatillos"
-                    name="platillo"
-                    class="browser-default"
-                >
-
-                    <option
-                        value=""
-                        selected
+                    <label
+                        for="listaPlatillos"
+                        class="select-label"
                     >
-                        Selecciona un platillo
-                    </option>
-
-                </select>
-
-            </div>
+                        Platillo
+                    </label>
 
 
-            <!-- NOMBRE -->
+                    <select
+                        id="listaPlatillos"
+                        name="platillo"
+                        class="browser-default"
+                    >
 
-            <div class="input-field">
+                        <option
+                            value=""
+                            disabled
+                            selected
+                        >
+                            Elige un platillo
+                        </option>
 
-                <i class="material-icons prefix">
-                    person
-                </i>
+                    </select>
 
-                <input
-                    type="text"
-                    id="txtNombre"
-                    name="nombre"
-                    required
-                >
-
-                <label for="txtNombre">
-                    Nombre
-                </label>
-
-            </div>
+                </div>
 
 
-            <!-- DIRECCIÓN -->
+                <!-- NOMBRE -->
 
-            <div class="input-field">
+                <div class="input-field">
 
-                <i class="material-icons prefix">
-                    home
-                </i>
-
-                <textarea
-                    id="txtDireccion"
-                    name="direccion"
-                    class="materialize-textarea"
-                    required
-                ></textarea>
-
-                <label for="txtDireccion">
-                    Dirección
-                </label>
-
-            </div>
-
-
-            <!-- ESTADO -->
-
-            <div id="ubicacionEstado">
-
-                <i class="material-icons tiny">
-                    check_circle
-                </i>
-
-                Ubicación obtenida correctamente.
-
-            </div>
-
-
-            <!-- BOTONES -->
-
-            <div class="pedido-buttons">
-
-                <button
-                    id="btnUbicacion"
-                    type="button"
-                    class="btn btn-location waves-effect waves-light"
-                >
-
-                    <i class="material-icons left">
-                        my_location
+                    <i class="material-icons prefix">
+                        person
                     </i>
 
-                    Obtener ubicación
 
-                </button>
+                    <input
+                        type="text"
+                        id="txtNombre"
+                        name="nombre"
+                        required
+                    >
 
 
-                <button
-                    id="btnCancelar"
-                    type="button"
-                    class="btn btn-cancel waves-effect"
-                >
+                    <label for="txtNombre">
+                        Tu nombre
+                    </label>
 
-                    <i class="material-icons left">
-                        close
+                </div>
+
+
+                <!-- DIRECCIÓN -->
+
+                <div class="input-field">
+
+                    <i class="material-icons prefix">
+                        home
                     </i>
 
-                    Cancelar
 
-                </button>
+                    <textarea
+                        id="txtDireccion"
+                        name="direccion"
+                        class="materialize-textarea"
+                        required
+                    ></textarea>
 
 
-                <button
-                    id="btnGuardar"
-                    type="button"
-                    class="btn btn-save waves-effect waves-light"
+                    <label for="txtDireccion">
+                        Dirección
+                    </label>
+
+                </div>
+
+
+                <!-- UBICACIÓN DETECTADA -->
+
+                <div class="location-box">
+
+                    <div class="location-status">
+
+                        <i class="material-icons">
+                            location_on
+                        </i>
+
+
+                        <span>
+                            Ubicación GPS
+                        </span>
+
+                    </div>
+
+
+                    <div id="ubicacionTexto">
+                        Aún no se ha obtenido tu ubicación.
+                    </div>
+
+                </div>
+
+
+                <!-- MENSAJE -->
+
+                <div id="mensajeUbicacion"></div>
+
+
+                <!-- BOTONES -->
+
+                <div class="pedido-buttons">
+
+                    <button
+                        id="btnUbicacion"
+                        type="button"
+                        class="btn btn-ubicacion waves-effect waves-light"
+                    >
+
+                        <i class="material-icons left">
+                            my_location
+                        </i>
+
+                        Obtener ubicación
+
+                    </button>
+
+
+                    <button
+                        id="btnCancelar"
+                        type="button"
+                        class="btn btn-cancelar waves-effect waves-light"
+                    >
+
+                        <i class="material-icons left">
+                            close
+                        </i>
+
+                        Cancelar
+
+                    </button>
+
+
+                    <button
+                        id="btnGuardar"
+                        type="button"
+                        class="btn btn-guardar waves-effect waves-light"
+                    >
+
+                        <i class="material-icons left">
+                            save
+                        </i>
+
+                        Guardar pedido
+
+                    </button>
+
+                </div>
+
+
+                <!-- ESTADO -->
+
+                <div
+                    id="pedidoStatus"
+                    class="pedido-status"
                 >
-
-                    <i class="material-icons left">
-                        check
-                    </i>
-
-                    Guardar pedido
-
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================
-             MAPA
-        ====================================== -->
-
-        <section class="pedido-card map-section">
-
-
-            <div class="section-heading">
-
-                <div class="heading-icon">
 
                     <i class="material-icons">
-                        location_on
+                        check_circle
                     </i>
 
-                </div>
-
-                <div>
-
-                    <h5>
-                        Ubicación
-                    </h5>
-
-                    <span>
-                        Aquí aparecerá la ubicación de tu pedido
-                    </span>
+                    Pedido preparado correctamente.
 
                 </div>
 
             </div>
 
 
-            <div class="map-info">
+            <!-- =================================
+                 MAPA
+            ================================== -->
 
-                <i class="material-icons">
-                    info
-                </i>
+            <div class="pedido-card">
 
-                Presiona "Obtener ubicación" para localizarte
-                automáticamente.
+                <div class="card-title-custom">
+
+                    <div class="card-title-icon">
+
+                        <i class="material-icons">
+                            map
+                        </i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h5>
+                            Tu ubicación
+                        </h5>
+
+                        <span>
+                            Aquí aparecerá tu posición actual
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div id="map"></div>
+
+
+                <p class="map-help">
+
+                    Presiona <strong>Obtener ubicación</strong>
+                    para localizarte automáticamente.
+
+                </p>
 
             </div>
 
 
-            <div id="map"></div>
-
-
-        </section>
-
+        </div>
 
     </main>
 
@@ -931,6 +1022,13 @@
 
 
     <!-- =========================================
+         MATERIALIZE
+    ========================================== -->
+
+    <script src="../js/materialize.min.js"></script>
+
+
+    <!-- =========================================
          FIREBASE DEL PROYECTO
     ========================================== -->
 
@@ -943,7 +1041,6 @@
 
     <script
         src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        crossorigin=""
     ></script>
 
 
@@ -955,10 +1052,484 @@
 
 
     <!-- =========================================
-         MATERIALIZE
+         UBICACIÓN GPS
     ========================================== -->
 
-    <script src="../js/materialize.min.js"></script>
+    <script>
+
+        let mapa = null;
+
+        let marcador = null;
+
+        let latitudActual = null;
+
+        let longitudActual = null;
+
+
+        // =========================================
+        // INICIAR MAPA
+        // =========================================
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                mapa = L.map("map").setView(
+                    [19.4326, -99.1332],
+                    13
+                );
+
+
+                L.tileLayer(
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                    {
+                        maxZoom: 19,
+                        attribution: "&copy; OpenStreetMap"
+                    }
+                ).addTo(mapa);
+
+
+                // =====================================
+                // BOTÓN UBICACIÓN
+                // =====================================
+
+                const btnUbicacion =
+                    document.getElementById(
+                        "btnUbicacion"
+                    );
+
+
+                if (btnUbicacion) {
+
+                    btnUbicacion.addEventListener(
+                        "click",
+                        obtenerUbicacion
+                    );
+
+                }
+
+
+                // =====================================
+                // CANCELAR
+                // =====================================
+
+                const btnCancelar =
+                    document.getElementById(
+                        "btnCancelar"
+                    );
+
+
+                if (btnCancelar) {
+
+                    btnCancelar.addEventListener(
+                        "click",
+                        function () {
+
+                            document.getElementById(
+                                "txtNombre"
+                            ).value = "";
+
+
+                            document.getElementById(
+                                "txtDireccion"
+                            ).value = "";
+
+
+                            latitudActual = null;
+
+                            longitudActual = null;
+
+
+                            if (marcador) {
+
+                                mapa.removeLayer(
+                                    marcador
+                                );
+
+                                marcador = null;
+
+                            }
+
+
+                            document.getElementById(
+                                "ubicacionTexto"
+                            ).textContent =
+                                "Aún no se ha obtenido tu ubicación.";
+
+
+                            document.getElementById(
+                                "mensajeUbicacion"
+                            ).textContent = "";
+
+                        }
+                    );
+
+                }
+
+            }
+        );
+
+
+        // =========================================
+        // OBTENER UBICACIÓN
+        // =========================================
+
+        function obtenerUbicacion() {
+
+            const mensaje =
+                document.getElementById(
+                    "mensajeUbicacion"
+                );
+
+
+            const texto =
+                document.getElementById(
+                    "ubicacionTexto"
+                );
+
+
+            const boton =
+                document.getElementById(
+                    "btnUbicacion"
+                );
+
+
+            if (!navigator.geolocation) {
+
+                mensaje.innerHTML =
+                    "<span style='color:#d32f2f;'>Tu navegador no soporta geolocalización.</span>";
+
+                return;
+
+            }
+
+
+            boton.disabled = true;
+
+            boton.innerHTML =
+                '<i class="material-icons left">location_searching</i>Obteniendo ubicación...';
+
+
+            mensaje.innerHTML =
+                "<span style='color:#777;'>Solicitando permiso de ubicación...</span>";
+
+
+            navigator.geolocation.getCurrentPosition(
+
+                function (position) {
+
+                    latitudActual =
+                        position.coords.latitude;
+
+
+                    longitudActual =
+                        position.coords.longitude;
+
+
+                    // =================================
+                    // MOSTRAR COORDENADAS
+                    // =================================
+
+                    texto.innerHTML =
+                        "Latitud: <strong>" +
+                        latitudActual.toFixed(6) +
+                        "</strong><br>" +
+                        "Longitud: <strong>" +
+                        longitudActual.toFixed(6) +
+                        "</strong>";
+
+
+                    // =================================
+                    // CENTRAR MAPA
+                    // =================================
+
+                    mapa.setView(
+                        [
+                            latitudActual,
+                            longitudActual
+                        ],
+                        17
+                    );
+
+
+                    // =================================
+                    // ELIMINAR MARCADOR ANTERIOR
+                    // =================================
+
+                    if (marcador) {
+
+                        mapa.removeLayer(
+                            marcador
+                        );
+
+                    }
+
+
+                    // =================================
+                    // CREAR MARCADOR
+                    // =================================
+
+                    marcador =
+                        L.marker([
+                            latitudActual,
+                            longitudActual
+                        ])
+                        .addTo(mapa)
+                        .bindPopup(
+                            "<strong>Tu ubicación</strong><br>" +
+                            latitudActual.toFixed(6) +
+                            ", " +
+                            longitudActual.toFixed(6)
+                        )
+                        .openPopup();
+
+
+                    // =================================
+                    // MENSAJE
+                    // =================================
+
+                    mensaje.innerHTML =
+                        "<span style='color:#2e7d32;'>" +
+                        "✓ Ubicación obtenida correctamente." +
+                        "</span>";
+
+
+                    boton.disabled = false;
+
+                    boton.innerHTML =
+                        '<i class="material-icons left">my_location</i>Actualizar ubicación';
+
+                },
+
+                function (error) {
+
+                    console.error(
+                        "Error de geolocalización:",
+                        error
+                    );
+
+
+                    boton.disabled = false;
+
+                    boton.innerHTML =
+                        '<i class="material-icons left">my_location</i>Obtener ubicación';
+
+
+                    let mensajeError =
+                        "No se pudo obtener la ubicación.";
+
+
+                    if (error.code === 1) {
+
+                        mensajeError =
+                            "Permiso de ubicación denegado. Debes permitir la ubicación en el navegador.";
+
+                    }
+
+
+                    if (error.code === 2) {
+
+                        mensajeError =
+                            "No se pudo determinar tu ubicación.";
+
+                    }
+
+
+                    if (error.code === 3) {
+
+                        mensajeError =
+                            "La solicitud de ubicación tardó demasiado.";
+
+                    }
+
+
+                    mensaje.innerHTML =
+                        "<span style='color:#d32f2f;'>" +
+                        mensajeError +
+                        "</span>";
+
+                },
+
+                {
+
+                    enableHighAccuracy: true,
+
+                    timeout: 15000,
+
+                    maximumAge: 0
+
+                }
+
+            );
+
+        }
+
+
+        // =========================================
+        // GUARDAR PEDIDO
+        // =========================================
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const btnGuardar =
+                    document.getElementById(
+                        "btnGuardar"
+                    );
+
+
+                if (!btnGuardar) {
+                    return;
+                }
+
+
+                btnGuardar.addEventListener(
+                    "click",
+                    function () {
+
+                        const platillo =
+                            document.getElementById(
+                                "listaPlatillos"
+                            ).value;
+
+
+                        const nombre =
+                            document.getElementById(
+                                "txtNombre"
+                            ).value.trim();
+
+
+                        const direccion =
+                            document.getElementById(
+                                "txtDireccion"
+                            ).value.trim();
+
+
+                        if (!platillo) {
+
+                            M.toast({
+                                html: "Selecciona un platillo"
+                            });
+
+                            return;
+
+                        }
+
+
+                        if (!nombre) {
+
+                            M.toast({
+                                html: "Ingresa tu nombre"
+                            });
+
+                            return;
+
+                        }
+
+
+                        if (!direccion) {
+
+                            M.toast({
+                                html: "Ingresa tu dirección"
+                            });
+
+                            return;
+
+                        }
+
+
+                        if (
+                            latitudActual === null ||
+                            longitudActual === null
+                        ) {
+
+                            M.toast({
+                                html: "Primero obtén tu ubicación"
+                            });
+
+                            return;
+
+                        }
+
+
+                        // =================================
+                        // GUARDAR EN FIRESTORE
+                        // =================================
+
+                        if (
+                            typeof db !== "undefined"
+                        ) {
+
+                            db.collection("pedidos")
+                                .add({
+
+                                    platillo:
+                                        platillo,
+
+                                    nombre:
+                                        nombre,
+
+                                    direccion:
+                                        direccion,
+
+                                    latitud:
+                                        latitudActual,
+
+                                    longitud:
+                                        longitudActual,
+
+                                    fecha:
+                                        new Date()
+
+                                })
+                                .then(function () {
+
+                                    document.getElementById(
+                                        "pedidoStatus"
+                                    ).style.display =
+                                        "block";
+
+
+                                    M.toast({
+                                        html: "Pedido guardado correctamente"
+                                    });
+
+                                })
+                                .catch(function (error) {
+
+                                    console.error(
+                                        "Error al guardar:",
+                                        error
+                                    );
+
+
+                                    M.toast({
+                                        html: "Error al guardar el pedido"
+                                    });
+
+                                });
+
+                        }
+                        else {
+
+                            console.error(
+                                "Firebase / db no está disponible."
+                            );
+
+                            M.toast({
+                                html: "La conexión con Firebase no está disponible"
+                            });
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    </script>
 
 
 </body>
