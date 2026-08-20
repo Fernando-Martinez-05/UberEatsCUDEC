@@ -1,211 +1,152 @@
-# DITS
+<div align="center">
 
-## 1. Título del proyecto
+# 🍽️ DITS
 
-**DITS**  
-**Tipo de aplicación:** Progressive Web App (PWA)
+## Sistema de gestión de platillos y pedidos
 
-DITS es una aplicación web progresiva orientada a la gestión y realización de pedidos de platillos. Permite registrar platillos, consultar su información, realizar pedidos y almacenar la información utilizando Firebase Firestore.
+**Progressive Web App (PWA)**
 
-**Materia:** [Nombre de la materia]  
-**Carrera:** [Nombre de la carrera]  
-**Alumno:** [Nombre del alumno]  
-**Grupo:** [Grupo]  
-**Institución:** [Nombre de la institución]
+Aplicación web progresiva para registrar platillos, gestionar pedidos, consultar información de productos y obtener la ubicación del cliente.
+
+<br>
+
+![DITS](https://img.shields.io/badge/DITS-PWA-4DC7E4?style=for-the-badge)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Firebase](https://img.shields.io/badge/Firebase-Firestore-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![PWA](https://img.shields.io/badge/Progressive-Web%20App-purple?style=for-the-badge)
+
+<br>
+
+**Proyecto académico**
+
+**Martínez Merlín Luis Fernando**  
+**Sistemas Computacionales**  
+**Programación Avanzada**  
+**ISC181**  
+**Universidad Multicultural CUDEC**
+
+**2026**
+
+</div>
 
 ---
 
-# 2. Descripción del proyecto
+# 📋 Índice
 
-DITS es una aplicación desarrollada como una Progressive Web App (PWA) para facilitar la administración de platillos y la realización de pedidos.
-
-La aplicación permite al usuario consultar los platillos disponibles, seleccionar un platillo, proporcionar sus datos y ubicación para realizar un pedido.
-
-Además, cuenta con una sección para registrar nuevos platillos, incluyendo su nombre, ingredientes, precio y fotografía.
-
-La información de los platillos y pedidos se almacena en **Firebase Firestore**, permitiendo que los datos se actualicen de manera dinámica.
-
-El proyecto está dirigido principalmente a usuarios que desean consultar y realizar pedidos de comida, así como a administradores que necesitan gestionar los platillos disponibles.
+- [📖 Descripción del proyecto](#-descripción-del-proyecto)
+- [🎯 Objetivos](#-objetivos)
+- [✨ Características principales](#-características-principales)
+- [🛠️ Tecnologías utilizadas](#️-tecnologías-utilizadas)
+- [📂 Estructura del proyecto](#-estructura-del-proyecto)
+- [🔄 Funcionamiento general](#-funcionamiento-general)
+- [🗄️ Base de datos](#️-base-de-datos)
+- [📱 Progressive Web App](#-progressive-web-app)
+- [📍 Sistema de ubicación](#-sistema-de-ubicación)
+- [📷 Sistema de cámara](#-sistema-de-cámara)
+- [📸 Evidencias](#-evidencias)
+- [🚀 Instalación](#-instalación)
+- [▶️ Ejecución](#️-ejecución)
+- [📚 Uso de la aplicación](#-uso-de-la-aplicación)
+- [🔐 Seguridad](#-seguridad)
+- [👨‍💻 Autor](#-autor)
+- [📄 Licencia](#-licencia)
 
 ---
 
-# 3. Objetivos
+# 📖 Descripción del proyecto
 
-## Objetivo general
+**DITS** es una aplicación web progresiva (**Progressive Web App**) desarrollada para facilitar la administración de platillos y la realización de pedidos.
 
-Desarrollar una Progressive Web App que permita administrar platillos y realizar pedidos de manera sencilla, utilizando tecnologías web modernas y una base de datos en la nube.
+La aplicación permite registrar diferentes platillos proporcionando información como:
 
-## Objetivos específicos
+- 🍽️ Nombre del platillo.
+- 🧂 Ingredientes.
+- 💰 Precio.
+- 📷 Fotografía.
 
-- Crear una interfaz web sencilla e intuitiva.
-- Permitir registrar nuevos platillos.
-- Permitir agregar nombre, ingredientes, precio y fotografía a cada platillo.
+Los usuarios pueden consultar los platillos disponibles y seleccionar uno para realizar un pedido.
+
+Durante el proceso de pedido, el usuario puede introducir sus datos y utilizar la ubicación de su dispositivo para obtener automáticamente sus coordenadas y una dirección aproximada.
+
+La información de los platillos y pedidos se almacena en **Firebase Cloud Firestore**, permitiendo que los cambios se reflejen dinámicamente en la aplicación.
+
+El proyecto fue desarrollado con fines académicos para demostrar el uso de tecnologías web, bases de datos en la nube, geolocalización, cámara y aplicaciones web progresivas.
+
+---
+
+# 🎯 Objetivos
+
+## 🎯 Objetivo general
+
+Desarrollar una **Progressive Web App** que permita administrar platillos y gestionar pedidos de manera sencilla, utilizando tecnologías web modernas, una base de datos en la nube y servicios de geolocalización.
+
+---
+
+## 📌 Objetivos específicos
+
+- Crear una interfaz web intuitiva y adaptable.
+- Implementar el registro de platillos.
+- Permitir almacenar nombre, ingredientes, precio y fotografía.
 - Mostrar dinámicamente los platillos disponibles.
-- Permitir seleccionar un platillo para realizar un pedido.
-- Registrar los datos del cliente.
+- Permitir eliminar platillos.
+- Implementar un sistema para realizar pedidos.
+- Registrar el nombre del cliente.
+- Registrar la dirección de entrega.
 - Obtener la ubicación del usuario mediante GPS.
-- Convertir las coordenadas obtenidas en una dirección.
-- Registrar los pedidos en Firebase Firestore.
+- Mostrar la ubicación del usuario mediante un mapa.
+- Convertir coordenadas GPS en una dirección.
+- Almacenar los pedidos en Firebase Firestore.
 - Mostrar los pedidos realizados en la página principal.
-- Permitir eliminar platillos registrados.
 - Permitir eliminar pedidos.
-- Implementar funcionalidades de cámara para obtener fotografías de los platillos.
-- Implementar la aplicación como una PWA.
+- Implementar acceso a la cámara del dispositivo.
+- Permitir seleccionar fotografías desde el dispositivo.
+- Implementar una Progressive Web App.
+- Utilizar un Service Worker para las funcionalidades PWA.
 
 ---
 
-# 4. Características principales
+# ✨ Características principales
 
-La aplicación cuenta con las siguientes funcionalidades:
+## 🍽️ Administración de platillos
 
-### Gestión de platillos
+La aplicación permite administrar los platillos disponibles.
 
-- Registro de nuevos platillos.
-- Nombre del platillo.
-- Ingredientes.
-- Precio.
-- Fotografía.
-- Consulta de platillos almacenados en Firebase.
-- Eliminación de platillos.
-- Actualización automática de la información mediante Firestore.
+### Funciones:
 
-### Realización de pedidos
-
-- Selección de un platillo disponible.
-- Visualización de ingredientes.
-- Visualización del precio.
-- Registro del nombre del cliente.
-- Registro de dirección.
-- Obtención de ubicación mediante GPS.
-- Visualización de coordenadas.
-- Visualización de ubicación en un mapa.
-- Conversión automática de coordenadas a dirección.
-- Registro del pedido en Firebase Firestore.
-
-### Cámara
-
-- Acceso a la cámara del dispositivo.
-- Captura de fotografías.
-- Selección de imágenes desde el dispositivo.
-- Vista previa de la fotografía.
-- Limpieza de la fotografía seleccionada.
-
-### Página principal
-
-- Visualización de los pedidos realizados.
-- Información del platillo.
-- Precio.
-- Ingredientes.
-- Nombre del cliente.
-- Dirección de entrega.
-- Eliminación de pedidos.
-
-### PWA
-
-- Aplicación instalable.
-- Manifest de la aplicación.
-- Service Worker.
-- Iconos para diferentes tamaños de pantalla.
-- Diseño adaptable a dispositivos móviles y computadoras.
-
-### Mapa
-
-- Visualización de mapas mediante OpenStreetMap.
-- Uso de Leaflet.
-- Marcador de ubicación.
-- Obtención de ubicación actual.
-- Actualización de la posición del marcador.
+- ➕ Agregar platillos.
+- 📝 Registrar nombre.
+- 🧂 Registrar ingredientes.
+- 💰 Registrar precio.
+- 📷 Agregar fotografía.
+- 👁️ Visualizar platillos.
+- 🗑️ Eliminar platillos.
+- 🔄 Actualización automática mediante Firebase.
 
 ---
 
-# 5. Tecnologías utilizadas
+## 🛒 Sistema de pedidos
 
-## HTML5
+El usuario puede realizar un pedido seleccionando uno de los platillos disponibles.
 
-Se utiliza para crear la estructura de las diferentes páginas de la aplicación.
-
-## CSS3
-
-Se utiliza para diseñar la interfaz y adaptar la aplicación a diferentes tamaños de pantalla.
-
-## JavaScript
-
-Se utiliza para implementar la lógica de la aplicación, manipular elementos del DOM, gestionar eventos y conectar la interfaz con Firebase.
-
-## Materialize CSS
-
-Framework utilizado para facilitar el diseño de la interfaz, botones, formularios, menús laterales, iconos y componentes visuales.
-
-## Firebase
-
-Servicio utilizado para almacenar y sincronizar los datos de la aplicación.
-
-### Firebase Firestore
-
-Se utiliza como base de datos NoSQL para almacenar:
-
-- Platillos.
-- Pedidos.
-
-## Leaflet
-
-Librería utilizada para mostrar mapas interactivos y administrar marcadores de ubicación.
-
-## OpenStreetMap
-
-Proveedor de los mapas utilizados dentro de la aplicación.
-
-## Nominatim
-
-Servicio utilizado para convertir coordenadas GPS en direcciones mediante geocodificación inversa.
-
-## Service Worker
-
-Se utiliza para implementar características de Progressive Web App y permitir que la aplicación pueda funcionar como una aplicación instalable.
-
----
-
-# 6. Estructura del proyecto
-
-La estructura principal del proyecto es la siguiente:
+### Proceso:
 
 ```text
-DITS/
-│
-├── index.html
-├── manifest.json
-├── sw.js
-├── README.md
-│
-├── css/
-│   ├── materialize.min.css
-│   └── styles.css
-│
-├── js/
-│   ├── firebase.js
-│   ├── index.js
-│   ├── db.js
-│   └── materialize.min.js
-│
-├── pages/
-│   ├── pedidos.html
-│   ├── registrar.html
-│   ├── about.html
-│   └── contact.html
-│
-├── img/
-│   └── [imágenes utilizadas por la aplicación]
-│
-└── iconos/
-    ├── icon-16x16.png
-    ├── icon-32x32.png
-    ├── icon-48x48.png
-    ├── icon-64x64.png
-    ├── icon-96x96.png
-    ├── icon-128x128.png
-    ├── icon-144x144.png
-    ├── icon-152x152.png
-    ├── icon-180x180.png
-    ├── icon-192x192.png
-    ├── icon-384x384.png
-    └── icon-512x512.png
+Seleccionar platillo
+        ↓
+Consultar ingredientes
+        ↓
+Consultar precio
+        ↓
+Ingresar nombre
+        ↓
+Obtener ubicación
+        ↓
+Obtener dirección
+        ↓
+Confirmar pedido
+        ↓
+Guardar en Firebase
+        ↓
+Mostrar pedido en Inicio
