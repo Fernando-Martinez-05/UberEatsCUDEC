@@ -5,50 +5,6 @@
 
 
 // =========================================================
-// MOSTRAR PLATILLOS DESDE FIRESTORE
-// =========================================================
-
-db.collection("platillos").onSnapshot((coleccion) => {
-
-    coleccion.docChanges().forEach((registro) => {
-
-        // Nuevo platillo
-        if (registro.type === "added") {
-
-            mostrarPlatillo(
-                registro.doc.data(),
-                registro.doc.id
-            );
-
-        }
-
-
-        // Platillo modificado
-        if (registro.type === "modified") {
-
-            actualizarPlatillo(
-                registro.doc.data(),
-                registro.doc.id
-            );
-
-        }
-
-
-        // Platillo eliminado
-        if (registro.type === "removed") {
-
-            borrarPlatillo(
-                registro.doc.id
-            );
-
-        }
-
-    });
-
-});
-
-
-// =========================================================
 // FORMULARIO AGREGAR PLATILLO
 // =========================================================
 
@@ -69,20 +25,41 @@ if (formularioAgregar) {
             // OBTENER DATOS
             // =================================================
 
+            const nombreElemento =
+                document.getElementById("title");
+
+            const ingredientesElemento =
+                document.getElementById("ingredients");
+
+            const precioElemento =
+                document.getElementById("price");
+
+            const fotoElemento =
+                document.getElementById("fotoInput");
+
+
             const nombre =
-                document.getElementById("title").value.trim();
+                nombreElemento
+                    ? nombreElemento.value.trim()
+                    : "";
 
 
             const ingredientes =
-                document.getElementById("ingredients").value.trim();
+                ingredientesElemento
+                    ? ingredientesElemento.value.trim()
+                    : "";
 
 
             const precio =
-                document.getElementById("price").value;
+                precioElemento
+                    ? precioElemento.value
+                    : "";
 
 
             const foto =
-                document.getElementById("fotoInput").value;
+                fotoElemento
+                    ? fotoElemento.value.trim()
+                    : "";
 
 
             // =================================================
@@ -105,20 +82,62 @@ if (formularioAgregar) {
 
 
             // =================================================
+            // CONVERTIR PRECIO
+            // =================================================
+
+            const precioNumero =
+                parseFloat(precio);
+
+
+            if (isNaN(precioNumero)) {
+
+                alert(
+                    "El precio debe ser un número válido."
+                );
+
+                return;
+
+            }
+
+
+            // =================================================
             // OBJETO PLATILLO
             // =================================================
 
             const platilloNuevo = {
 
-                nombre: nombre,
+                nombre:
+                    nombre,
 
-                ingredientes: ingredientes,
+                ingredientes:
+                    ingredientes,
 
-                precio: parseFloat(precio),
+                precio:
+                    precioNumero,
 
-                foto: foto || ""
+                foto:
+                    foto || ""
 
             };
+
+
+            // =================================================
+            // VERIFICAR FIREBASE
+            // =================================================
+
+            if (typeof db === "undefined") {
+
+                console.error(
+                    "Firebase no está disponible."
+                );
+
+                alert(
+                    "Firebase no está disponible."
+                );
+
+                return;
+
+            }
 
 
             // =================================================
@@ -128,77 +147,99 @@ if (formularioAgregar) {
             db.collection("platillos")
                 .add(platilloNuevo)
 
-                .then(() => {
+                .then(
+                    function (docRef) {
 
-                    alert(
-                        "Platillo agregado correctamente."
-                    );
-
-
-                    // Limpiar formulario
-
-                    formularioAgregar.reset();
+                        console.log(
+                            "Platillo agregado:",
+                            docRef.id
+                        );
 
 
-                    // Restaurar foto
+                        alert(
+                            "Platillo agregado correctamente."
+                        );
 
-                    const fotoElement =
-                        document.getElementById("foto");
+
+                        // =====================================
+                        // LIMPIAR FORMULARIO
+                        // =====================================
+
+                        formularioAgregar.reset();
 
 
-                    if (fotoElement) {
+                        // =====================================
+                        // RESTAURAR FOTO
+                        // =====================================
 
-                        fotoElement.src =
-                            "img/default.jpg";
+                        const foto =
+                            document.getElementById("foto");
+
+
+                        if (foto) {
+
+                            foto.src =
+                                "img/default.jpg";
+
+                        }
+
+
+                        const fotoInput =
+                            document.getElementById("fotoInput");
+
+
+                        if (fotoInput) {
+
+                            fotoInput.value =
+                                "";
+
+                        }
+
+
+                        const btnFoto =
+                            document.getElementById("btnFoto");
+
+
+                        if (btnFoto) {
+
+                            btnFoto.value =
+                                "";
+
+                        }
+
+
+                        // =====================================
+                        // MATERIALIZE
+                        // =====================================
+
+                        if (
+                            typeof M !== "undefined"
+                        ) {
+
+                            M.updateTextFields();
+
+                        }
 
                     }
+                )
+
+                .catch(
+                    function (error) {
+
+                        console.error(
+                            "Error al agregar platillo:",
+                            error
+                        );
 
 
-                    const fotoInput =
-                        document.getElementById("fotoInput");
-
-
-                    if (fotoInput) {
-
-                        fotoInput.value = "";
-
-                    }
-
-
-                    const btnFoto =
-                        document.getElementById("btnFoto");
-
-
-                    if (btnFoto) {
-
-                        btnFoto.value = "";
+                        alert(
+                            "Error al agregar el platillo."
+                        );
 
                     }
-
-
-                    // Actualizar campos Materialize
-
-                    M.updateTextFields();
-
-
-                })
-
-                .catch((error) => {
-
-                    console.error(
-                        "Error al agregar platillo:",
-                        error
-                    );
-
-
-                    alert(
-                        "Error al agregar el platillo."
-                    );
-
-                });
+                );
 
         }
-
     );
 
 }
@@ -218,7 +259,9 @@ if (platilloBorrar) {
         "click",
         function (e) {
 
-            // Detectar icono eliminar
+            // =================================================
+            // DETECTAR ICONO ELIMINAR
+            // =================================================
 
             if (
                 e.target.tagName === "I" &&
@@ -242,36 +285,58 @@ if (platilloBorrar) {
                 }
 
 
+                // =================================================
+                // ELIMINAR DE FIRESTORE
+                // =================================================
+
+                if (typeof db === "undefined") {
+
+                    console.error(
+                        "Firebase no está disponible."
+                    );
+
+                    alert(
+                        "Firebase no está disponible."
+                    );
+
+                    return;
+
+                }
+
+
                 db.collection("platillos")
                     .doc(id)
                     .delete()
 
-                    .then(() => {
+                    .then(
+                        function () {
 
-                        alert(
-                            "Platillo eliminado correctamente."
-                        );
+                            alert(
+                                "Platillo eliminado correctamente."
+                            );
 
-                    })
+                        }
+                    )
 
-                    .catch((error) => {
+                    .catch(
+                        function (error) {
 
-                        console.error(
-                            "Error al eliminar:",
-                            error
-                        );
+                            console.error(
+                                "Error al eliminar:",
+                                error
+                            );
 
 
-                        alert(
-                            "Error al eliminar el platillo."
-                        );
+                            alert(
+                                "Error al eliminar el platillo."
+                            );
 
-                    });
+                        }
+                    );
 
             }
 
         }
-
     );
 
 }
