@@ -21,21 +21,14 @@ if (formularioAgregar) {
             e.preventDefault();
 
 
-            // =================================================
-            // OBTENER DATOS
-            // =================================================
-
             const nombreElemento =
                 document.getElementById("title");
-
 
             const ingredientesElemento =
                 document.getElementById("ingredients");
 
-
             const precioElemento =
                 document.getElementById("price");
-
 
             const fotoElemento =
                 document.getElementById("fotoInput");
@@ -84,10 +77,6 @@ if (formularioAgregar) {
             }
 
 
-            // =================================================
-            // CONVERTIR PRECIO
-            // =================================================
-
             const precioNumero =
                 parseFloat(precio);
 
@@ -104,7 +93,7 @@ if (formularioAgregar) {
 
 
             // =================================================
-            // OBJETO PLATILLO
+            // OBJETO
             // =================================================
 
             const platilloNuevo = {
@@ -125,7 +114,7 @@ if (formularioAgregar) {
 
 
             // =================================================
-            // VERIFICAR FIREBASE
+            // FIREBASE
             // =================================================
 
             if (
@@ -145,21 +134,17 @@ if (formularioAgregar) {
             }
 
 
-            // =================================================
-            // DESACTIVAR BOTÓN
-            // =================================================
-
-            const btnAgregar =
+            const boton =
                 document.getElementById(
                     "btnAgregarPlatillo"
                 );
 
 
-            if (btnAgregar) {
+            if (boton) {
 
-                btnAgregar.disabled = true;
+                boton.disabled = true;
 
-                btnAgregar.innerHTML = `
+                boton.innerHTML = `
                     <i class="material-icons left">
                         hourglass_empty
                     </i>
@@ -170,7 +155,7 @@ if (formularioAgregar) {
 
 
             // =================================================
-            // GUARDAR EN FIRESTORE
+            // GUARDAR
             // =================================================
 
             db.collection("platillos")
@@ -189,10 +174,6 @@ if (formularioAgregar) {
                             "Platillo agregado correctamente."
                         );
 
-
-                        // =====================================
-                        // LIMPIAR FORMULARIO
-                        // =====================================
 
                         formularioAgregar.reset();
 
@@ -243,10 +224,6 @@ if (formularioAgregar) {
                         }
 
 
-                        // =====================================
-                        // MATERIALIZE
-                        // =====================================
-
                         if (
                             typeof M !== "undefined"
                         ) {
@@ -277,12 +254,11 @@ if (formularioAgregar) {
                 .finally(
                     function () {
 
-                        if (btnAgregar) {
+                        if (boton) {
 
-                            btnAgregar.disabled =
-                                false;
+                            boton.disabled = false;
 
-                            btnAgregar.innerHTML = `
+                            boton.innerHTML = `
                                 <i class="material-icons left">
                                     add
                                 </i>
@@ -301,23 +277,8 @@ if (formularioAgregar) {
 
 
 // =========================================================
-// ELIMINAR PEDIDO DESDE INDEX
+// ELIMINAR PEDIDO DEL INDEX
 // =========================================================
-//
-// IMPORTANTE:
-//
-// Los elementos que aparecen en index.html después de
-// realizar un pedido pertenecen a:
-//
-//     pedidos
-//
-// NO a:
-//
-//     platillos
-//
-// Por eso aquí eliminamos de "pedidos".
-// =========================================================
-
 
 const contenedorRecetas =
     document.querySelector(".recipes");
@@ -330,16 +291,16 @@ if (contenedorRecetas) {
         function (e) {
 
             // =================================================
-            // BUSCAR BOTÓN / ICONO DE ELIMINAR
+            // BUSCAR ICONO
             // =================================================
 
-            const iconoEliminar =
+            const icono =
                 e.target.closest(
                     ".recipe-delete i"
                 );
 
 
-            if (!iconoEliminar) {
+            if (!icono) {
 
                 return;
 
@@ -347,11 +308,11 @@ if (contenedorRecetas) {
 
 
             // =================================================
-            // OBTENER ID DEL PEDIDO
+            // ID DEL PEDIDO
             // =================================================
 
             const id =
-                iconoEliminar.getAttribute(
+                icono.getAttribute(
                     "data-id"
                 );
 
@@ -359,7 +320,7 @@ if (contenedorRecetas) {
             if (!id) {
 
                 console.error(
-                    "No se encontró el ID del pedido."
+                    "El botón de eliminar no tiene data-id."
                 );
 
                 return;
@@ -385,16 +346,12 @@ if (contenedorRecetas) {
 
 
             // =================================================
-            // VERIFICAR FIREBASE
+            // FIREBASE
             // =================================================
 
             if (
                 typeof db === "undefined"
             ) {
-
-                console.error(
-                    "Firebase no está disponible."
-                );
 
                 alert(
                     "Firebase no está disponible."
@@ -406,7 +363,7 @@ if (contenedorRecetas) {
 
 
             // =================================================
-            // ENCONTRAR TARJETA
+            // OBTENER TARJETA
             // =================================================
 
             const tarjeta =
@@ -416,14 +373,7 @@ if (contenedorRecetas) {
 
 
             // =================================================
-            // ELIMINAR VISUALMENTE INMEDIATAMENTE
-            // =================================================
-            //
-            // Esto hace que desaparezca de la pantalla
-            // inmediatamente, sin esperar a Firebase.
-            //
-            // Si Firebase falla, la tarjeta se vuelve a
-            // mostrar mediante la recarga del snapshot.
+            // BORRAR INMEDIATAMENTE DE LA PANTALLA
             // =================================================
 
             if (tarjeta) {
@@ -434,7 +384,7 @@ if (contenedorRecetas) {
 
 
             // =================================================
-            // ELIMINAR DE FIRESTORE
+            // BORRAR DE FIRESTORE
             // =================================================
 
             db.collection("pedidos")
@@ -445,31 +395,9 @@ if (contenedorRecetas) {
                     function () {
 
                         console.log(
-                            "Pedido eliminado correctamente:",
+                            "Pedido eliminado:",
                             id
                         );
-
-
-                        // =====================================
-                        // VERIFICAR SI YA NO HAY PEDIDOS
-                        // =====================================
-
-                        const recetas =
-                            document.querySelector(
-                                ".recipes"
-                            );
-
-
-                        if (
-                            recetas &&
-                            recetas.children.length === 0
-                        ) {
-
-                            console.log(
-                                "No hay pedidos."
-                            );
-
-                        }
 
                     }
                 )
@@ -488,14 +416,8 @@ if (contenedorRecetas) {
                         );
 
 
-                        // =====================================
-                        // RECARGAR LA PÁGINA
-                        // =====================================
-                        //
-                        // Si Firebase rechazó la eliminación,
-                        // el snapshot volverá a mostrar el
-                        // pedido.
-                        // =====================================
+                        // Recargar para recuperar
+                        // el pedido si Firebase falló.
 
                         location.reload();
 
@@ -509,13 +431,7 @@ if (contenedorRecetas) {
 
 
 // =========================================================
-// LIMPIAR PEDIDOS ANTIGUOS DE LOCALSTORAGE
-// =========================================================
-//
-// Ya no necesitamos usar localStorage para mostrar los
-// pedidos porque index.js los obtiene directamente de
-// Firebase.
-//
+// ELIMINAR DATO ANTIGUO DE LOCALSTORAGE
 // =========================================================
 
 try {
@@ -528,8 +444,7 @@ try {
 catch (error) {
 
     console.warn(
-        "No se pudo limpiar localStorage:",
-        error
+        "No se pudo limpiar localStorage."
     );
 
 }
