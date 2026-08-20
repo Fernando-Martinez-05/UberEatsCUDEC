@@ -76,12 +76,12 @@
 
     <meta
         name="application-name"
-        content="DITS"
+        content="UBEAR"
     >
 
     <meta
         name="apple-mobile-web-app-title"
-        content="DITS"
+        content="UBEAR"
     >
 
     <meta
@@ -177,18 +177,16 @@
 
 
     <!-- =========================================
-         MENÚ SUPERIOR
+         MENU SUPERIOR
     ========================================== -->
 
     <nav class="z-depth-0">
 
         <div class="nav-wrapper container">
 
-
             <a href="./">
                 DITS
             </a>
-
 
             <span class="right grey-text text-darken-1">
 
@@ -201,22 +199,19 @@
 
             </span>
 
-
         </div>
 
     </nav>
 
 
-
     <!-- =========================================
-         MENÚ LATERAL
+         MENU LATERAL
     ========================================== -->
 
     <ul
         id="side-menu"
         class="sidenav side-menu"
     >
-
 
         <li>
 
@@ -226,8 +221,6 @@
 
         </li>
 
-
-        <!-- INICIO -->
 
         <li>
 
@@ -241,8 +234,6 @@
         </li>
 
 
-        <!-- PEDIDOS -->
-
         <li>
 
             <a
@@ -255,7 +246,28 @@
         </li>
 
 
-        <!-- ACERCA -->
+        <!-- =====================================
+             TOMAR FOTO
+        ====================================== -->
+
+        <li>
+
+            <a
+                href="#camera-menu"
+                id="abrirCamara"
+                class="waves-effect"
+            >
+
+                <i class="material-icons">
+                    camera_alt
+                </i>
+
+                Tomar foto
+
+            </a>
+
+        </li>
+
 
         <li>
 
@@ -269,16 +281,12 @@
         </li>
 
 
-        <!-- SEPARADOR -->
-
         <li>
 
             <div class="divider"></div>
 
         </li>
 
-
-        <!-- CONTACTO -->
 
         <li>
 
@@ -297,9 +305,7 @@
 
         </li>
 
-
     </ul>
-
 
 
     <!-- =========================================
@@ -310,7 +316,6 @@
         class="recipes container grey-text text-darken-1"
     >
     </div>
-
 
 
     <!-- =========================================
@@ -333,9 +338,8 @@
     </div>
 
 
-
     <!-- =========================================
-         FORMULARIO AGREGAR PLATILLO
+         AGREGAR PLATILLO
     ========================================== -->
 
     <div
@@ -343,20 +347,16 @@
         class="sidenav side-form"
     >
 
-
         <form
             id="formAgregar"
             class="add-recipe container section"
         >
 
-
             <h6>
                 Nuevo platillo
             </h6>
 
-
             <div class="divider"></div>
-
 
 
             <!-- NOMBRE -->
@@ -379,7 +379,6 @@
             </div>
 
 
-
             <!-- INGREDIENTES -->
 
             <div class="input-field">
@@ -398,7 +397,6 @@
                 </label>
 
             </div>
-
 
 
             <!-- PRECIO -->
@@ -423,8 +421,7 @@
             </div>
 
 
-
-            <!-- BOTÓN -->
+            <!-- BOTÓN AGREGAR -->
 
             <div class="input-field center">
 
@@ -433,71 +430,172 @@
                     type="submit"
                     class="btn-small"
                 >
-
                     Agregar
-
                 </button>
 
             </div>
-
 
         </form>
 
     </div>
 
 
+    <!-- =========================================
+         MENÚ LATERAL DE LA CÁMARA
+    ========================================== -->
+
+    <div
+        id="camera-menu"
+        class="sidenav side-form"
+    >
+
+        <div class="container section">
+
+            <h6>
+
+                <i class="material-icons">
+                    camera_alt
+                </i>
+
+                Tomar foto
+
+            </h6>
+
+
+            <div class="divider"></div>
+
+            <br>
+
+
+            <!-- ESTADO -->
+
+            <p
+                id="cameraStatus"
+                class="grey-text"
+            >
+                Iniciando cámara...
+            </p>
+
+
+            <!-- =================================
+                 CÁMARA
+            ================================== -->
+
+            <div class="center">
+
+                <video
+                    id="video"
+                    width="320"
+                    height="240"
+                    autoplay
+                    playsinline
+                    muted
+                    style="
+                        width: 100%;
+                        max-width: 320px;
+                        height: auto;
+                        border-radius: 10px;
+                        background: #000;
+                    "
+                >
+                </video>
+
+
+                <br>
+                <br>
+
+
+                <!-- BOTÓN TOMAR FOTO -->
+
+                <button
+                    id="btntomarfoto"
+                    type="button"
+                    class="btn orange"
+                >
+
+                    <i class="material-icons left">
+                        photo_camera
+                    </i>
+
+                    Tomar foto
+
+                </button>
+
+
+                <br>
+                <br>
+
+
+                <!-- FOTO TOMADA -->
+
+                <img
+                    id="foto"
+                    alt="Foto del platillo"
+                    style="
+                        display: none;
+                        width: 100%;
+                        max-width: 320px;
+                        border-radius: 10px;
+                    "
+                >
+
+
+                <!-- CANVAS -->
+
+                <canvas
+                    id="canvas"
+                    style="display: none;"
+                >
+                </canvas>
+
+
+                <!-- ERROR -->
+
+                <p
+                    id="cameraError"
+                    class="red-text"
+                >
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
 
     <!-- =========================================
          FIREBASE
     ========================================== -->
 
-    <script
-        src="https://www.gstatic.com/firebasejs/6.0.1/firebase-app.js">
-    </script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.1/firebase-app.js"></script>
 
-    <script
-        src="https://www.gstatic.com/firebasejs/6.0.1/firebase-firestore.js">
-    </script>
-
+    <script src="https://www.gstatic.com/firebasejs/6.0.1/firebase-firestore.js"></script>
 
 
     <!-- =========================================
-         MATERIALIZE JS
+         MATERIALIZE
     ========================================== -->
 
-    <script
-        src="./JS/materialize.min.js">
-    </script>
-
+    <script src="./JS/materialize.min.js"></script>
 
 
     <!-- =========================================
          FIREBASE DEL PROYECTO
     ========================================== -->
 
-    <script
-        src="./JS/firebase.js">
-    </script>
+    <script src="./JS/firebase.js"></script>
 
+    <script src="./JS/index.js"></script>
 
-
-    <!-- =========================================
-         INDEX JS
-    ========================================== -->
-
-    <script
-        src="./JS/index.js">
-    </script>
-
+    <script src="./JS/db.js"></script>
 
 
     <!-- =========================================
-         BASE DE DATOS
+         CÁMARA
     ========================================== -->
 
-    <script
-        src="./JS/db.js">
-    </script>
+    <script src="./JS/camera.js"></script>
 
 
 </body>
