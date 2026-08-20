@@ -24,7 +24,7 @@
 
     <link
         type="text/css"
-        href="CSS/materialize.min.css"
+        href="css/materialize.min.css"
         rel="stylesheet"
     >
 
@@ -45,7 +45,7 @@
 
     <link
         type="text/css"
-        href="CSS/styles.css"
+        href="css/styles.css"
         rel="stylesheet"
     >
 
@@ -184,7 +184,7 @@
 
         <div class="nav-wrapper container">
 
-            <a href="/">
+            <a href="./">
                 DITS
             </a>
 
@@ -225,7 +225,7 @@
         <li>
 
             <a
-                href="/"
+                href="./"
                 class="waves-effect"
             >
                 Inicio
@@ -421,6 +421,15 @@
             </div>
 
 
+            <!-- FOTO -->
+
+            <input
+                id="fotoInput"
+                type="hidden"
+                value=""
+            >
+
+
             <!-- BOTÓN AGREGAR -->
 
             <div class="input-field center">
@@ -473,7 +482,7 @@
                 id="cameraStatus"
                 class="grey-text"
             >
-                Iniciando cámara...
+                Cámara lista
             </p>
 
 
@@ -568,27 +577,41 @@
          FIREBASE
     ========================================== -->
 
-    <script src="https://www.gstatic.com/firebasejs/6.0.1/firebase-app.js"></script>
+    <script
+        src="https://www.gstatic.com/firebasejs/6.0.1/firebase-app.js">
+    </script>
 
-    <script src="https://www.gstatic.com/firebasejs/6.0.1/firebase-firestore.js"></script>
+    <script
+        src="https://www.gstatic.com/firebasejs/6.0.1/firebase-firestore.js">
+    </script>
 
 
     <!-- =========================================
-         MATERIALIZE
+         MATERIALIZE JS
     ========================================== -->
 
-    <script src="JS/materialize.min.js"></script>
+    <script src="js/materialize.min.js"></script>
 
 
     <!-- =========================================
          FIREBASE DEL PROYECTO
     ========================================== -->
 
-    <script src="JS/firebase.js"></script>
+    <script src="js/firebase.js"></script>
 
-    <script src="JS/index.js"></script>
 
-    <script src="JS/db.js"></script>
+    <!-- =========================================
+         INDEX JS
+    ========================================== -->
+
+    <script src="js/index.js"></script>
+
+
+    <!-- =========================================
+         DATABASE JS
+    ========================================== -->
+
+    <script src="js/db.js"></script>
 
 
 </body>
