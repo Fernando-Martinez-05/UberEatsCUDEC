@@ -15,12 +15,12 @@
         content="ie=edge"
     >
 
-    <title>DITS - Pedidos</title>
+    <title>DITS - Realizar pedido</title>
 
 
-    <!-- =========================================
-         MATERIALIZE
-    ========================================== -->
+    <!-- =====================================================
+         MATERIALIZE CSS
+    ====================================================== -->
 
     <link
         type="text/css"
@@ -28,15 +28,20 @@
         rel="stylesheet"
     >
 
+
+    <!-- =====================================================
+         MATERIAL ICONS
+    ====================================================== -->
+
     <link
         href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet"
     >
 
 
-    <!-- =========================================
+    <!-- =====================================================
          CSS DEL PROYECTO
-    ========================================== -->
+    ====================================================== -->
 
     <link
         type="text/css"
@@ -45,9 +50,10 @@
     >
 
 
-    <!-- =========================================
-         LEAFLET
-    ========================================== -->
+    <!-- =====================================================
+         LEAFLET CSS
+         SIN INTEGRITY PARA EVITAR EL ERROR SHA
+    ====================================================== -->
 
     <link
         rel="stylesheet"
@@ -55,19 +61,19 @@
     >
 
 
-    <!-- =========================================
+    <!-- =====================================================
          MANIFEST
-    ========================================== -->
+    ====================================================== -->
 
     <link
         rel="manifest"
         href="../manifest.json"
     >
 
-    <meta
-        name="theme-color"
-        content="#ff8c00"
-    >
+
+    <!-- =====================================================
+         CONFIGURACIÓN PWA
+    ====================================================== -->
 
     <meta
         name="mobile-web-app-capable"
@@ -80,23 +86,135 @@
     >
 
     <meta
+        name="application-name"
+        content="DITS"
+    >
+
+    <meta
         name="apple-mobile-web-app-title"
         content="DITS"
     >
 
+    <meta
+        name="theme-color"
+        content="#ed8b00"
+    >
 
-    <!-- =========================================
-         ESTILOS
-    ========================================== -->
+    <meta
+        name="msapplication-navbutton-color"
+        content="#ed8b00"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"
+    >
+
+
+    <!-- =====================================================
+         ICONOS
+    ====================================================== -->
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="../iconos/icon-16x16.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="32x32"
+        href="../iconos/icon-32x32.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="48x48"
+        href="../iconos/icon-48x48.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="64x64"
+        href="../iconos/icon-64x64.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="96x96"
+        href="../iconos/icon-96x96.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="128x128"
+        href="../iconos/icon-128x128.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="144x144"
+        href="../iconos/icon-144x144.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="152x152"
+        href="../iconos/icon-152x152.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="180x180"
+        href="../iconos/icon-180x180.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="192x192"
+        href="../iconos/icon-192x192.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="384x384"
+        href="../iconos/icon-384x384.png"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="512x512"
+        href="../iconos/icon-512x512.png"
+    >
+
+
+    <!-- =====================================================
+         DISEÑO DE PEDIDOS
+    ====================================================== -->
 
     <style>
 
         :root {
-            --naranja: #ff8c00;
-            --naranja-oscuro: #e87500;
-            --naranja-claro: #fff3e0;
+
+            --naranja: #ed8b00;
+            --naranja-oscuro: #d97700;
+            --naranja-claro: #fff3df;
             --texto: #333333;
             --gris: #777777;
+            --blanco: #ffffff;
+
         }
 
 
@@ -106,466 +224,671 @@
 
 
         body {
+
             margin: 0;
+
             min-height: 100vh;
-            background: #f7f7f7;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #fff8ed 0%,
+                    #f5f5f5 100%
+                );
+
             color: var(--texto);
+
         }
 
 
-        /* =========================================
+        /* =================================================
            NAVBAR
-        ========================================== */
+        ================================================= */
 
         nav {
-            background: var(--naranja);
-            height: 64px;
-            line-height: 64px;
+
+            background: var(--blanco) !important;
+
+            border-bottom:
+                1px solid #eeeeee;
+
         }
 
 
-        nav .nav-wrapper {
-            width: 92%;
-            max-width: 1100px;
-        }
-
-
+        nav .brand-logo,
         nav a {
-            color: white !important;
-            font-size: 23px;
-            font-weight: 600;
-        }
 
-
-        nav .material-icons {
-            color: white;
-            cursor: pointer;
-        }
-
-
-        /* =========================================
-           MENÚ LATERAL
-        ========================================== */
-
-        .side-menu {
-            padding-top: 10px;
-        }
-
-
-        .side-menu .subheader {
             color: var(--naranja);
-            font-size: 20px;
-            font-weight: 600;
-        }
 
-
-        .side-menu a {
-            color: #444;
-        }
-
-
-        .side-menu a i {
-            color: var(--naranja);
-        }
-
-
-        /* =========================================
-           CONTENEDOR
-        ========================================== */
-
-        .pedidos-wrapper {
-            width: 92%;
-            max-width: 1050px;
-            margin: 35px auto 60px;
-        }
-
-
-        /* =========================================
-           ENCABEZADO
-        ========================================== */
-
-        .pedido-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-
-        .pedido-header-icon {
-            width: 75px;
-            height: 75px;
-            margin: 0 auto 15px;
-            border-radius: 50%;
-            background: var(--naranja-claro);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-
-        .pedido-header-icon i {
-            color: var(--naranja);
-            font-size: 40px;
-        }
-
-
-        .pedido-header h4 {
-            margin: 0;
             font-weight: 700;
+
+        }
+
+
+        nav .sidenav-trigger {
+
+            color: var(--naranja);
+
+        }
+
+
+        /* =================================================
+           CONTENEDOR
+        ================================================= */
+
+        .pedidos-container {
+
+            width: 92%;
+
+            max-width: 900px;
+
+            margin:
+                35px auto
+                60px;
+
+        }
+
+
+        /* =================================================
+           ENCABEZADO
+        ================================================= */
+
+        .pedidos-header {
+
+            text-align: center;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .header-icon {
+
+            width: 75px;
+
+            height: 75px;
+
+            margin:
+                0 auto 15px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background:
+                var(--naranja-claro);
+
+            color:
+                var(--naranja);
+
+        }
+
+
+        .header-icon i {
+
+            font-size: 40px;
+
+        }
+
+
+        .pedidos-header h4 {
+
+            margin:
+                0 0 8px;
+
+            font-weight: 700;
+
             color: #333;
+
         }
 
 
-        .pedido-header p {
-            margin: 10px 0 0;
-            color: #777;
-            font-size: 15px;
+        .pedidos-header p {
+
+            margin: 0;
+
+            color: var(--gris);
+
         }
 
 
-        /* =========================================
-           GRID
-        ========================================== */
-
-        .pedido-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-
-
-        /* =========================================
+        /* =================================================
            TARJETAS
-        ========================================== */
+        ================================================= */
 
         .pedido-card {
-            background: white;
+
+            background:
+                var(--blanco);
+
             border-radius: 18px;
+
             padding: 28px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
-            border: 1px solid #eeeeee;
+
+            margin-bottom: 22px;
+
+            box-shadow:
+                0 8px 30px
+                rgba(0, 0, 0, 0.07);
+
+            border:
+                1px solid #eeeeee;
+
         }
 
 
-        .pedido-card-full {
-            grid-column: 1 / -1;
-        }
+        /* =================================================
+           TITULO DE SECCIÓN
+        ================================================= */
 
+        .section-title {
 
-        /* =========================================
-           TÍTULOS
-        ========================================== */
-
-        .card-title-custom {
             display: flex;
+
             align-items: center;
-            gap: 12px;
+
+            gap: 10px;
+
+            font-size: 19px;
+
+            font-weight: 700;
+
             margin-bottom: 25px;
+
+            color: #333;
+
         }
 
 
-        .card-title-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            background: var(--naranja-claro);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .section-title i {
+
+            color:
+                var(--naranja);
+
+            font-size: 26px;
+
         }
 
 
-        .card-title-icon i {
-            color: var(--naranja);
-            font-size: 25px;
+        /* =================================================
+           SELECT
+        ================================================= */
+
+        #listaPlatillos {
+
+            width: 100%;
+
+            height: 48px;
+
+            border:
+                1px solid #dddddd;
+
+            border-radius: 10px;
+
+            padding:
+                0 12px;
+
+            background:
+                white;
+
+            font-size: 16px;
+
+            outline: none;
+
         }
 
 
-        .card-title-custom h5 {
-            margin: 0;
-            font-size: 20px;
-            font-weight: 600;
+        #listaPlatillos:focus {
+
+            border-color:
+                var(--naranja);
+
         }
 
 
-        .card-title-custom span {
-            display: block;
-            color: #888;
-            font-size: 13px;
-            margin-top: 3px;
-        }
-
-
-        /* =========================================
-           CAMPOS
-        ========================================== */
+        /* =================================================
+           INPUTS
+        ================================================= */
 
         .input-field {
+
             margin-top: 25px;
+
         }
 
 
-        .input-field label {
-            color: #777;
+        .input-field .prefix {
+
+            color:
+                #999;
+
         }
 
 
         .input-field input:focus,
         .input-field textarea:focus {
-            border-bottom: 1px solid var(--naranja) !important;
-            box-shadow: 0 1px 0 0 var(--naranja) !important;
+
+            border-bottom:
+                1px solid var(--naranja) !important;
+
+            box-shadow:
+                0 1px 0 0 var(--naranja) !important;
+
         }
 
 
         .input-field input:focus + label,
         .input-field textarea:focus + label {
-            color: var(--naranja) !important;
+
+            color:
+                var(--naranja) !important;
+
         }
 
 
-        .input-field .prefix {
-            color: #999;
+        #txtDireccion {
+
+            min-height: 110px;
+
         }
 
 
-        .input-field .prefix.active {
-            color: var(--naranja);
+        #txtIngredientes {
+
+            min-height: 90px;
+
         }
 
 
-        /* =========================================
-           SELECT
-        ========================================== */
+        /* =================================================
+           INFORMACIÓN DEL PLATILLO
+        ================================================= */
 
-        .select-label {
-            display: block;
-            font-size: 13px;
-            color: #777;
-            margin-bottom: 8px;
-        }
+        .platillo-info {
 
+            display: grid;
 
-        #listaPlatillos {
-            width: 100%;
-            height: 48px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 0 15px;
-            background: white;
-            font-size: 15px;
-            outline: none;
-        }
+            grid-template-columns:
+                1fr 1fr;
 
+            gap: 15px;
 
-        #listaPlatillos:focus {
-            border-color: var(--naranja);
-        }
-
-
-        /* =========================================
-           UBICACIÓN
-        ========================================== */
-
-        .location-box {
-            background: #fff8ef;
-            border: 1px solid #ffe0b2;
-            border-radius: 14px;
-            padding: 15px;
             margin-top: 20px;
+
         }
 
 
-        .location-status {
+        .info-box {
+
+            background:
+                var(--naranja-claro);
+
+            border-radius: 12px;
+
+            padding: 16px;
+
+            border:
+                1px solid #ffe1b5;
+
+        }
+
+
+        .info-box .info-title {
+
             display: flex;
+
             align-items: center;
-            gap: 10px;
-            color: #777;
-            font-size: 14px;
-        }
 
+            gap: 7px;
 
-        .location-status i {
-            color: var(--naranja);
-        }
-
-
-        #ubicacionTexto {
-            margin-top: 10px;
-            color: #444;
             font-size: 13px;
-            word-break: break-word;
+
+            color:
+                #888;
+
+            margin-bottom: 7px;
+
         }
 
 
-        /* =========================================
-           MAPA
-        ========================================== */
+        .info-box .info-title i {
 
-        #map {
-            width: 100%;
-            height: 390px;
-            border-radius: 15px;
-            overflow: hidden;
-            border: 1px solid #ddd;
+            color:
+                var(--naranja);
+
+            font-size: 20px;
+
         }
 
 
-        .map-help {
-            margin-top: 12px;
-            color: #888;
-            font-size: 13px;
+        .info-box .info-value {
+
+            font-size: 17px;
+
+            font-weight: 600;
+
+            color: #333;
+
         }
 
 
-        /* =========================================
+        /* =================================================
+           COSTO
+        ================================================= */
+
+        #txtCosto {
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+            color:
+                var(--naranja);
+
+        }
+
+
+        /* =================================================
+           BOTÓN UBICACIÓN
+        ================================================= */
+
+        #btnUbicacion {
+
+            background:
+                var(--naranja) !important;
+
+            border-radius: 10px;
+
+            height: 46px;
+
+        }
+
+
+        #btnUbicacion:hover {
+
+            background:
+                var(--naranja-oscuro) !important;
+
+        }
+
+
+        /* =================================================
            BOTONES
-        ========================================== */
+        ================================================= */
 
         .pedido-buttons {
+
             display: flex;
+
+            justify-content: flex-end;
+
+            align-items: center;
+
             gap: 12px;
+
             flex-wrap: wrap;
-            margin-top: 25px;
+
+            margin-top: 30px;
+
         }
 
 
         .pedido-buttons button {
-            flex: 1;
-            min-width: 150px;
-            height: 48px;
+
             border-radius: 10px;
-            box-shadow: none;
-            text-transform: none;
-            font-weight: 500;
+
+            min-height: 45px;
+
         }
 
 
-        .btn-ubicacion {
-            background: var(--naranja) !important;
+        #btnGuardar {
+
+            background:
+                var(--naranja) !important;
+
         }
 
 
-        .btn-ubicacion:hover {
-            background: var(--naranja-oscuro) !important;
+        #btnGuardar:hover {
+
+            background:
+                var(--naranja-oscuro) !important;
+
         }
 
 
-        .btn-guardar {
-            background: #43a047 !important;
+        #btnCancelar {
+
+            background:
+                #eeeeee !important;
+
+            color:
+                #555 !important;
+
         }
 
 
-        .btn-cancelar {
-            background: #777 !important;
+        /* =================================================
+           MAPA
+        ================================================= */
+
+        .map-container {
+
+            padding-bottom: 20px;
+
         }
 
 
-        /* =========================================
-           MENSAJE
-        ========================================== */
+        #map {
 
-        #mensajeUbicacion {
-            margin-top: 12px;
+            width: 100%;
+
+            height: 380px;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+
+            border:
+                1px solid #dddddd;
+
+        }
+
+
+        .map-info {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 13px;
+
+            color: #777;
+
             font-size: 13px;
+
         }
 
 
-        /* =========================================
-           ESTADO DEL PEDIDO
-        ========================================== */
+        .map-info i {
 
-        .pedido-status {
-            display: none;
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 12px;
-            background: #e8f5e9;
-            color: #2e7d32;
+            color:
+                var(--naranja);
+
+            font-size: 19px;
+
         }
 
 
-        .pedido-status i {
-            vertical-align: middle;
-            margin-right: 5px;
+        /* =================================================
+           COORDENADAS
+        ================================================= */
+
+        .coordenadas {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 10px;
+
+            margin-top: 15px;
+
         }
 
 
-        /* =========================================
+        .coordenada {
+
+            background:
+                #f8f8f8;
+
+            padding: 10px 12px;
+
+            border-radius: 8px;
+
+            font-size: 12px;
+
+            color: #777;
+
+        }
+
+
+        /* =================================================
+           MENÚ LATERAL
+        ================================================= */
+
+        .sidenav {
+
+            background:
+                white;
+
+        }
+
+
+        .sidenav .subheader {
+
+            color:
+                var(--naranja);
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+        }
+
+
+        .sidenav li > a {
+
+            color: #555;
+
+        }
+
+
+        .sidenav li > a i {
+
+            color:
+                var(--naranja);
+
+        }
+
+
+        /* =================================================
+           MENSAJE DE ESTADO
+        ================================================= */
+
+        #estadoUbicacion {
+
+            margin-top: 12px;
+
+            font-size: 14px;
+
+            text-align: center;
+
+            min-height: 20px;
+
+        }
+
+
+        /* =================================================
            RESPONSIVE
-        ========================================== */
-
-        @media only screen and (max-width: 800px) {
-
-            .pedido-grid {
-                grid-template-columns: 1fr;
-            }
-
-
-            .pedido-card-full {
-                grid-column: auto;
-            }
-
-        }
-
+        ================================================= */
 
         @media only screen and (max-width: 600px) {
 
-            nav {
-                height: 58px;
-                line-height: 58px;
-            }
+            .pedidos-container {
 
-
-            nav a {
-                font-size: 20px;
-            }
-
-
-            .pedidos-wrapper {
                 width: 94%;
+
                 margin-top: 22px;
-            }
 
-
-            .pedido-header {
-                margin-bottom: 22px;
-            }
-
-
-            .pedido-header-icon {
-                width: 65px;
-                height: 65px;
-            }
-
-
-            .pedido-header-icon i {
-                font-size: 34px;
-            }
-
-
-            .pedido-header h4 {
-                font-size: 25px;
             }
 
 
             .pedido-card {
+
                 padding: 20px;
+
                 border-radius: 15px;
+
             }
 
 
-            #map {
-                height: 300px;
+            .pedidos-header h4 {
+
+                font-size: 25px;
+
+            }
+
+
+            .platillo-info {
+
+                grid-template-columns:
+                    1fr;
+
             }
 
 
             .pedido-buttons {
+
                 flex-direction: column;
+
             }
 
 
             .pedido-buttons button {
+
                 width: 100%;
-                flex: none;
+
+            }
+
+
+            #btnUbicacion {
+
+                width: 100%;
+
+            }
+
+
+            #map {
+
+                height: 300px;
+
+            }
+
+
+            .coordenadas {
+
+                grid-template-columns:
+                    1fr;
+
             }
 
         }
@@ -578,18 +901,17 @@
 <body>
 
 
-    <!-- =========================================
-         NAVBAR
-    ========================================== -->
+    <!-- =====================================================
+         MENÚ
+    ====================================================== -->
 
-    <nav>
+    <nav class="z-depth-0">
 
         <div class="nav-wrapper container">
 
             <a href="../">
                 DITS
             </a>
-
 
             <span class="right">
 
@@ -607,13 +929,13 @@
     </nav>
 
 
-    <!-- =========================================
+    <!-- =====================================================
          MENÚ LATERAL
-    ========================================== -->
+    ====================================================== -->
 
     <ul
         id="side-menu"
-        class="sidenav side-menu"
+        class="sidenav"
     >
 
         <li>
@@ -706,20 +1028,20 @@
     </ul>
 
 
-    <!-- =========================================
+    <!-- =====================================================
          CONTENIDO
-    ========================================== -->
+    ====================================================== -->
 
-    <main class="pedidos-wrapper">
+    <main class="pedidos-container">
 
 
-        <!-- =====================================
+        <!-- =================================================
              ENCABEZADO
-        ====================================== -->
+        ================================================== -->
 
-        <div class="pedido-header">
+        <header class="pedidos-header">
 
-            <div class="pedido-header-icon">
+            <div class="header-icon">
 
                 <i class="material-icons">
                     restaurant
@@ -727,289 +1049,354 @@
 
             </div>
 
-
             <h4>
                 Realizar pedido
             </h4>
 
-
             <p>
-                Selecciona tu platillo y proporciona tu ubicación.
+                Selecciona tu platillo y proporciona tus datos
+                de entrega.
             </p>
 
-        </div>
+        </header>
 
 
-        <!-- =====================================
-             GRID
-        ====================================== -->
+        <!-- =================================================
+             DATOS DEL PEDIDO
+        ================================================== -->
 
-        <div class="pedido-grid">
+        <section class="pedido-card">
 
+            <div class="section-title">
 
-            <!-- =================================
-                 DATOS DEL PEDIDO
-            ================================== -->
+                <i class="material-icons">
+                    shopping_cart
+                </i>
 
-            <div class="pedido-card">
+                Datos del pedido
 
-                <div class="card-title-custom">
+            </div>
 
-                    <div class="card-title-icon">
 
-                        <i class="material-icons">
-                            shopping_cart
-                        </i>
+            <!-- PLATILLO -->
 
-                    </div>
+            <div class="input-field">
 
+                <label
+                    for="listaPlatillos"
+                    class="active"
+                >
+                    Platillo
+                </label>
 
-                    <div>
-
-                        <h5>
-                            Tu pedido
-                        </h5>
-
-                        <span>
-                            Selecciona lo que deseas pedir
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <!-- PLATILLO -->
-
-                <div>
-
-                    <label
-                        for="listaPlatillos"
-                        class="select-label"
-                    >
-                        Platillo
-                    </label>
-
-
-                    <select
-                        id="listaPlatillos"
-                        name="platillo"
-                        class="browser-default"
-                    >
-
-                        <option
-                            value=""
-                            disabled
-                            selected
-                        >
-                            Elige un platillo
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <!-- NOMBRE -->
-
-                <div class="input-field">
-
-                    <i class="material-icons prefix">
-                        person
-                    </i>
-
-
-                    <input
-                        type="text"
-                        id="txtNombre"
-                        name="nombre"
-                        required
-                    >
-
-
-                    <label for="txtNombre">
-                        Tu nombre
-                    </label>
-
-                </div>
-
-
-                <!-- DIRECCIÓN -->
-
-                <div class="input-field">
-
-                    <i class="material-icons prefix">
-                        home
-                    </i>
-
-
-                    <textarea
-                        id="txtDireccion"
-                        name="direccion"
-                        class="materialize-textarea"
-                        required
-                    ></textarea>
-
-
-                    <label for="txtDireccion">
-                        Dirección
-                    </label>
-
-                </div>
-
-
-                <!-- UBICACIÓN DETECTADA -->
-
-                <div class="location-box">
-
-                    <div class="location-status">
-
-                        <i class="material-icons">
-                            location_on
-                        </i>
-
-
-                        <span>
-                            Ubicación GPS
-                        </span>
-
-                    </div>
-
-
-                    <div id="ubicacionTexto">
-                        Aún no se ha obtenido tu ubicación.
-                    </div>
-
-                </div>
-
-
-                <!-- MENSAJE -->
-
-                <div id="mensajeUbicacion"></div>
-
-
-                <!-- BOTONES -->
-
-                <div class="pedido-buttons">
-
-                    <button
-                        id="btnUbicacion"
-                        type="button"
-                        class="btn btn-ubicacion waves-effect waves-light"
-                    >
-
-                        <i class="material-icons left">
-                            my_location
-                        </i>
-
-                        Obtener ubicación
-
-                    </button>
-
-
-                    <button
-                        id="btnCancelar"
-                        type="button"
-                        class="btn btn-cancelar waves-effect waves-light"
-                    >
-
-                        <i class="material-icons left">
-                            close
-                        </i>
-
-                        Cancelar
-
-                    </button>
-
-
-                    <button
-                        id="btnGuardar"
-                        type="button"
-                        class="btn btn-guardar waves-effect waves-light"
-                    >
-
-                        <i class="material-icons left">
-                            save
-                        </i>
-
-                        Guardar pedido
-
-                    </button>
-
-                </div>
-
-
-                <!-- ESTADO -->
-
-                <div
-                    id="pedidoStatus"
-                    class="pedido-status"
+                <select
+                    id="listaPlatillos"
+                    name="platillo"
+                    class="browser-default"
                 >
 
-                    <i class="material-icons">
-                        check_circle
-                    </i>
+                    <option
+                        value=""
+                        selected
+                    >
+                        -- Selecciona un platillo --
+                    </option>
 
-                    Pedido preparado correctamente.
-
-                </div>
+                </select>
 
             </div>
 
 
-            <!-- =================================
-                 MAPA
-            ================================== -->
+            <!-- INFORMACIÓN DEL PLATILLO -->
 
-            <div class="pedido-card">
+            <div class="platillo-info">
 
-                <div class="card-title-custom">
 
-                    <div class="card-title-icon">
+                <div class="info-box">
+
+                    <div class="info-title">
 
                         <i class="material-icons">
-                            map
+                            restaurant
                         </i>
+
+                        Ingredientes
 
                     </div>
 
-
-                    <div>
-
-                        <h5>
-                            Tu ubicación
-                        </h5>
-
-                        <span>
-                            Aquí aparecerá tu posición actual
-                        </span>
-
+                    <div
+                        id="ingredientesVista"
+                        class="info-value"
+                    >
+                        Selecciona un platillo
                     </div>
 
                 </div>
 
 
-                <div id="map"></div>
+                <div class="info-box">
 
+                    <div class="info-title">
 
-                <p class="map-help">
+                        <i class="material-icons">
+                            attach_money
+                        </i>
 
-                    Presiona <strong>Obtener ubicación</strong>
-                    para localizarte automáticamente.
+                        Costo
 
-                </p>
+                    </div>
+
+                    <div
+                        id="costoVista"
+                        class="info-value"
+                    >
+                        $0.00 MXN
+                    </div>
+
+                </div>
 
             </div>
 
 
-        </div>
+            <!-- NOMBRE -->
+
+            <div class="input-field">
+
+                <i class="material-icons prefix">
+                    person
+                </i>
+
+                <input
+                    type="text"
+                    id="txtNombre"
+                    name="nombre"
+                    required
+                >
+
+                <label for="txtNombre">
+                    Nombre
+                </label>
+
+            </div>
+
+
+            <!-- DIRECCIÓN -->
+
+            <div class="input-field">
+
+                <i class="material-icons prefix">
+                    home
+                </i>
+
+                <textarea
+                    id="txtDireccion"
+                    name="direccion"
+                    class="materialize-textarea"
+                    required
+                ></textarea>
+
+                <label for="txtDireccion">
+                    Dirección
+                </label>
+
+            </div>
+
+
+            <!-- INGREDIENTES -->
+
+            <div class="input-field">
+
+                <i class="material-icons prefix">
+                    restaurant
+                </i>
+
+                <textarea
+                    id="txtIngredientes"
+                    name="ingredientes"
+                    class="materialize-textarea"
+                    readonly
+                ></textarea>
+
+                <label for="txtIngredientes">
+                    Ingredientes del platillo
+                </label>
+
+            </div>
+
+
+            <!-- COSTO -->
+
+            <div class="input-field">
+
+                <i class="material-icons prefix">
+                    attach_money
+                </i>
+
+                <input
+                    type="text"
+                    id="txtCosto"
+                    name="costo"
+                    value="$0.00 MXN"
+                    readonly
+                >
+
+                <label
+                    for="txtCosto"
+                    class="active"
+                >
+                    Costo del platillo
+                </label>
+
+            </div>
+
+
+            <!-- COORDENADAS OCULTAS -->
+
+            <input
+                type="hidden"
+                id="txtLatitud"
+                name="latitud"
+            >
+
+            <input
+                type="hidden"
+                id="txtLongitud"
+                name="longitud"
+            >
+
+
+            <!-- ESTADO -->
+
+            <div
+                id="estadoUbicacion"
+                class="grey-text"
+            ></div>
+
+
+            <!-- BOTONES -->
+
+            <div class="pedido-buttons">
+
+
+                <button
+                    id="btnUbicacion"
+                    type="button"
+                    class="btn waves-effect waves-light"
+                >
+
+                    <i class="material-icons left">
+                        location_on
+                    </i>
+
+                    Obtener ubicación
+
+                </button>
+
+
+                <button
+                    id="btnCancelar"
+                    type="button"
+                    class="btn waves-effect waves-light"
+                >
+
+                    <i class="material-icons left">
+                        close
+                    </i>
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    id="btnGuardar"
+                    type="button"
+                    class="btn waves-effect waves-light"
+                >
+
+                    <i class="material-icons left">
+                        save
+                    </i>
+
+                    Guardar pedido
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             MAPA
+        ================================================== -->
+
+        <section class="pedido-card map-container">
+
+            <div class="section-title">
+
+                <i class="material-icons">
+                    map
+                </i>
+
+                Ubicación de entrega
+
+            </div>
+
+
+            <div id="map"></div>
+
+
+            <div class="map-info">
+
+                <i class="material-icons">
+                    info_outline
+                </i>
+
+                Pulsa "Obtener ubicación" para localizar
+                automáticamente tu posición.
+
+            </div>
+
+
+            <div class="coordenadas">
+
+                <div class="coordenada">
+
+                    <strong>
+                        Latitud:
+                    </strong>
+
+                    <span id="latitudVista">
+                        No disponible
+                    </span>
+
+                </div>
+
+
+                <div class="coordenada">
+
+                    <strong>
+                        Longitud:
+                    </strong>
+
+                    <span id="longitudVista">
+                        No disponible
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
 
     </main>
 
 
-    <!-- =========================================
+    <!-- =====================================================
          FIREBASE
-    ========================================== -->
+    ====================================================== -->
 
     <script
         src="https://www.gstatic.com/firebasejs/6.0.1/firebase-app.js"
@@ -1021,515 +1408,40 @@
     ></script>
 
 
-    <!-- =========================================
+    <!-- =====================================================
          MATERIALIZE
-    ========================================== -->
+    ====================================================== -->
 
-    <script src="../js/materialize.min.js"></script>
+    <script
+        src="../js/materialize.min.js"
+    ></script>
 
 
-    <!-- =========================================
+    <!-- =====================================================
          FIREBASE DEL PROYECTO
-    ========================================== -->
+    ====================================================== -->
 
-    <script src="../js/firebase.js"></script>
+    <script
+        src="../js/firebase.js"
+    ></script>
 
 
-    <!-- =========================================
-         LEAFLET
-    ========================================== -->
+    <!-- =====================================================
+         LEAFLET JS
+    ====================================================== -->
 
     <script
         src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     ></script>
 
 
-    <!-- =========================================
+    <!-- =====================================================
          PEDIDOS JS
-    ========================================== -->
-
-    <script src="../js/pedidos.js"></script>
-
-
-    <!-- =========================================
-         UBICACIÓN GPS
-    ========================================== -->
-
-    <script>
-
-        let mapa = null;
-
-        let marcador = null;
-
-        let latitudActual = null;
-
-        let longitudActual = null;
-
-
-        // =========================================
-        // INICIAR MAPA
-        // =========================================
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            function () {
-
-                mapa = L.map("map").setView(
-                    [19.4326, -99.1332],
-                    13
-                );
-
-
-                L.tileLayer(
-                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                    {
-                        maxZoom: 19,
-                        attribution: "&copy; OpenStreetMap"
-                    }
-                ).addTo(mapa);
-
-
-                // =====================================
-                // BOTÓN UBICACIÓN
-                // =====================================
-
-                const btnUbicacion =
-                    document.getElementById(
-                        "btnUbicacion"
-                    );
-
-
-                if (btnUbicacion) {
-
-                    btnUbicacion.addEventListener(
-                        "click",
-                        obtenerUbicacion
-                    );
-
-                }
-
-
-                // =====================================
-                // CANCELAR
-                // =====================================
-
-                const btnCancelar =
-                    document.getElementById(
-                        "btnCancelar"
-                    );
-
-
-                if (btnCancelar) {
-
-                    btnCancelar.addEventListener(
-                        "click",
-                        function () {
-
-                            document.getElementById(
-                                "txtNombre"
-                            ).value = "";
-
-
-                            document.getElementById(
-                                "txtDireccion"
-                            ).value = "";
-
-
-                            latitudActual = null;
-
-                            longitudActual = null;
-
-
-                            if (marcador) {
-
-                                mapa.removeLayer(
-                                    marcador
-                                );
-
-                                marcador = null;
-
-                            }
-
-
-                            document.getElementById(
-                                "ubicacionTexto"
-                            ).textContent =
-                                "Aún no se ha obtenido tu ubicación.";
-
-
-                            document.getElementById(
-                                "mensajeUbicacion"
-                            ).textContent = "";
-
-                        }
-                    );
-
-                }
-
-            }
-        );
-
-
-        // =========================================
-        // OBTENER UBICACIÓN
-        // =========================================
-
-        function obtenerUbicacion() {
-
-            const mensaje =
-                document.getElementById(
-                    "mensajeUbicacion"
-                );
-
-
-            const texto =
-                document.getElementById(
-                    "ubicacionTexto"
-                );
-
-
-            const boton =
-                document.getElementById(
-                    "btnUbicacion"
-                );
-
-
-            if (!navigator.geolocation) {
-
-                mensaje.innerHTML =
-                    "<span style='color:#d32f2f;'>Tu navegador no soporta geolocalización.</span>";
-
-                return;
-
-            }
-
-
-            boton.disabled = true;
-
-            boton.innerHTML =
-                '<i class="material-icons left">location_searching</i>Obteniendo ubicación...';
-
-
-            mensaje.innerHTML =
-                "<span style='color:#777;'>Solicitando permiso de ubicación...</span>";
-
-
-            navigator.geolocation.getCurrentPosition(
-
-                function (position) {
-
-                    latitudActual =
-                        position.coords.latitude;
-
-
-                    longitudActual =
-                        position.coords.longitude;
-
-
-                    // =================================
-                    // MOSTRAR COORDENADAS
-                    // =================================
-
-                    texto.innerHTML =
-                        "Latitud: <strong>" +
-                        latitudActual.toFixed(6) +
-                        "</strong><br>" +
-                        "Longitud: <strong>" +
-                        longitudActual.toFixed(6) +
-                        "</strong>";
-
-
-                    // =================================
-                    // CENTRAR MAPA
-                    // =================================
-
-                    mapa.setView(
-                        [
-                            latitudActual,
-                            longitudActual
-                        ],
-                        17
-                    );
-
-
-                    // =================================
-                    // ELIMINAR MARCADOR ANTERIOR
-                    // =================================
-
-                    if (marcador) {
-
-                        mapa.removeLayer(
-                            marcador
-                        );
-
-                    }
-
-
-                    // =================================
-                    // CREAR MARCADOR
-                    // =================================
-
-                    marcador =
-                        L.marker([
-                            latitudActual,
-                            longitudActual
-                        ])
-                        .addTo(mapa)
-                        .bindPopup(
-                            "<strong>Tu ubicación</strong><br>" +
-                            latitudActual.toFixed(6) +
-                            ", " +
-                            longitudActual.toFixed(6)
-                        )
-                        .openPopup();
-
-
-                    // =================================
-                    // MENSAJE
-                    // =================================
-
-                    mensaje.innerHTML =
-                        "<span style='color:#2e7d32;'>" +
-                        "✓ Ubicación obtenida correctamente." +
-                        "</span>";
-
-
-                    boton.disabled = false;
-
-                    boton.innerHTML =
-                        '<i class="material-icons left">my_location</i>Actualizar ubicación';
-
-                },
-
-                function (error) {
-
-                    console.error(
-                        "Error de geolocalización:",
-                        error
-                    );
-
-
-                    boton.disabled = false;
-
-                    boton.innerHTML =
-                        '<i class="material-icons left">my_location</i>Obtener ubicación';
-
-
-                    let mensajeError =
-                        "No se pudo obtener la ubicación.";
-
-
-                    if (error.code === 1) {
-
-                        mensajeError =
-                            "Permiso de ubicación denegado. Debes permitir la ubicación en el navegador.";
-
-                    }
-
-
-                    if (error.code === 2) {
-
-                        mensajeError =
-                            "No se pudo determinar tu ubicación.";
-
-                    }
-
-
-                    if (error.code === 3) {
-
-                        mensajeError =
-                            "La solicitud de ubicación tardó demasiado.";
-
-                    }
-
-
-                    mensaje.innerHTML =
-                        "<span style='color:#d32f2f;'>" +
-                        mensajeError +
-                        "</span>";
-
-                },
-
-                {
-
-                    enableHighAccuracy: true,
-
-                    timeout: 15000,
-
-                    maximumAge: 0
-
-                }
-
-            );
-
-        }
-
-
-        // =========================================
-        // GUARDAR PEDIDO
-        // =========================================
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            function () {
-
-                const btnGuardar =
-                    document.getElementById(
-                        "btnGuardar"
-                    );
-
-
-                if (!btnGuardar) {
-                    return;
-                }
-
-
-                btnGuardar.addEventListener(
-                    "click",
-                    function () {
-
-                        const platillo =
-                            document.getElementById(
-                                "listaPlatillos"
-                            ).value;
-
-
-                        const nombre =
-                            document.getElementById(
-                                "txtNombre"
-                            ).value.trim();
-
-
-                        const direccion =
-                            document.getElementById(
-                                "txtDireccion"
-                            ).value.trim();
-
-
-                        if (!platillo) {
-
-                            M.toast({
-                                html: "Selecciona un platillo"
-                            });
-
-                            return;
-
-                        }
-
-
-                        if (!nombre) {
-
-                            M.toast({
-                                html: "Ingresa tu nombre"
-                            });
-
-                            return;
-
-                        }
-
-
-                        if (!direccion) {
-
-                            M.toast({
-                                html: "Ingresa tu dirección"
-                            });
-
-                            return;
-
-                        }
-
-
-                        if (
-                            latitudActual === null ||
-                            longitudActual === null
-                        ) {
-
-                            M.toast({
-                                html: "Primero obtén tu ubicación"
-                            });
-
-                            return;
-
-                        }
-
-
-                        // =================================
-                        // GUARDAR EN FIRESTORE
-                        // =================================
-
-                        if (
-                            typeof db !== "undefined"
-                        ) {
-
-                            db.collection("pedidos")
-                                .add({
-
-                                    platillo:
-                                        platillo,
-
-                                    nombre:
-                                        nombre,
-
-                                    direccion:
-                                        direccion,
-
-                                    latitud:
-                                        latitudActual,
-
-                                    longitud:
-                                        longitudActual,
-
-                                    fecha:
-                                        new Date()
-
-                                })
-                                .then(function () {
-
-                                    document.getElementById(
-                                        "pedidoStatus"
-                                    ).style.display =
-                                        "block";
-
-
-                                    M.toast({
-                                        html: "Pedido guardado correctamente"
-                                    });
-
-                                })
-                                .catch(function (error) {
-
-                                    console.error(
-                                        "Error al guardar:",
-                                        error
-                                    );
-
-
-                                    M.toast({
-                                        html: "Error al guardar el pedido"
-                                    });
-
-                                });
-
-                        }
-                        else {
-
-                            console.error(
-                                "Firebase / db no está disponible."
-                            );
-
-                            M.toast({
-                                html: "La conexión con Firebase no está disponible"
-                            });
-
-                        }
-
-                    }
-                );
-
-            }
-        );
-
-    </script>
+    ====================================================== -->
+
+    <script
+        src="../js/pedidos.js"
+    ></script>
 
 
 </body>
