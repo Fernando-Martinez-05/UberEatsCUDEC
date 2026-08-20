@@ -12,7 +12,14 @@ let contenido = "";
 document.addEventListener("DOMContentLoaded", function () {
 
     // =====================================================
-    // CARGAR PLATILLO NUEVO DESDE PEDIDOS
+    // CARGAR PLATILLOS GUARDADOS DESDE PEDIDOS
+    // =====================================================
+
+    cargarPlatillosDesdePedidos();
+
+
+    // =====================================================
+    // CARGAR PLATILLO NUEVO PENDIENTE
     // =====================================================
 
     cargarNuevoPlatilloDesdePedido();
@@ -67,6 +74,15 @@ function mostrarPlatillo(
     id
 ) {
 
+    // =====================================================
+    // EVITAR DUPLICADOS VISUALES
+    // =====================================================
+
+    if (document.getElementById(id)) {
+        return;
+    }
+
+
     let fotoPlatillo = "";
 
 
@@ -103,6 +119,7 @@ function mostrarPlatillo(
                     object-fit: cover;
                     border-radius: 10px;
                 "
+                alt="${platillo.nombre || "Platillo"}"
             >
         `;
 
@@ -192,8 +209,10 @@ function mostrarPlatillo(
 
     if (contenedor) {
 
-        contenedor.innerHTML +=
-            contenido;
+        contenedor.insertAdjacentHTML(
+            "beforeend",
+            contenido
+        );
 
     }
 
@@ -302,10 +321,26 @@ function agregarALista(
         );
 
 
-    // Si estamos en index.html
-    // no existe la lista de pedidos.
+    // =====================================================
+    // SI NO EXISTE LA LISTA
+    // =====================================================
 
     if (!lista) {
+        return;
+    }
+
+
+    // =====================================================
+    // EVITAR OPCIONES DUPLICADAS
+    // =====================================================
+
+    const opcionExistente =
+        lista.querySelector(
+            `option[value="${id}"]`
+        );
+
+
+    if (opcionExistente) {
         return;
     }
 
@@ -333,7 +368,7 @@ function agregarALista(
 
 
 // =====================================================
-// CARGAR PLATILLO GUARDADO DESDE PEDIDOS
+// CARGAR PLATILLO NUEVO DESDE PEDIDOS
 // =====================================================
 
 function cargarNuevoPlatilloDesdePedido() {
@@ -344,7 +379,9 @@ function cargarNuevoPlatilloDesdePedido() {
         );
 
 
-    // No existe platillo nuevo.
+    // =====================================================
+    // NO EXISTE PLATILLO NUEVO
+    // =====================================================
 
     if (!datos) {
         return;
@@ -363,7 +400,7 @@ function cargarNuevoPlatilloDesdePedido() {
 
 
         // =================================================
-        // ID ÚNICO
+        // CREAR ID
         // =================================================
 
         const id =
@@ -382,6 +419,16 @@ function cargarNuevoPlatilloDesdePedido() {
         );
 
 
+        // =================================================
+        // GUARDAR EN LISTA PERMANENTE
+        // =================================================
+
+        guardarPlatilloLocal(
+            platillo,
+            id
+        );
+
+
         console.log(
             "Platillo agregado desde pedidos:",
             platillo
@@ -389,7 +436,7 @@ function cargarNuevoPlatilloDesdePedido() {
 
 
         // =================================================
-        // EVITAR DUPLICADOS
+        // ELIMINAR PENDIENTE
         // =================================================
 
         localStorage.removeItem(
@@ -405,14 +452,287 @@ function cargarNuevoPlatilloDesdePedido() {
             error
         );
 
+    }
 
-        localStorage.removeItem(
-            "nuevoPlatilloIndex"
+}
+
+
+// =====================================================
+// GUARDAR PLATILLO EN LOCALSTORAGE
+// =====================================================
+
+function guardarPlatilloLocal(
+    platillo,
+    id
+) {
+
+    let platillos = [];
+
+
+    try {
+
+        const datos =
+            localStorage.getItem(
+                "platillosIndex"
+            );
+
+
+        if (datos) {
+
+            platillos =
+                JSON.parse(datos);
+
+        }
+
+
+        if (!Array.isArray(platillos)) {
+
+            platillos = [];
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Error leyendo platillos locales:",
+            error
+        );
+
+        platillos = [];
+
+    }
+
+
+    // =====================================================
+    // COMPROBAR SI YA EXISTE
+    // =====================================================
+
+    const existe =
+        platillos.some(
+            function (item) {
+
+                return item.id === id;
+
+            }
+        );
+
+
+    if (!existe) {
+
+        platillos.push({
+
+            id: id,
+
+            nombre:
+                platillo.nombre ||
+                "Sin nombre",
+
+            ingredientes:
+                platillo.ingredientes ||
+                "Sin ingredientes",
+
+            precio:
+                platillo.precio ||
+                "0",
+
+            foto:
+                platillo.foto ||
+                ""
+
+        });
+
+    }
+
+
+    // =====================================================
+    // GUARDAR
+    // =====================================================
+
+    try {
+
+        localStorage.setItem(
+            "platillosIndex",
+            JSON.stringify(platillos)
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Error guardando platillos:",
+            error
         );
 
     }
 
 }
+
+
+// =====================================================
+// CARGAR TODOS LOS PLATILLOS GUARDADOS
+// =====================================================
+
+function cargarPlatillosDesdePedidos() {
+
+    const datos =
+        localStorage.getItem(
+            "platillosIndex"
+        );
+
+
+    if (!datos) {
+        return;
+    }
+
+
+    try {
+
+        const platillos =
+            JSON.parse(datos);
+
+
+        if (!Array.isArray(platillos)) {
+            return;
+        }
+
+
+        platillos.forEach(
+            function (platillo) {
+
+                if (!platillo) {
+                    return;
+                }
+
+
+                const id =
+                    platillo.id ||
+                    "pedido_" +
+                    Date.now();
+
+
+                mostrarPlatillo(
+                    platillo,
+                    id
+                );
+
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Error cargando platillos guardados:",
+            error
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// ESCUCHAR NUEVOS PEDIDOS DESDE PEDIDOS.HTML
+// =====================================================
+//
+// Esto permite que si index.html está abierto y desde
+// otra pestaña se agrega un pedido, el platillo aparezca
+// automáticamente.
+//
+// =====================================================
+
+window.addEventListener(
+    "storage",
+    function (event) {
+
+        // =================================================
+        // SOLO NOS INTERESA ESTA CLAVE
+        // =================================================
+
+        if (
+            event.key !==
+            "nuevoPlatilloIndex"
+        ) {
+
+            return;
+
+        }
+
+
+        // =================================================
+        // NO HAY NUEVO VALOR
+        // =================================================
+
+        if (!event.newValue) {
+            return;
+        }
+
+
+        try {
+
+            const platillo =
+                JSON.parse(
+                    event.newValue
+                );
+
+
+            if (!platillo) {
+                return;
+            }
+
+
+            // =================================================
+            // ID
+            // =================================================
+
+            const id =
+                platillo.id ||
+                "pedido_" +
+                Date.now();
+
+
+            // =================================================
+            // MOSTRAR
+            // =================================================
+
+            mostrarPlatillo(
+                platillo,
+                id
+            );
+
+
+            // =================================================
+            // GUARDAR PERMANENTEMENTE
+            // =================================================
+
+            guardarPlatilloLocal(
+                platillo,
+                id
+            );
+
+
+            console.log(
+                "Nuevo platillo recibido desde pedidos.html:",
+                platillo
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Error procesando nuevo pedido:",
+                error
+            );
+
+        }
+
+    }
+);
 
 
 // =====================================================
@@ -494,59 +814,61 @@ if (btnFoto) {
                 event.target.files[0];
 
 
-            if (file) {
-
-                const reader =
-                    new FileReader();
-
-
-                reader.onload =
-                    function (e) {
-
-                        const fotoFinal =
-                            e.target.result;
-
-
-                        if (foto) {
-
-                            foto.setAttribute(
-                                "src",
-                                fotoFinal
-                            );
-
-                            foto.style.display =
-                                "block";
-
-                        }
-
-
-                        const fotoInput =
-                            document.getElementById(
-                                "fotoInput"
-                            );
-
-
-                        if (fotoInput) {
-
-                            fotoInput.value =
-                                fotoFinal;
-
-                        }
-
-
-                        if (cameraStatus) {
-
-                            cameraStatus.textContent =
-                                "Imagen seleccionada correctamente.";
-
-                        }
-
-                    };
-
-
-                reader.readAsDataURL(file);
-
+            if (!file) {
+                return;
             }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function (e) {
+
+                    const fotoFinal =
+                        e.target.result;
+
+
+                    if (foto) {
+
+                        foto.setAttribute(
+                            "src",
+                            fotoFinal
+                        );
+
+
+                        foto.style.display =
+                            "block";
+
+                    }
+
+
+                    const fotoInput =
+                        document.getElementById(
+                            "fotoInput"
+                        );
+
+
+                    if (fotoInput) {
+
+                        fotoInput.value =
+                            fotoFinal;
+
+                    }
+
+
+                    if (cameraStatus) {
+
+                        cameraStatus.textContent =
+                            "Imagen seleccionada correctamente.";
+
+                    }
+
+                };
+
+
+            reader.readAsDataURL(file);
 
         }
     );
@@ -564,60 +886,61 @@ if (video) {
         "canplay",
         function () {
 
-            if (!streaming) {
-
-                if (
-                    video.videoWidth &&
-                    video.videoHeight
-                ) {
-
-                    height =
-                        video.videoHeight /
-                        (
-                            video.videoWidth /
-                            width
-                        );
-
-                }
-
-                else {
-
-                    height = 240;
-
-                }
+            if (streaming) {
+                return;
+            }
 
 
-                video.setAttribute(
+            if (
+                video.videoWidth &&
+                video.videoHeight
+            ) {
+
+                height =
+                    video.videoHeight /
+                    (
+                        video.videoWidth /
+                        width
+                    );
+
+            }
+
+            else {
+
+                height = 240;
+
+            }
+
+
+            video.setAttribute(
+                "width",
+                width
+            );
+
+
+            video.setAttribute(
+                "height",
+                height
+            );
+
+
+            if (canvas) {
+
+                canvas.setAttribute(
                     "width",
                     width
                 );
 
 
-                video.setAttribute(
+                canvas.setAttribute(
                     "height",
                     height
                 );
 
-
-                if (canvas) {
-
-                    canvas.setAttribute(
-                        "width",
-                        width
-                    );
-
-
-                    canvas.setAttribute(
-                        "height",
-                        height
-                    );
-
-                }
-
-
-                streaming = true;
-
             }
+
+
+            streaming = true;
 
         }
     );
@@ -673,19 +996,37 @@ if (btnCamara) {
                 }
 
 
+                // =================================================
+                // CONFIGURACIÓN DE CÁMARA
+                // =================================================
+
                 const stream =
-                    await navigator.mediaDevices.getUserMedia(
-                        {
-                            video: {
-                                facingMode: {
-                                    ideal: "environment"
-                                }
+                    await navigator.mediaDevices.getUserMedia({
+
+                        video: {
+
+                            facingMode: {
+                                ideal: "environment"
                             },
 
-                            audio: false
-                        }
-                    );
+                            width: {
+                                ideal: 1280
+                            },
 
+                            height: {
+                                ideal: 720
+                            }
+
+                        },
+
+                        audio: false
+
+                    });
+
+
+                // =================================================
+                // ASIGNAR STREAM
+                // =================================================
 
                 video.srcObject =
                     stream;
@@ -710,6 +1051,10 @@ if (btnCamara) {
                 await video.play();
 
 
+                // =================================================
+                // MOSTRAR CÁMARA
+                // =================================================
+
                 const camera =
                     document.getElementById(
                         "Camera"
@@ -720,6 +1065,14 @@ if (btnCamara) {
 
                     camera.style.display =
                         "block";
+
+                }
+
+
+                if (foto) {
+
+                    foto.style.display =
+                        "none";
 
                 }
 
@@ -741,44 +1094,55 @@ if (btnCamara) {
                 );
 
 
-                if (cameraError) {
+                if (!cameraError) {
+                    return;
+                }
 
-                    if (
-                        error.name ===
-                        "NotAllowedError"
-                    ) {
 
-                        cameraError.textContent =
-                            "Permiso de cámara denegado. Autoriza la cámara en el navegador.";
+                if (
+                    error.name ===
+                    "NotAllowedError"
+                ) {
 
-                    }
+                    cameraError.textContent =
+                        "Permiso de cámara denegado. Autoriza la cámara en el navegador.";
 
-                    else if (
-                        error.name ===
-                        "NotFoundError"
-                    ) {
+                }
 
-                        cameraError.textContent =
-                            "No se encontró ninguna cámara.";
+                else if (
+                    error.name ===
+                    "NotFoundError"
+                ) {
 
-                    }
+                    cameraError.textContent =
+                        "No se encontró ninguna cámara.";
 
-                    else if (
-                        error.name ===
-                        "NotReadableError"
-                    ) {
+                }
 
-                        cameraError.textContent =
-                            "La cámara está siendo utilizada por otra aplicación.";
+                else if (
+                    error.name ===
+                    "NotReadableError"
+                ) {
 
-                    }
+                    cameraError.textContent =
+                        "La cámara está siendo utilizada por otra aplicación.";
 
-                    else {
+                }
 
-                        cameraError.textContent =
-                            "No se pudo abrir la cámara.";
+                else if (
+                    error.name ===
+                    "SecurityError"
+                ) {
 
-                    }
+                    cameraError.textContent =
+                        "El navegador bloqueó el acceso a la cámara. Usa HTTPS o localhost.";
+
+                }
+
+                else {
+
+                    cameraError.textContent =
+                        "No se pudo abrir la cámara.";
 
                 }
 
@@ -905,7 +1269,33 @@ function tomarFoto() {
     // DETENER CÁMARA
     // =================================================
 
-    if (video.srcObject) {
+    detenerCamara();
+
+
+    streaming =
+        false;
+
+
+    if (cameraStatus) {
+
+        cameraStatus.textContent =
+            "Foto capturada correctamente.";
+
+    }
+
+}
+
+
+// =====================================================
+// DETENER CÁMARA
+// =====================================================
+
+function detenerCamara() {
+
+    if (
+        video &&
+        video.srcObject
+    ) {
 
         const tracks =
             video.srcObject.getTracks();
@@ -922,18 +1312,6 @@ function tomarFoto() {
 
         video.srcObject =
             null;
-
-    }
-
-
-    streaming =
-        false;
-
-
-    if (cameraStatus) {
-
-        cameraStatus.textContent =
-            "Foto capturada correctamente.";
 
     }
 
@@ -966,6 +1344,10 @@ if (btnCapturar) {
 
 function limpiarFoto() {
 
+    // =================================================
+    // LIMPIAR IMAGEN
+    // =================================================
+
     if (foto) {
 
         foto.setAttribute(
@@ -979,6 +1361,10 @@ function limpiarFoto() {
 
     }
 
+
+    // =================================================
+    // LIMPIAR INPUT
+    // =================================================
 
     const fotoInput =
         document.getElementById(
@@ -998,29 +1384,12 @@ function limpiarFoto() {
     // DETENER CÁMARA
     // =================================================
 
-    if (
-        video &&
-        video.srcObject
-    ) {
-
-        const tracks =
-            video.srcObject.getTracks();
+    detenerCamara();
 
 
-        tracks.forEach(
-            function (track) {
-
-                track.stop();
-
-            }
-        );
-
-
-        video.srcObject =
-            null;
-
-    }
-
+    // =================================================
+    // REINICIAR VIDEO
+    // =================================================
 
     if (video) {
 
@@ -1035,6 +1404,10 @@ function limpiarFoto() {
     }
 
 
+    // =================================================
+    // MOSTRAR CONTENEDOR
+    // =================================================
+
     const camera =
         document.getElementById(
             "Camera"
@@ -1048,6 +1421,10 @@ function limpiarFoto() {
 
     }
 
+
+    // =================================================
+    // LIMPIAR INPUT DE ARCHIVO
+    // =================================================
 
     if (btnFoto) {
 
@@ -1141,3 +1518,11 @@ window.borrarPlatillo =
 
 window.agregarALista =
     agregarALista;
+
+
+window.guardarPlatilloLocal =
+    guardarPlatilloLocal;
+
+
+window.cargarPlatillosDesdePedidos =
+    cargarPlatillosDesdePedidos;
