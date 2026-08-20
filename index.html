@@ -489,7 +489,7 @@
 
 
     <!-- =========================================
-         LISTA DE PLATILLOS
+         LISTA DE PLATILLOS / PEDIDOS
     ========================================== -->
 
     <div
@@ -539,7 +539,9 @@
             <div class="divider"></div>
 
 
-            <!-- NOMBRE -->
+            <!-- =====================================
+                 NOMBRE
+            ====================================== -->
 
             <div class="input-field">
 
@@ -559,7 +561,9 @@
             </div>
 
 
-            <!-- INGREDIENTES -->
+            <!-- =====================================
+                 INGREDIENTES
+            ====================================== -->
 
             <div class="input-field">
 
@@ -579,7 +583,9 @@
             </div>
 
 
-            <!-- PRECIO -->
+            <!-- =====================================
+                 PRECIO
+            ====================================== -->
 
             <div class="input-field">
 
@@ -601,7 +607,19 @@
             </div>
 
 
-            <!-- FOTO -->
+            <!-- =====================================
+                 FOTO
+            ====================================== -->
+
+            <!--
+                Aquí se guardará temporalmente
+                la imagen comprimida en Base64.
+
+                db.js la convierte a Blob,
+                la sube a Firebase Storage
+                y después guarda la URL
+                en Firestore.
+            -->
 
             <input
                 id="fotoInput"
@@ -610,7 +628,9 @@
             >
 
 
-            <!-- AGREGAR -->
+            <!-- =====================================
+                 AGREGAR PLATILLO
+            ====================================== -->
 
             <div class="input-field center">
 
@@ -655,7 +675,9 @@
             <br>
 
 
-            <!-- SELECCIONAR IMAGEN -->
+            <!-- =====================================
+                 SELECCIONAR IMAGEN
+            ====================================== -->
 
             <div>
 
@@ -673,7 +695,9 @@
             </div>
 
 
-            <!-- BOTONES -->
+            <!-- =====================================
+                 BOTONES DE CÁMARA
+            ====================================== -->
 
             <div class="camera-buttons">
 
@@ -724,17 +748,23 @@
             </div>
 
 
-            <!-- ESTADO -->
+            <!-- =====================================
+                 ESTADO
+            ====================================== -->
 
             <div
                 id="cameraStatus"
                 class="center grey-text"
             >
+
                 Cámara lista para tomar una foto.
+
             </div>
 
 
-            <!-- ERROR -->
+            <!-- =====================================
+                 ERROR
+            ====================================== -->
 
             <div
                 id="cameraError"
@@ -743,7 +773,9 @@
             </div>
 
 
-            <!-- VIDEO -->
+            <!-- =====================================
+                 VIDEO
+            ====================================== -->
 
             <div
                 id="Camera"
@@ -756,13 +788,17 @@
                     playsinline
                     muted
                 >
+
                     Video no disponible
+
                 </video>
 
             </div>
 
 
-            <!-- CANVAS -->
+            <!-- =====================================
+                 CANVAS
+            ====================================== -->
 
             <canvas
                 id="Canvas"
@@ -771,17 +807,14 @@
             </canvas>
 
 
-            <!-- FOTO -->
+            <!-- =====================================
+                 FOTO CAPTURADA
+            ====================================== -->
 
             <div
                 id="Salida"
                 class="center"
             >
-
-                <!--
-                    No usamos img/default.jpg porque
-                    actualmente esa imagen te está dando 404.
-                -->
 
                 <img
                     id="foto"
@@ -807,6 +840,12 @@
 
     <script
         src="https://www.gstatic.com/firebasejs/6.0.1/firebase-firestore.js">
+    </script>
+
+    <!-- IMPORTANTE:
+         Firebase Storage -->
+    <script
+        src="https://www.gstatic.com/firebasejs/6.0.1/firebase-storage.js">
     </script>
 
 
@@ -847,14 +886,22 @@
         if ("serviceWorker" in navigator) {
 
             navigator.serviceWorker.register("sw.js")
-                .then(() => {
-                    console.log("Service Worker registrado correctamente");
+
+                .then(function () {
+
+                    console.log(
+                        "Service Worker registrado correctamente"
+                    );
+
                 })
-                .catch((error) => {
+
+                .catch(function (error) {
+
                     console.error(
                         "Error al registrar Service Worker:",
                         error
                     );
+
                 });
 
         }
