@@ -28,11 +28,14 @@ if (formularioAgregar) {
             const nombreElemento =
                 document.getElementById("title");
 
+
             const ingredientesElemento =
                 document.getElementById("ingredients");
 
+
             const precioElemento =
                 document.getElementById("price");
+
 
             const fotoElemento =
                 document.getElementById("fotoInput");
@@ -125,7 +128,9 @@ if (formularioAgregar) {
             // VERIFICAR FIREBASE
             // =================================================
 
-            if (typeof db === "undefined") {
+            if (
+                typeof db === "undefined"
+            ) {
 
                 console.error(
                     "Firebase no está disponible."
@@ -136,6 +141,30 @@ if (formularioAgregar) {
                 );
 
                 return;
+
+            }
+
+
+            // =================================================
+            // DESACTIVAR BOTÓN
+            // =================================================
+
+            const btnAgregar =
+                document.getElementById(
+                    "btnAgregarPlatillo"
+                );
+
+
+            if (btnAgregar) {
+
+                btnAgregar.disabled = true;
+
+                btnAgregar.innerHTML = `
+                    <i class="material-icons left">
+                        hourglass_empty
+                    </i>
+                    Guardando...
+                `;
 
             }
 
@@ -169,41 +198,47 @@ if (formularioAgregar) {
 
 
                         // =====================================
-                        // RESTAURAR FOTO
+                        // LIMPIAR FOTO
                         // =====================================
 
                         const foto =
-                            document.getElementById("foto");
+                            document.getElementById(
+                                "foto"
+                            );
 
 
                         if (foto) {
 
-                            foto.src =
-                                "img/default.jpg";
+                            foto.src = "";
+
+                            foto.style.display =
+                                "none";
 
                         }
 
 
                         const fotoInput =
-                            document.getElementById("fotoInput");
+                            document.getElementById(
+                                "fotoInput"
+                            );
 
 
                         if (fotoInput) {
 
-                            fotoInput.value =
-                                "";
+                            fotoInput.value = "";
 
                         }
 
 
                         const btnFoto =
-                            document.getElementById("btnFoto");
+                            document.getElementById(
+                                "btnFoto"
+                            );
 
 
                         if (btnFoto) {
 
-                            btnFoto.value =
-                                "";
+                            btnFoto.value = "";
 
                         }
 
@@ -237,6 +272,26 @@ if (formularioAgregar) {
                         );
 
                     }
+                )
+
+                .finally(
+                    function () {
+
+                        if (btnAgregar) {
+
+                            btnAgregar.disabled =
+                                false;
+
+                            btnAgregar.innerHTML = `
+                                <i class="material-icons left">
+                                    add
+                                </i>
+                                Agregar platillo
+                            `;
+
+                        }
+
+                    }
                 );
 
         }
@@ -246,97 +301,235 @@ if (formularioAgregar) {
 
 
 // =========================================================
-// ELIMINAR PLATILLO
+// ELIMINAR PEDIDO DESDE INDEX
+// =========================================================
+//
+// IMPORTANTE:
+//
+// Los elementos que aparecen en index.html después de
+// realizar un pedido pertenecen a:
+//
+//     pedidos
+//
+// NO a:
+//
+//     platillos
+//
+// Por eso aquí eliminamos de "pedidos".
 // =========================================================
 
-const platilloBorrar =
+
+const contenedorRecetas =
     document.querySelector(".recipes");
 
 
-if (platilloBorrar) {
+if (contenedorRecetas) {
 
-    platilloBorrar.addEventListener(
+    contenedorRecetas.addEventListener(
         "click",
         function (e) {
 
             // =================================================
-            // DETECTAR ICONO ELIMINAR
+            // BUSCAR BOTÓN / ICONO DE ELIMINAR
             // =================================================
 
-            if (
-                e.target.tagName === "I" &&
-                e.target.getAttribute("data-id")
-            ) {
-
-                const id =
-                    e.target.getAttribute("data-id");
+            const iconoEliminar =
+                e.target.closest(
+                    ".recipe-delete i"
+                );
 
 
-                const confirmar =
-                    confirm(
-                        "¿Seguro que deseas eliminar este platillo?"
-                    );
+            if (!iconoEliminar) {
 
-
-                if (!confirmar) {
-
-                    return;
-
-                }
-
-
-                // =================================================
-                // ELIMINAR DE FIRESTORE
-                // =================================================
-
-                if (typeof db === "undefined") {
-
-                    console.error(
-                        "Firebase no está disponible."
-                    );
-
-                    alert(
-                        "Firebase no está disponible."
-                    );
-
-                    return;
-
-                }
-
-
-                db.collection("platillos")
-                    .doc(id)
-                    .delete()
-
-                    .then(
-                        function () {
-
-                            alert(
-                                "Platillo eliminado correctamente."
-                            );
-
-                        }
-                    )
-
-                    .catch(
-                        function (error) {
-
-                            console.error(
-                                "Error al eliminar:",
-                                error
-                            );
-
-
-                            alert(
-                                "Error al eliminar el platillo."
-                            );
-
-                        }
-                    );
+                return;
 
             }
 
+
+            // =================================================
+            // OBTENER ID DEL PEDIDO
+            // =================================================
+
+            const id =
+                iconoEliminar.getAttribute(
+                    "data-id"
+                );
+
+
+            if (!id) {
+
+                console.error(
+                    "No se encontró el ID del pedido."
+                );
+
+                return;
+
+            }
+
+
+            // =================================================
+            // CONFIRMAR
+            // =================================================
+
+            const confirmar =
+                confirm(
+                    "¿Seguro que deseas eliminar este pedido?"
+                );
+
+
+            if (!confirmar) {
+
+                return;
+
+            }
+
+
+            // =================================================
+            // VERIFICAR FIREBASE
+            // =================================================
+
+            if (
+                typeof db === "undefined"
+            ) {
+
+                console.error(
+                    "Firebase no está disponible."
+                );
+
+                alert(
+                    "Firebase no está disponible."
+                );
+
+                return;
+
+            }
+
+
+            // =================================================
+            // ENCONTRAR TARJETA
+            // =================================================
+
+            const tarjeta =
+                document.getElementById(
+                    "pedido_" + id
+                );
+
+
+            // =================================================
+            // ELIMINAR VISUALMENTE INMEDIATAMENTE
+            // =================================================
+            //
+            // Esto hace que desaparezca de la pantalla
+            // inmediatamente, sin esperar a Firebase.
+            //
+            // Si Firebase falla, la tarjeta se vuelve a
+            // mostrar mediante la recarga del snapshot.
+            // =================================================
+
+            if (tarjeta) {
+
+                tarjeta.remove();
+
+            }
+
+
+            // =================================================
+            // ELIMINAR DE FIRESTORE
+            // =================================================
+
+            db.collection("pedidos")
+                .doc(id)
+                .delete()
+
+                .then(
+                    function () {
+
+                        console.log(
+                            "Pedido eliminado correctamente:",
+                            id
+                        );
+
+
+                        // =====================================
+                        // VERIFICAR SI YA NO HAY PEDIDOS
+                        // =====================================
+
+                        const recetas =
+                            document.querySelector(
+                                ".recipes"
+                            );
+
+
+                        if (
+                            recetas &&
+                            recetas.children.length === 0
+                        ) {
+
+                            console.log(
+                                "No hay pedidos."
+                            );
+
+                        }
+
+                    }
+                )
+
+                .catch(
+                    function (error) {
+
+                        console.error(
+                            "Error eliminando pedido:",
+                            error
+                        );
+
+
+                        alert(
+                            "No se pudo eliminar el pedido."
+                        );
+
+
+                        // =====================================
+                        // RECARGAR LA PÁGINA
+                        // =====================================
+                        //
+                        // Si Firebase rechazó la eliminación,
+                        // el snapshot volverá a mostrar el
+                        // pedido.
+                        // =====================================
+
+                        location.reload();
+
+                    }
+                );
+
         }
+    );
+
+}
+
+
+// =========================================================
+// LIMPIAR PEDIDOS ANTIGUOS DE LOCALSTORAGE
+// =========================================================
+//
+// Ya no necesitamos usar localStorage para mostrar los
+// pedidos porque index.js los obtiene directamente de
+// Firebase.
+//
+// =========================================================
+
+try {
+
+    localStorage.removeItem(
+        "nuevoPlatilloIndex"
+    );
+
+}
+catch (error) {
+
+    console.warn(
+        "No se pudo limpiar localStorage:",
+        error
     );
 
 }
