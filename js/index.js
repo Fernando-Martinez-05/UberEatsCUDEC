@@ -21,6 +21,13 @@ let camaraActiva = false;
 
 
 // =========================================================
+// FOTO ACTUAL DEL PLATILLO
+// =========================================================
+
+let fotoActual = "";
+
+
+// =========================================================
 // INICIO
 // =========================================================
 
@@ -263,9 +270,6 @@ function cargarPlatillos() {
         );
 
 
-    // Si estamos en index.html y no existe
-    // el selector de pedidos, simplemente no hacemos nada.
-
     if (!select) {
         return;
     }
@@ -450,10 +454,6 @@ function cargarPedidosEnIndex() {
                 );
 
 
-                // =================================================
-                // ELIMINAR TARJETAS QUE YA NO EXISTEN
-                // =================================================
-
                 const tarjetas =
                     contenedor.querySelectorAll(
                         ".recipe"
@@ -590,10 +590,6 @@ function crearHTMLPedido(
     let imagenHTML = "";
 
 
-    // =====================================================
-    // SI TIENE FOTO
-    // =====================================================
-
     if (
         platillo.foto &&
         typeof platillo.foto === "string" &&
@@ -616,10 +612,6 @@ function crearHTMLPedido(
         `;
 
     }
-
-    // =====================================================
-    // SI NO TIENE FOTO
-    // =====================================================
 
     else {
 
@@ -1775,10 +1767,6 @@ function guardarPedido() {
                 );
 
 
-                // IMPORTANTE:
-                // Guardamos el ID en el pedido
-                // para poder identificarlo posteriormente.
-
                 return db.collection("pedidos")
                     .doc(docRef.id)
                     .update({
@@ -1790,10 +1778,6 @@ function guardarPedido() {
 
         .then(
             function () {
-
-                // =================================================
-                // VOLVER AL INDEX
-                // =================================================
 
                 window.location.href =
                     "../index.html";
@@ -2052,10 +2036,6 @@ function iniciarControlesCamara() {
         );
 
 
-    // =====================================================
-    // VERIFICAR ELEMENTOS
-    // =====================================================
-
     if (
         !btnCamara ||
         !btnCapturar ||
@@ -2131,10 +2111,17 @@ function iniciarControlesCamara() {
                                     );
 
 
-                                mostrarFoto(
-                                    resultado
-                                );
+                                // =================================
+                                // GUARDAR FOTO GLOBAL
+                                // =================================
 
+                                fotoActual =
+                                    resultado;
+
+
+                                // =================================
+                                // GUARDAR FOTO EN INPUT
+                                // =================================
 
                                 if (fotoInput) {
 
@@ -2142,6 +2129,27 @@ function iniciarControlesCamara() {
                                         resultado;
 
                                 }
+
+
+                                // =================================
+                                // MOSTRAR FOTO
+                                // =================================
+
+                                mostrarFoto(
+                                    resultado
+                                );
+
+
+                                console.log(
+                                    "Imagen seleccionada."
+                                );
+
+
+                                console.log(
+                                    "Tamaño:",
+                                    fotoActual.length,
+                                    "caracteres"
+                                );
 
 
                                 if (cameraStatus) {
@@ -2245,31 +2253,6 @@ function iniciarControlesCamara() {
         }
     );
 
-
-    // =====================================================
-    // DETENER CÁMARA AL CERRAR FORMULARIO
-    // =====================================================
-
-    const sideForm =
-        document.getElementById(
-            "side-form"
-        );
-
-
-    if (sideForm) {
-
-        sideForm.addEventListener(
-            "click",
-            function () {
-
-                // No hacemos nada aquí.
-                // La cámara permanece disponible.
-
-            }
-        );
-
-    }
-
 }
 
 
@@ -2304,10 +2287,6 @@ async function abrirCamara() {
     }
 
 
-    // =====================================================
-    // LIMPIAR MENSAJE DE ERROR
-    // =====================================================
-
     if (cameraError) {
 
         cameraError.textContent =
@@ -2315,10 +2294,6 @@ async function abrirCamara() {
 
     }
 
-
-    // =====================================================
-    // VERIFICAR SOPORTE
-    // =====================================================
 
     if (
         !navigator.mediaDevices ||
@@ -2337,10 +2312,6 @@ async function abrirCamara() {
     }
 
 
-    // =====================================================
-    // DETENER CÁMARA ANTERIOR
-    // =====================================================
-
     detenerCamara();
 
 
@@ -2353,10 +2324,6 @@ async function abrirCamara() {
 
 
     try {
-
-        // =================================================
-        // CÁMARA TRASERA PARA TELÉFONO
-        // =================================================
 
         streamCamara =
             await navigator.mediaDevices.getUserMedia({
@@ -2411,13 +2378,8 @@ async function abrirCamara() {
         }
 
 
-        // =================================================
-        // MOSTRAR VIDEO
-        // =================================================
-
         video.style.display =
             "block";
-
 
     }
 
@@ -2556,8 +2518,7 @@ function capturarFoto() {
     if (
         !streamCamara ||
         !camaraActiva ||
-        video.readyState <
-        2
+        video.readyState < 2
     ) {
 
         if (cameraError) {
@@ -2661,6 +2622,26 @@ function capturarFoto() {
 
 
     // =====================================================
+    // GUARDAR FOTO EN VARIABLE GLOBAL
+    // =====================================================
+
+    fotoActual =
+        imagen;
+
+
+    // =====================================================
+    // GUARDAR FOTO EN INPUT
+    // =====================================================
+
+    if (fotoInput) {
+
+        fotoInput.value =
+            imagen;
+
+    }
+
+
+    // =====================================================
     // MOSTRAR FOTO
     // =====================================================
 
@@ -2676,15 +2657,44 @@ function capturarFoto() {
 
 
     // =====================================================
-    // GUARDAR FOTO PARA FIRESTORE
+    // DEBUG
     // =====================================================
 
-    if (fotoInput) {
+    console.log(
+        "================================="
+    );
 
-        fotoInput.value =
-            imagen;
 
-    }
+    console.log(
+        "FOTO CAPTURADA"
+    );
+
+
+    console.log(
+        "Existe:",
+        fotoActual !== ""
+    );
+
+
+    console.log(
+        "Tamaño:",
+        fotoActual.length,
+        "caracteres"
+    );
+
+
+    console.log(
+        "Inicio:",
+        fotoActual.substring(
+            0,
+            50
+        )
+    );
+
+
+    console.log(
+        "================================="
+    );
 
 
     if (cameraStatus) {
@@ -2809,6 +2819,14 @@ function mostrarFoto(
 // =========================================================
 
 function limpiarFoto() {
+
+    // =====================================================
+    // LIMPIAR VARIABLE GLOBAL
+    // =====================================================
+
+    fotoActual =
+        "";
+
 
     const foto =
         document.getElementById(
