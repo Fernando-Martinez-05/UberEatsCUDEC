@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // En pedidos.html el ID es "listaplatillos"
 
     const lista =
-        document.getElementById("listaplatillos");
+        document.getElementById("listaPlatillos");
 
     if (lista) {
 
@@ -196,7 +196,7 @@ function cargarPlatillos() {
 
     const select =
         document.getElementById(
-            "listaplatillos"
+            "listaPlatillos"
         );
 
 
@@ -986,7 +986,7 @@ function guardarPedido() {
 
     const lista =
         document.getElementById(
-            "listaplatillos"
+            "listaPlatillos"
         );
 
 
@@ -1337,7 +1337,7 @@ function limpiarPedido() {
 
     const lista =
         document.getElementById(
-            "listaplatillos"
+            "listaPlatillos"
         );
 
 
