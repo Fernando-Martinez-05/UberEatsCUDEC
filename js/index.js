@@ -11,23 +11,48 @@ let contenido = "";
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Menú lateral
-    const menus = document.querySelectorAll(".side-menu");
+    // =====================================================
+    // CARGAR PLATILLO NUEVO DESDE PEDIDOS
+    // =====================================================
+
+    cargarNuevoPlatilloDesdePedido();
+
+
+    // =====================================================
+    // MENÚ LATERAL
+    // =====================================================
+
+    const menus =
+        document.querySelectorAll(".side-menu");
 
     if (menus.length > 0) {
-        M.Sidenav.init(menus, {
-            edge: "right"
-        });
+
+        M.Sidenav.init(
+            menus,
+            {
+                edge: "right"
+            }
+        );
+
     }
 
 
-    // Formulario lateral
-    const forms = document.querySelectorAll(".side-form");
+    // =====================================================
+    // FORMULARIO LATERAL
+    // =====================================================
+
+    const forms =
+        document.querySelectorAll(".side-form");
 
     if (forms.length > 0) {
-        M.Sidenav.init(forms, {
-            edge: "left"
-        });
+
+        M.Sidenav.init(
+            forms,
+            {
+                edge: "left"
+            }
+        );
+
     }
 
 });
@@ -37,19 +62,35 @@ document.addEventListener("DOMContentLoaded", function () {
 // MOSTRAR PLATILLO
 // =====================================================
 
-function mostrarPlatillo(platillo, id) {
+function mostrarPlatillo(
+    platillo,
+    id
+) {
 
     let fotoPlatillo = "";
 
-    // Si existe una fotografía guardada
-    if (platillo.foto && platillo.foto !== "") {
 
-        fotoPlatillo = platillo.foto;
+    // =====================================================
+    // FOTOGRAFÍA
+    // =====================================================
+
+    if (
+        platillo.foto &&
+        platillo.foto !== ""
+    ) {
+
+        fotoPlatillo =
+            platillo.foto;
 
     }
 
 
     let imagenHTML = "";
+
+
+    // =====================================================
+    // MOSTRAR IMAGEN
+    // =====================================================
 
     if (fotoPlatillo !== "") {
 
@@ -58,13 +99,17 @@ function mostrarPlatillo(platillo, id) {
                 src="${fotoPlatillo}"
                 height="100"
                 width="100"
-                style="object-fit: cover; border-radius: 10px;"
+                style="
+                    object-fit: cover;
+                    border-radius: 10px;
+                "
             >
         `;
 
-    } else {
+    }
 
-        // Si no tiene foto mostramos un icono
+    else {
+
         imagenHTML = `
             <div
                 style="
@@ -88,6 +133,10 @@ function mostrarPlatillo(platillo, id) {
 
     }
 
+
+    // =====================================================
+    // TARJETA
+    // =====================================================
 
     contenido = `
 
@@ -135,11 +184,16 @@ function mostrarPlatillo(platillo, id) {
     `;
 
 
-    const contenedor = document.querySelector(".recipes");
+    const contenedor =
+        document.querySelector(
+            ".recipes"
+        );
+
 
     if (contenedor) {
 
-        contenedor.innerHTML += contenido;
+        contenedor.innerHTML +=
+            contenido;
 
     }
 
@@ -150,26 +204,43 @@ function mostrarPlatillo(platillo, id) {
 // ACTUALIZAR PLATILLO
 // =====================================================
 
-function actualizarPlatillo(platillo, id) {
+function actualizarPlatillo(
+    platillo,
+    id
+) {
 
-    const tarjeta = document.getElementById(id);
+    const tarjeta =
+        document.getElementById(id);
+
 
     if (!tarjeta) {
         return;
     }
 
 
-    const titulo = tarjeta.querySelector(".recipe-title");
+    const titulo =
+        tarjeta.querySelector(
+            ".recipe-title"
+        );
 
-    const ingredientes = tarjeta.querySelector(".recipe-ingredients");
 
-    const precio = tarjeta.querySelector(".recipe-price");
+    const ingredientes =
+        tarjeta.querySelector(
+            ".recipe-ingredients"
+        );
+
+
+    const precio =
+        tarjeta.querySelector(
+            ".recipe-price"
+        );
 
 
     if (titulo) {
 
         titulo.innerHTML =
-            platillo.nombre || "Sin nombre";
+            platillo.nombre ||
+            "Sin nombre";
 
     }
 
@@ -177,7 +248,8 @@ function actualizarPlatillo(platillo, id) {
     if (ingredientes) {
 
         ingredientes.innerHTML =
-            platillo.ingredientes || "Sin ingredientes";
+            platillo.ingredientes ||
+            "Sin ingredientes";
 
     }
 
@@ -196,11 +268,14 @@ function actualizarPlatillo(platillo, id) {
 // BORRAR PLATILLO VISUALMENTE
 // =====================================================
 
-function borrarPlatillo(id) {
+function borrarPlatillo(
+    id
+) {
 
-    const platillo = document.querySelector(
-        `.recipe[data-id="${id}"]`
-    );
+    const platillo =
+        document.querySelector(
+            `.recipe[data-id="${id}"]`
+        );
 
 
     if (platillo) {
@@ -215,37 +290,127 @@ function borrarPlatillo(id) {
 // =====================================================
 // AGREGAR PLATILLO A LA LISTA
 // =====================================================
-//
-// Esta es la función que te estaba faltando.
-// db.js la estaba llamando y por eso aparecía:
-//
-// agregarALista is not defined
-//
-// =====================================================
 
-function agregarALista(platillo, id) {
+function agregarALista(
+    platillo,
+    id
+) {
 
-    const lista = document.getElementById("listaplatillos");
+    const lista =
+        document.getElementById(
+            "listaplatillos"
+        );
 
 
-    // Si estamos en index.html no existe la lista
-    // de pedidos y simplemente salimos.
+    // Si estamos en index.html
+    // no existe la lista de pedidos.
+
     if (!lista) {
-
         return;
-
     }
 
 
-    const opcion = document.createElement("option");
+    const opcion =
+        document.createElement(
+            "option"
+        );
 
-    opcion.value = id;
+
+    opcion.value =
+        id;
+
 
     opcion.textContent =
-        platillo.nombre || "Sin nombre";
+        platillo.nombre ||
+        "Sin nombre";
 
 
-    lista.appendChild(opcion);
+    lista.appendChild(
+        opcion
+    );
+
+}
+
+
+// =====================================================
+// CARGAR PLATILLO GUARDADO DESDE PEDIDOS
+// =====================================================
+
+function cargarNuevoPlatilloDesdePedido() {
+
+    const datos =
+        localStorage.getItem(
+            "nuevoPlatilloIndex"
+        );
+
+
+    // No existe platillo nuevo.
+
+    if (!datos) {
+        return;
+    }
+
+
+    try {
+
+        const platillo =
+            JSON.parse(datos);
+
+
+        if (!platillo) {
+            return;
+        }
+
+
+        // =================================================
+        // ID ÚNICO
+        // =================================================
+
+        const id =
+            platillo.id ||
+            "pedido_" +
+            Date.now();
+
+
+        // =================================================
+        // MOSTRAR EN INDEX
+        // =================================================
+
+        mostrarPlatillo(
+            platillo,
+            id
+        );
+
+
+        console.log(
+            "Platillo agregado desde pedidos:",
+            platillo
+        );
+
+
+        // =================================================
+        // EVITAR DUPLICADOS
+        // =================================================
+
+        localStorage.removeItem(
+            "nuevoPlatilloIndex"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Error leyendo el platillo guardado:",
+            error
+        );
+
+
+        localStorage.removeItem(
+            "nuevoPlatilloIndex"
+        );
+
+    }
 
 }
 
@@ -261,25 +426,58 @@ let width = 320;
 let height = 0;
 
 
-const video = document.getElementById("Video");
+const video =
+    document.getElementById(
+        "Video"
+    );
 
-const canvas = document.getElementById("Canvas");
 
-const foto = document.getElementById("foto");
+const canvas =
+    document.getElementById(
+        "Canvas"
+    );
 
-const btnFoto = document.getElementById("btnFoto");
 
-const btnCapturar = document.getElementById("btnCapturar");
+const foto =
+    document.getElementById(
+        "foto"
+    );
 
-const btnLimpiar = document.getElementById("btnLimpiar");
 
-const btnCamara = document.getElementById("btnCamara");
+const btnFoto =
+    document.getElementById(
+        "btnFoto"
+    );
+
+
+const btnCapturar =
+    document.getElementById(
+        "btnCapturar"
+    );
+
+
+const btnLimpiar =
+    document.getElementById(
+        "btnLimpiar"
+    );
+
+
+const btnCamara =
+    document.getElementById(
+        "btnCamara"
+    );
+
 
 const cameraStatus =
-    document.getElementById("cameraStatus");
+    document.getElementById(
+        "cameraStatus"
+    );
+
 
 const cameraError =
-    document.getElementById("cameraError");
+    document.getElementById(
+        "cameraError"
+    );
 
 
 // =====================================================
@@ -288,63 +486,70 @@ const cameraError =
 
 if (btnFoto) {
 
-    btnFoto.addEventListener("change", function (event) {
+    btnFoto.addEventListener(
+        "change",
+        function (event) {
 
-        const file = event.target.files[0];
-
-
-        if (file) {
-
-            const reader = new FileReader();
+            const file =
+                event.target.files[0];
 
 
-            reader.onload = function (e) {
+            if (file) {
 
-                const fotoFinal =
-                    e.target.result;
-
-
-                if (foto) {
-
-                    foto.setAttribute(
-                        "src",
-                        fotoFinal
-                    );
-
-                    foto.style.display = "block";
-
-                }
+                const reader =
+                    new FileReader();
 
 
-                const fotoInput =
-                    document.getElementById(
-                        "fotoInput"
-                    );
+                reader.onload =
+                    function (e) {
+
+                        const fotoFinal =
+                            e.target.result;
 
 
-                if (fotoInput) {
+                        if (foto) {
 
-                    fotoInput.value =
-                        fotoFinal;
+                            foto.setAttribute(
+                                "src",
+                                fotoFinal
+                            );
 
-                }
+                            foto.style.display =
+                                "block";
 
-
-                if (cameraStatus) {
-
-                    cameraStatus.textContent =
-                        "Imagen seleccionada correctamente.";
-
-                }
-
-            };
+                        }
 
 
-            reader.readAsDataURL(file);
+                        const fotoInput =
+                            document.getElementById(
+                                "fotoInput"
+                            );
+
+
+                        if (fotoInput) {
+
+                            fotoInput.value =
+                                fotoFinal;
+
+                        }
+
+
+                        if (cameraStatus) {
+
+                            cameraStatus.textContent =
+                                "Imagen seleccionada correctamente.";
+
+                        }
+
+                    };
+
+
+                reader.readAsDataURL(file);
+
+            }
 
         }
-
-    });
+    );
 
 }
 
@@ -355,57 +560,67 @@ if (btnFoto) {
 
 if (video) {
 
-    video.addEventListener("canplay", function () {
+    video.addEventListener(
+        "canplay",
+        function () {
 
-        if (!streaming) {
+            if (!streaming) {
 
-            if (
-                video.videoWidth &&
-                video.videoHeight
-            ) {
+                if (
+                    video.videoWidth &&
+                    video.videoHeight
+                ) {
 
-                height =
-                    video.videoHeight /
-                    (video.videoWidth / width);
+                    height =
+                        video.videoHeight /
+                        (
+                            video.videoWidth /
+                            width
+                        );
 
-            } else {
+                }
 
-                height = 240;
+                else {
 
-            }
+                    height = 240;
 
-
-            video.setAttribute(
-                "width",
-                width
-            );
-
-            video.setAttribute(
-                "height",
-                height
-            );
+                }
 
 
-            if (canvas) {
-
-                canvas.setAttribute(
+                video.setAttribute(
                     "width",
                     width
                 );
 
-                canvas.setAttribute(
+
+                video.setAttribute(
                     "height",
                     height
                 );
 
+
+                if (canvas) {
+
+                    canvas.setAttribute(
+                        "width",
+                        width
+                    );
+
+
+                    canvas.setAttribute(
+                        "height",
+                        height
+                    );
+
+                }
+
+
+                streaming = true;
+
             }
 
-
-            streaming = true;
-
         }
-
-    });
+    );
 
 }
 
@@ -444,7 +659,8 @@ if (btnCamara) {
 
                 if (cameraError) {
 
-                    cameraError.textContent = "";
+                    cameraError.textContent =
+                        "";
 
                 }
 
@@ -458,32 +674,37 @@ if (btnCamara) {
 
 
                 const stream =
-                    await navigator.mediaDevices.getUserMedia({
+                    await navigator.mediaDevices.getUserMedia(
+                        {
+                            video: {
+                                facingMode: {
+                                    ideal: "environment"
+                                }
+                            },
 
-                        video: {
-                            facingMode: {
-                                ideal: "environment"
-                            }
-                        },
-
-                        audio: false
-
-                    });
+                            audio: false
+                        }
+                    );
 
 
-                video.srcObject = stream;
+                video.srcObject =
+                    stream;
+
 
                 video.setAttribute(
                     "playsinline",
                     ""
                 );
 
+
                 video.setAttribute(
                     "autoplay",
                     ""
                 );
 
-                video.muted = true;
+
+                video.muted =
+                    true;
 
 
                 await video.play();
@@ -575,7 +796,11 @@ if (btnCamara) {
 
 function tomarFoto() {
 
-    if (!video || !canvas || !foto) {
+    if (
+        !video ||
+        !canvas ||
+        !foto
+    ) {
 
         return;
 
@@ -597,19 +822,25 @@ function tomarFoto() {
 
 
     const context =
-        canvas.getContext("2d");
+        canvas.getContext(
+            "2d"
+        );
 
 
     const ancho =
         video.videoWidth;
 
+
     const alto =
         video.videoHeight;
 
 
-    canvas.width = ancho;
+    canvas.width =
+        ancho;
 
-    canvas.height = alto;
+
+    canvas.height =
+        alto;
 
 
     context.drawImage(
@@ -634,7 +865,8 @@ function tomarFoto() {
     );
 
 
-    foto.style.display = "block";
+    foto.style.display =
+        "block";
 
 
     const fotoInput =
@@ -651,7 +883,10 @@ function tomarFoto() {
     }
 
 
-    // Ocultar cámara
+    // =================================================
+    // OCULTAR CÁMARA
+    // =================================================
+
     const camera =
         document.getElementById(
             "Camera"
@@ -666,26 +901,33 @@ function tomarFoto() {
     }
 
 
-    // Detener cámara
+    // =================================================
+    // DETENER CÁMARA
+    // =================================================
+
     if (video.srcObject) {
 
         const tracks =
             video.srcObject.getTracks();
 
 
-        tracks.forEach(function (track) {
+        tracks.forEach(
+            function (track) {
 
-            track.stop();
+                track.stop();
 
-        });
+            }
+        );
 
 
-        video.srcObject = null;
+        video.srcObject =
+            null;
 
     }
 
 
-    streaming = false;
+    streaming =
+        false;
 
 
     if (cameraStatus) {
@@ -731,6 +973,7 @@ function limpiarFoto() {
             ""
         );
 
+
         foto.style.display =
             "none";
 
@@ -745,12 +988,16 @@ function limpiarFoto() {
 
     if (fotoInput) {
 
-        fotoInput.value = "";
+        fotoInput.value =
+            "";
 
     }
 
 
-    // Detener cámara
+    // =================================================
+    // DETENER CÁMARA
+    // =================================================
+
     if (
         video &&
         video.srcObject
@@ -760,14 +1007,17 @@ function limpiarFoto() {
             video.srcObject.getTracks();
 
 
-        tracks.forEach(function (track) {
+        tracks.forEach(
+            function (track) {
 
-            track.stop();
+                track.stop();
 
-        });
+            }
+        );
 
 
-        video.srcObject = null;
+        video.srcObject =
+            null;
 
     }
 
@@ -801,12 +1051,14 @@ function limpiarFoto() {
 
     if (btnFoto) {
 
-        btnFoto.value = "";
+        btnFoto.value =
+            "";
 
     }
 
 
-    streaming = false;
+    streaming =
+        false;
 
 
     if (cameraStatus) {
@@ -819,7 +1071,8 @@ function limpiarFoto() {
 
     if (cameraError) {
 
-        cameraError.textContent = "";
+        cameraError.textContent =
+            "";
 
     }
 
@@ -847,7 +1100,7 @@ if (btnLimpiar) {
 
 
 // =====================================================
-// CERRAR CÁMARA AL CERRAR EL FORMULARIO
+// CERRAR CÁMARA AL CERRAR FORMULARIO
 // =====================================================
 
 const sideForm =
@@ -862,7 +1115,6 @@ if (sideForm) {
         "click",
         function () {
 
-            // No hacemos nada aquí.
             // Se mantiene disponible la cámara.
 
         }
@@ -874,21 +1126,18 @@ if (sideForm) {
 // =====================================================
 // EXPORTAR FUNCIONES PARA DB.JS
 // =====================================================
-//
-// db.js se carga después de index.js,
-// por lo que estas funciones quedan disponibles
-// globalmente.
-//
-// =====================================================
 
 window.mostrarPlatillo =
     mostrarPlatillo;
 
+
 window.actualizarPlatillo =
     actualizarPlatillo;
 
+
 window.borrarPlatillo =
     borrarPlatillo;
+
 
 window.agregarALista =
     agregarALista;
