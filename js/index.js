@@ -1,33 +1,4 @@
-// =========================================================
-// DITS - INDEX.JS
-// Gestión de platillos + cámara del dispositivo
-// =========================================================
-
-
-// =========================================================
-// VARIABLES GENERALES
-// =========================================================
-
 let contenido = "";
-
-
-// =========================================================
-// VARIABLES DE LA CÁMARA
-// =========================================================
-
-let streaming = false;
-
-let width = 640;
-
-let height = 0;
-
-let video = null;
-
-let canvas = null;
-
-let foto = null;
-
-let streamCamara = null;
 
 
 // =========================================================
@@ -36,40 +7,35 @@ let streamCamara = null;
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // =====================================================
+    // =========================================
     // MENÚS LATERALES
-    // =====================================================
+    // =========================================
 
     const menus = document.querySelectorAll(".sidenav");
 
     if (typeof M !== "undefined") {
-
         M.Sidenav.init(menus, {
             edge: "right"
         });
-
     }
 
 
-    // =====================================================
+    // =========================================
     // SELECTS
-    // =====================================================
+    // =========================================
 
     const selects = document.querySelectorAll("select");
 
     if (typeof M !== "undefined") {
-
         M.FormSelect.init(selects);
-
     }
 
 
-    // =====================================================
+    // =========================================
     // BOTÓN USAR CÁMARA
-    // =====================================================
+    // =========================================
 
-    const btnCamara =
-        document.getElementById("btnCamara");
+    const btnCamara = document.getElementById("btnCamara");
 
     if (btnCamara) {
 
@@ -84,12 +50,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =====================================================
+    // =========================================
     // BOTÓN CAPTURAR
-    // =====================================================
+    // =========================================
 
-    const btnCapturar =
-        document.getElementById("btnCapturar");
+    const btnCapturar = document.getElementById("btnCapturar");
 
     if (btnCapturar) {
 
@@ -104,12 +69,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =====================================================
+    // =========================================
     // BOTÓN LIMPIAR
-    // =====================================================
+    // =========================================
 
-    const btnLimpiar =
-        document.getElementById("btnLimpiar");
+    const btnLimpiar = document.getElementById("btnLimpiar");
 
     if (btnLimpiar) {
 
@@ -124,30 +88,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =====================================================
-    // SELECCIONAR IMAGEN DESDE GALERÍA
-    // =====================================================
-
-    const btnFoto =
-        document.getElementById("btnFoto");
-
-    if (btnFoto) {
-
-        btnFoto.addEventListener("change", function () {
-
-            cargarImagenSeleccionada(this);
-
-        });
-
-    }
-
-
-    // =====================================================
+    // =========================================
     // DETENER CÁMARA AL CERRAR EL FORMULARIO
-    // =====================================================
+    // =========================================
 
-    const sideForm =
-        document.getElementById("side-form");
+    const sideForm = document.getElementById("side-form");
 
     if (sideForm) {
 
@@ -163,9 +108,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =====================================================
+    // =========================================
     // FORMULARIO
-    // =====================================================
+    // =========================================
 
     const formAgregar =
         document.getElementById("formAgregar");
@@ -446,10 +391,40 @@ function limpiarFormularioPlatillo() {
 
 
 // =========================================================
-// PREPARAR ELEMENTOS DE LA CÁMARA
+// CÁMARA
+// =========================================================
+
+let streaming = false;
+
+let width = 320;
+
+let height = 0;
+
+let video = null;
+
+let canvas = null;
+
+let foto = null;
+
+let streamCamara = null;
+
+
+// =========================================================
+// OBTENER ELEMENTOS DE LA CÁMARA
 // =========================================================
 
 function prepararCamara() {
+
+    /*
+     * IMPORTANTE:
+     * En tu index.html los IDs son:
+     *
+     * Video
+     * Canvas
+     * foto
+     *
+     * Por eso deben escribirse exactamente igual.
+     */
 
     video =
         document.getElementById("Video");
@@ -479,31 +454,20 @@ async function iniciarCamara() {
         document.getElementById("cameraError");
 
 
-    // =====================================================
-    // COMPROBAR VIDEO
-    // =====================================================
-
     if (!video) {
 
         console.error(
-            "No se encontró el elemento #Video."
+            "No se encontró el elemento #Video"
         );
-
-        if (error) {
-
-            error.textContent =
-                "No se encontró el elemento de video.";
-
-        }
 
         return;
 
     }
 
 
-    // =====================================================
-    // COMPROBAR SOPORTE
-    // =====================================================
+    // =========================================
+    // COMPROBAR SOPORTE DE CÁMARA
+    // =========================================
 
     if (
         !navigator.mediaDevices ||
@@ -513,7 +477,7 @@ async function iniciarCamara() {
         if (error) {
 
             error.textContent =
-                "Tu navegador no permite utilizar la cámara.";
+                "La cámara no está disponible en este dispositivo.";
 
         }
 
@@ -526,43 +490,30 @@ async function iniciarCamara() {
     }
 
 
-    // =====================================================
-    // COMPROBAR HTTPS
-    // =====================================================
-
-    if (
-        location.protocol !== "https:" &&
-        location.hostname !== "localhost" &&
-        location.hostname !== "127.0.0.1"
-    ) {
-
-        console.warn(
-            "La cámara normalmente requiere HTTPS."
-        );
-
-    }
-
-
     try {
 
-        // =================================================
+        // =========================================
         // DETENER STREAM ANTERIOR
-        // =================================================
+        // =========================================
 
-        detenerCamara();
+        if (streamCamara) {
+
+            detenerCamara();
+
+        }
 
 
         if (status) {
 
             status.textContent =
-                "Solicitando acceso a la cámara...";
+                "Iniciando cámara...";
 
         }
 
 
-        // =================================================
-        // SOLICITAR CÁMARA TRASERA
-        // =================================================
+        // =========================================
+        // SOLICITAR ACCESO A LA CÁMARA
+        // =========================================
 
         streamCamara =
             await navigator.mediaDevices.getUserMedia({
@@ -571,14 +522,6 @@ async function iniciarCamara() {
 
                     facingMode: {
                         ideal: "environment"
-                    },
-
-                    width: {
-                        ideal: 1280
-                    },
-
-                    height: {
-                        ideal: 720
                     }
 
                 },
@@ -588,75 +531,87 @@ async function iniciarCamara() {
             });
 
 
-        // =================================================
-        // ASIGNAR STREAM
-        // =================================================
+        // =========================================
+        // COLOCAR STREAM EN EL VIDEO
+        // =========================================
 
         video.srcObject =
             streamCamara;
 
 
-        video.setAttribute(
-            "autoplay",
-            ""
-        );
+        // Esperar a que el navegador permita
+        // reproducir el video.
+
+        await video.play();
 
 
-        video.setAttribute(
-            "playsinline",
-            ""
-        );
-
-
-        video.muted = true;
-
-
-        // =================================================
-        // REPRODUCIR VIDEO
-        // =================================================
-
-        try {
-
-            await video.play();
-
-        }
-        catch (playError) {
-
-            console.warn(
-                "El navegador bloqueó la reproducción automática.",
-                playError
-            );
-
-        }
-
-
-        // =================================================
-        // ESPERAR METADATA
-        // =================================================
+        // =========================================
+        // CONFIGURAR DIMENSIONES
+        // =========================================
 
         video.onloadedmetadata =
             function () {
 
-                configurarVideo();
+                if (!streaming) {
+
+                    height =
+                        video.videoHeight /
+                        (video.videoWidth / width);
+
+
+                    if (
+                        !height ||
+                        !isFinite(height)
+                    ) {
+
+                        height = 240;
+
+                    }
+
+
+                    video.setAttribute(
+                        "width",
+                        width
+                    );
+
+
+                    video.setAttribute(
+                        "height",
+                        height
+                    );
+
+
+                    if (canvas) {
+
+                        canvas.setAttribute(
+                            "width",
+                            width
+                        );
+
+
+                        canvas.setAttribute(
+                            "height",
+                            height
+                        );
+
+                    }
+
+
+                    streaming = true;
+
+                }
 
             };
 
 
-        // =================================================
-        // POR SI LA METADATA YA ESTÁ CARGADA
-        // =================================================
-
-        if (video.readyState >= 2) {
-
-            configurarVideo();
-
-        }
-
+        // =========================================
+        // ESTADO
+        // =========================================
 
         if (status) {
 
             status.textContent =
-                "Cámara lista. Puedes capturar la foto.";
+                "Cámara lista.";
 
         }
 
@@ -686,117 +641,12 @@ async function iniciarCamara() {
 
         if (error) {
 
-            if (err.name === "NotAllowedError") {
-
-                error.textContent =
-                    "Permiso de cámara rechazado. Permite el acceso a la cámara en tu navegador.";
-
-            }
-            else if (err.name === "NotFoundError") {
-
-                error.textContent =
-                    "No se encontró ninguna cámara en el dispositivo.";
-
-            }
-            else if (err.name === "NotReadableError") {
-
-                error.textContent =
-                    "La cámara está siendo utilizada por otra aplicación.";
-
-            }
-            else if (err.name === "SecurityError") {
-
-                error.textContent =
-                    "El navegador bloqueó la cámara por motivos de seguridad. Utiliza HTTPS.";
-
-            }
-            else {
-
-                error.textContent =
-                    "No se pudo acceder a la cámara. Revisa los permisos del dispositivo.";
-
-            }
+            error.textContent =
+                "Verifica los permisos de cámara y que la página utilice HTTPS.";
 
         }
 
     }
-
-}
-
-
-// =========================================================
-// CONFIGURAR VIDEO
-// =========================================================
-
-function configurarVideo() {
-
-    prepararCamara();
-
-
-    if (!video) {
-        return;
-    }
-
-
-    if (
-        video.videoWidth === 0 ||
-        video.videoHeight === 0
-    ) {
-
-        return;
-
-    }
-
-
-    // =====================================================
-    // CALCULAR DIMENSIONES
-    // =====================================================
-
-    width = 640;
-
-
-    height =
-        video.videoHeight /
-        (video.videoWidth / width);
-
-
-    if (
-        !height ||
-        !isFinite(height)
-    ) {
-
-        height = 360;
-
-    }
-
-
-    // =====================================================
-    // LIMITAR TAMAÑO
-    // =====================================================
-
-    if (height > 480) {
-
-        height = 480;
-
-    }
-
-
-    // =====================================================
-    // CONFIGURAR CANVAS
-    // =====================================================
-
-    if (canvas) {
-
-        canvas.width =
-            width;
-
-        canvas.height =
-            height;
-
-    }
-
-
-    streaming = true;
 
 }
 
@@ -810,10 +660,10 @@ function tomarFoto() {
     prepararCamara();
 
 
-    if (!video) {
+    if (!video || !canvas || !foto) {
 
         console.error(
-            "No se encontró #Video."
+            "No se encontraron los elementos necesarios para tomar la foto."
         );
 
         return;
@@ -821,50 +671,9 @@ function tomarFoto() {
     }
 
 
-    if (!canvas) {
-
-        console.error(
-            "No se encontró #Canvas."
-        );
-
-        return;
-
-    }
-
-
-    if (!foto) {
-
-        console.error(
-            "No se encontró #foto."
-        );
-
-        return;
-
-    }
-
-
-    // =====================================================
-    // COMPROBAR CÁMARA
-    // =====================================================
-
-    if (
-        !streamCamara ||
-        video.videoWidth === 0 ||
-        video.videoHeight === 0
-    ) {
-
-        mostrarErrorCamara(
-            "Primero debes abrir la cámara."
-        );
-
-        return;
-
-    }
-
-
-    // =====================================================
-    // CONTEXTO
-    // =====================================================
+    // =========================================
+    // OBTENER CONTEXTO DEL CANVAS
+    // =========================================
 
     const context =
         canvas.getContext("2d");
@@ -881,79 +690,90 @@ function tomarFoto() {
     }
 
 
-    // =====================================================
-    // DIMENSIONES REALES
-    // =====================================================
+    // =========================================
+    // COMPROBAR DIMENSIONES
+    // =========================================
 
-    const videoWidth =
-        video.videoWidth;
+    if (!streaming) {
 
-    const videoHeight =
-        video.videoHeight;
+        if (video.videoWidth > 0) {
+
+            width = 320;
+
+            height =
+                video.videoHeight /
+                (video.videoWidth / width);
+
+        }
+        else {
+
+            height = 240;
+
+        }
+
+    }
 
 
-    // =====================================================
-    // UTILIZAR RESOLUCIÓN DEL VIDEO
-    // =====================================================
+    // =========================================
+    // CONFIGURAR CANVAS
+    // =========================================
 
     canvas.width =
-        videoWidth;
+        width;
 
     canvas.height =
-        videoHeight;
+        height;
 
 
-    // =====================================================
-    // DIBUJAR VIDEO
-    // =====================================================
+    // =========================================
+    // COPIAR VIDEO AL CANVAS
+    // =========================================
 
     context.drawImage(
         video,
         0,
         0,
-        videoWidth,
-        videoHeight
+        width,
+        height
     );
 
 
-    // =====================================================
-    // CONVERTIR A JPEG
-    // =====================================================
+    // =========================================
+    // CONVERTIR A IMAGEN
+    // =========================================
 
     const fotoFinal =
-        canvas.toDataURL(
-            "image/jpeg",
-            0.90
-        );
+        canvas.toDataURL("image/png");
 
 
-    // =====================================================
+    // =========================================
     // MOSTRAR FOTO
-    // =====================================================
+    // =========================================
 
-    foto.src =
-        fotoFinal;
+    foto.setAttribute(
+        "src",
+        fotoFinal
+    );
 
 
     foto.style.display =
         "block";
 
 
-    // =====================================================
-    // GUARDAR IMAGEN
-    // =====================================================
+    // =========================================
+    // GUARDAR FOTO
+    // =========================================
 
     foto.dataset.imagen =
         fotoFinal;
 
 
-    // =====================================================
-    // GUARDAR EN INPUT
-    // =====================================================
+    // =========================================
+    // GUARDAR TAMBIÉN EN FOTO INPUT
+    // =========================================
 
     const fotoInput =
         document.getElementById("fotoInput");
-
 
     if (fotoInput) {
 
@@ -963,16 +783,16 @@ function tomarFoto() {
     }
 
 
-    // =====================================================
+    // =========================================
     // DETENER CÁMARA
-    // =====================================================
+    // =========================================
 
     detenerCamara();
 
 
-    // =====================================================
-    // ESTADO
-    // =====================================================
+    // =========================================
+    // ACTUALIZAR ESTADO
+    // =========================================
 
     const status =
         document.getElementById("cameraStatus");
@@ -984,151 +804,6 @@ function tomarFoto() {
             "Foto tomada correctamente.";
 
     }
-
-
-    const error =
-        document.getElementById("cameraError");
-
-
-    if (error) {
-
-        error.textContent = "";
-
-    }
-
-}
-
-
-// =========================================================
-// SELECCIONAR IMAGEN DESDE GALERÍA
-// =========================================================
-
-function cargarImagenSeleccionada(input) {
-
-    if (
-        !input ||
-        !input.files ||
-        input.files.length === 0
-    ) {
-
-        return;
-
-    }
-
-
-    const archivo =
-        input.files[0];
-
-
-    // =====================================================
-    // COMPROBAR TIPO
-    // =====================================================
-
-    if (!archivo.type.startsWith("image/")) {
-
-        mostrarErrorCamara(
-            "Selecciona un archivo de imagen válido."
-        );
-
-        input.value = "";
-
-        return;
-
-    }
-
-
-    const reader =
-        new FileReader();
-
-
-    reader.onload =
-        function (event) {
-
-            prepararCamara();
-
-
-            if (!foto) {
-                return;
-            }
-
-
-            const imagen =
-                event.target.result;
-
-
-            // =============================================
-            // MOSTRAR FOTO
-            // =============================================
-
-            foto.src =
-                imagen;
-
-
-            foto.style.display =
-                "block";
-
-
-            foto.dataset.imagen =
-                imagen;
-
-
-            // =============================================
-            // GUARDAR INPUT OCULTO
-            // =============================================
-
-            const fotoInput =
-                document.getElementById("fotoInput");
-
-
-            if (fotoInput) {
-
-                fotoInput.value =
-                    imagen;
-
-            }
-
-
-            // =============================================
-            // DETENER CÁMARA
-            // =============================================
-
-            detenerCamara();
-
-
-            // =============================================
-            // ESTADO
-            // =============================================
-
-            const status =
-                document.getElementById(
-                    "cameraStatus"
-                );
-
-
-            if (status) {
-
-                status.textContent =
-                    "Imagen seleccionada correctamente.";
-
-            }
-
-
-            const error =
-                document.getElementById(
-                    "cameraError"
-                );
-
-
-            if (error) {
-
-                error.textContent = "";
-
-            }
-
-        };
-
-
-    reader.readAsDataURL(archivo);
 
 }
 
@@ -1159,8 +834,6 @@ function detenerCamara() {
 
     if (video) {
 
-        video.pause();
-
         video.srcObject =
             null;
 
@@ -1181,25 +854,12 @@ function limpiarFoto() {
     prepararCamara();
 
 
-    // =====================================================
-    // DETENER CÁMARA
-    // =====================================================
-
-    detenerCamara();
-
-
-    // =====================================================
-    // LIMPIAR FOTO
-    // =====================================================
-
     if (foto) {
 
-        foto.src =
-            "img/default.jpg";
+        foto.src = "";
 
         foto.style.display =
-            "block";
-
+            "none";
 
         foto.removeAttribute(
             "data-imagen"
@@ -1208,13 +868,12 @@ function limpiarFoto() {
     }
 
 
-    // =====================================================
+    // =========================================
     // LIMPIAR INPUT OCULTO
-    // =====================================================
+    // =========================================
 
     const fotoInput =
         document.getElementById("fotoInput");
-
 
     if (fotoInput) {
 
@@ -1223,24 +882,9 @@ function limpiarFoto() {
     }
 
 
-    // =====================================================
-    // LIMPIAR INPUT DE GALERÍA
-    // =====================================================
-
-    const btnFoto =
-        document.getElementById("btnFoto");
-
-
-    if (btnFoto) {
-
-        btnFoto.value = "";
-
-    }
-
-
-    // =====================================================
+    // =========================================
     // LIMPIAR CANVAS
-    // =====================================================
+    // =========================================
 
     if (canvas) {
 
@@ -1262,20 +906,23 @@ function limpiarFoto() {
     }
 
 
-    // =====================================================
-    // ESTADO
-    // =====================================================
+    // =========================================
+    // DETENER CÁMARA
+    // =========================================
+
+    detenerCamara();
+
+
+    // =========================================
+    // ACTUALIZAR ESTADO
+    // =========================================
 
     const status =
-        document.getElementById(
-            "cameraStatus"
-        );
+        document.getElementById("cameraStatus");
 
 
     const error =
-        document.getElementById(
-            "cameraError"
-        );
+        document.getElementById("cameraError");
 
 
     if (status) {
@@ -1296,33 +943,6 @@ function limpiarFoto() {
 
 
 // =========================================================
-// MOSTRAR ERROR
-// =========================================================
-
-function mostrarErrorCamara(mensaje) {
-
-    const error =
-        document.getElementById(
-            "cameraError"
-        );
-
-
-    if (error) {
-
-        error.textContent =
-            mensaje;
-
-    }
-
-
-    console.error(
-        mensaje
-    );
-
-}
-
-
-// =========================================================
 // CERRAR CÁMARA AL SALIR
 // =========================================================
 
@@ -1331,24 +951,6 @@ window.addEventListener(
     function () {
 
         detenerCamara();
-
-    }
-);
-
-
-// =========================================================
-// DETENER CÁMARA CUANDO LA PÁGINA PASA A SEGUNDO PLANO
-// =========================================================
-
-document.addEventListener(
-    "visibilitychange",
-    function () {
-
-        if (document.hidden) {
-
-            detenerCamara();
-
-        }
 
     }
 );
