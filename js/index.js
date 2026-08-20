@@ -1,32 +1,17 @@
 // =====================================================
-// DITS - INDEX.JS
-// Gestión de platillos + cámara
-// =====================================================
-
-
-// =====================================================
 // VARIABLES
 // =====================================================
 
 let contenido = "";
 
-let streaming = false;
-
-let width = 320;
-
-let height = 0;
-
 
 // =====================================================
-// INICIO
+// INICIALIZAR MATERIALIZE
 // =====================================================
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // -------------------------------------------------
-    // MENÚ LATERAL
-    // -------------------------------------------------
-
+    // Menú lateral
     const menus = document.querySelectorAll(".side-menu");
 
     if (menus.length > 0) {
@@ -36,10 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // -------------------------------------------------
-    // FORMULARIO LATERAL
-    // -------------------------------------------------
-
+    // Formulario lateral
     const forms = document.querySelectorAll(".side-form");
 
     if (forms.length > 0) {
@@ -47,27 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
             edge: "left"
         });
     }
-
-
-    // -------------------------------------------------
-    // ELEMENTOS DE LA CÁMARA
-    // -------------------------------------------------
-
-    inicializarCamara();
-
-
-    // -------------------------------------------------
-    // FORMULARIO DE PLATILLO
-    // -------------------------------------------------
-
-    inicializarFormulario();
-
-
-    // -------------------------------------------------
-    // ELIMINAR PLATILLOS
-    // -------------------------------------------------
-
-    inicializarEliminacion();
 
 });
 
@@ -80,34 +41,64 @@ function mostrarPlatillo(platillo, id) {
 
     let fotoPlatillo = "";
 
-    // Si tiene fotografía guardada
-    if (platillo.foto && platillo.foto.trim() !== "") {
+    // Si existe una fotografía guardada
+    if (platillo.foto && platillo.foto !== "") {
 
         fotoPlatillo = platillo.foto;
-
-    } else {
-
-        // Imagen por defecto
-        fotoPlatillo = "img/default.jpg";
 
     }
 
 
-    const tarjeta = `
-    
-        <div 
+    let imagenHTML = "";
+
+    if (fotoPlatillo !== "") {
+
+        imagenHTML = `
+            <img
+                src="${fotoPlatillo}"
+                height="100"
+                width="100"
+                style="object-fit: cover; border-radius: 10px;"
+            >
+        `;
+
+    } else {
+
+        // Si no tiene foto mostramos un icono
+        imagenHTML = `
+            <div
+                style="
+                    width:100px;
+                    height:100px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    background:#eeeeee;
+                    border-radius:10px;
+                "
+            >
+                <i
+                    class="material-icons grey-text"
+                    style="font-size:45px;"
+                >
+                    restaurant
+                </i>
+            </div>
+        `;
+
+    }
+
+
+    contenido = `
+
+        <div
             class="card-panel recipe white row"
             id="${id}"
             data-id="${id}"
         >
 
-            <img
-                src="${fotoPlatillo}"
-                height="100px"
-                width="100px"
-                alt="${platillo.nombre || "Platillo"}"
-                onerror="this.src='img/default.jpg';"
-            >
+            ${imagenHTML}
+
 
             <div class="recipe-details">
 
@@ -148,7 +139,7 @@ function mostrarPlatillo(platillo, id) {
 
     if (contenedor) {
 
-        contenedor.innerHTML += tarjeta;
+        contenedor.innerHTML += contenido;
 
     }
 
@@ -177,7 +168,8 @@ function actualizarPlatillo(platillo, id) {
 
     if (titulo) {
 
-        titulo.innerHTML = platillo.nombre || "Sin nombre";
+        titulo.innerHTML =
+            platillo.nombre || "Sin nombre";
 
     }
 
@@ -201,13 +193,14 @@ function actualizarPlatillo(platillo, id) {
 
 
 // =====================================================
-// BORRAR PLATILLO DE LA INTERFAZ
+// BORRAR PLATILLO VISUALMENTE
 // =====================================================
 
 function borrarPlatillo(id) {
 
-    const platillo =
-        document.querySelector(`.recipe[data-id="${id}"]`);
+    const platillo = document.querySelector(
+        `.recipe[data-id="${id}"]`
+    );
 
 
     if (platillo) {
@@ -220,38 +213,27 @@ function borrarPlatillo(id) {
 
 
 // =====================================================
-// AGREGAR A LISTA
+// AGREGAR PLATILLO A LA LISTA
 // =====================================================
 //
-// Esta función es importante porque tu db.js la utiliza.
-// Si db.js encuentra un platillo, llama a:
-// agregarALista(...)
+// Esta es la función que te estaba faltando.
+// db.js la estaba llamando y por eso aparecía:
+//
+// agregarALista is not defined
 //
 // =====================================================
 
 function agregarALista(platillo, id) {
 
-    // Actualmente el index principal muestra
-    // los platillos mediante tarjetas.
-    //
-    // Esta función se mantiene para evitar el error:
-    //
-    // "agregarALista is not defined"
-    //
-    // También permite que, si posteriormente agregas
-    // un select de platillos al index, funcione.
+    const lista = document.getElementById("listaplatillos");
 
-    const lista = document.getElementById("listaPlatillos");
 
+    // Si estamos en index.html no existe la lista
+    // de pedidos y simplemente salimos.
     if (!lista) {
+
         return;
-    }
 
-
-    // Evitar duplicados
-
-    if (lista.querySelector(`option[value="${id}"]`)) {
-        return;
     }
 
 
@@ -260,7 +242,7 @@ function agregarALista(platillo, id) {
     opcion.value = id;
 
     opcion.textContent =
-        platillo.nombre || "Platillo sin nombre";
+        platillo.nombre || "Sin nombre";
 
 
     lista.appendChild(opcion);
@@ -269,160 +251,98 @@ function agregarALista(platillo, id) {
 
 
 // =====================================================
-// FORMULARIO PARA AGREGAR PLATILLO
+// CÁMARA
 // =====================================================
 
-function inicializarFormulario() {
+let streaming = false;
 
-    const formulario =
-        document.querySelector(".add-recipe");
+let width = 320;
 
-
-    if (!formulario) {
-        return;
-    }
+let height = 0;
 
 
-    formulario.addEventListener("submit", function (e) {
+const video = document.getElementById("Video");
 
-        e.preventDefault();
+const canvas = document.getElementById("Canvas");
 
+const foto = document.getElementById("foto");
 
-        // ---------------------------------------------
-        // OBTENER DATOS
-        // ---------------------------------------------
+const btnFoto = document.getElementById("btnFoto");
 
-        const nombre =
-            document.getElementById("title").value.trim();
+const btnCapturar = document.getElementById("btnCapturar");
 
+const btnLimpiar = document.getElementById("btnLimpiar");
 
-        const ingredientes =
-            document.getElementById("ingredients").value.trim();
+const btnCamara = document.getElementById("btnCamara");
 
+const cameraStatus =
+    document.getElementById("cameraStatus");
 
-        const precio =
-            document.getElementById("price").value;
-
-
-        const foto =
-            document.getElementById("fotoInput").value;
+const cameraError =
+    document.getElementById("cameraError");
 
 
-        // ---------------------------------------------
-        // VALIDACIÓN
-        // ---------------------------------------------
+// =====================================================
+// SELECCIONAR IMAGEN DESDE GALERÍA
+// =====================================================
 
-        if (
-            nombre === "" ||
-            ingredientes === "" ||
-            precio === ""
-        ) {
+if (btnFoto) {
 
-            alert("Por favor completa todos los campos.");
+    btnFoto.addEventListener("change", function (event) {
 
-            return;
-
-        }
+        const file = event.target.files[0];
 
 
-        // ---------------------------------------------
-        // OBJETO DEL PLATILLO
-        // ---------------------------------------------
+        if (file) {
 
-        const platilloNuevo = {
-
-            nombre: nombre,
-
-            ingredientes: ingredientes,
-
-            precio: precio,
-
-            foto: foto || ""
-
-        };
+            const reader = new FileReader();
 
 
-        // ---------------------------------------------
-        // GUARDAR EN FIREBASE
-        // ---------------------------------------------
+            reader.onload = function (e) {
 
-        db.collection("platillos")
-            .add(platilloNuevo)
-
-            .then(function () {
-
-                alert("Platillo agregado correctamente.");
+                const fotoFinal =
+                    e.target.result;
 
 
-                // Limpiar formulario
+                if (foto) {
 
-                formulario.reset();
+                    foto.setAttribute(
+                        "src",
+                        fotoFinal
+                    );
 
+                    foto.style.display = "block";
 
-                // Limpiar fotografía
+                }
+
 
                 const fotoInput =
-                    document.getElementById("fotoInput");
+                    document.getElementById(
+                        "fotoInput"
+                    );
 
 
                 if (fotoInput) {
 
-                    fotoInput.value = "";
+                    fotoInput.value =
+                        fotoFinal;
 
                 }
 
 
-                const imagen =
-                    document.getElementById("foto");
+                if (cameraStatus) {
 
-
-                if (imagen) {
-
-                    imagen.src = "";
+                    cameraStatus.textContent =
+                        "Imagen seleccionada correctamente.";
 
                 }
 
-
-                // Detener cámara
-
-                detenerCamara();
+            };
 
 
-                // Cerrar menú lateral
+            reader.readAsDataURL(file);
 
-                const sideForm =
-                    document.getElementById("side-form");
-
-
-                if (sideForm) {
-
-                    const instancia =
-                        M.Sidenav.getInstance(sideForm);
-
-
-                    if (instancia) {
-
-                        instancia.close();
-
-                    }
-
-                }
-
-            })
-
-            .catch(function (error) {
-
-                console.error(
-                    "Error al agregar el platillo:",
-                    error
-                );
-
-
-                alert(
-                    "Error al agregar el platillo."
-                );
-
-            });
+        }
 
     });
 
@@ -430,242 +350,35 @@ function inicializarFormulario() {
 
 
 // =====================================================
-// ELIMINAR PLATILLO
+// CUANDO EL VIDEO ESTÁ LISTO
 // =====================================================
 
-function inicializarEliminacion() {
+if (video) {
 
-    const contenedor =
-        document.querySelector(".recipes");
+    video.addEventListener("canplay", function () {
 
-
-    if (!contenedor) {
-        return;
-    }
-
-
-    contenedor.addEventListener("click", function (e) {
-
-        // Buscar si se hizo clic sobre el icono
-        // o sobre alguno de sus elementos internos
-
-        const icono =
-            e.target.closest(".recipe-delete i");
-
-
-        if (!icono) {
-            return;
-        }
-
-
-        const id =
-            icono.getAttribute("data-id");
-
-
-        if (!id) {
-            return;
-        }
-
-
-        const confirmar =
-            confirm(
-                "¿Seguro que deseas eliminar este platillo?"
-            );
-
-
-        if (!confirmar) {
-            return;
-        }
-
-
-        db.collection("platillos")
-            .doc(id)
-            .delete()
-
-            .then(function () {
-
-                alert(
-                    "Platillo eliminado correctamente."
-                );
-
-            })
-
-            .catch(function (error) {
-
-                console.error(
-                    "Error al eliminar:",
-                    error
-                );
-
-
-                alert(
-                    "Error al eliminar el platillo."
-                );
-
-            });
-
-    });
-
-}
-
-
-// =====================================================
-// INICIALIZAR CÁMARA
-// =====================================================
-
-function inicializarCamara() {
-
-    const video =
-        document.getElementById("Video");
-
-
-    const canvas =
-        document.getElementById("Canvas");
-
-
-    const foto =
-        document.getElementById("foto");
-
-
-    const btnFoto =
-        document.getElementById("btnFoto");
-
-
-    const btnCapturar =
-        document.getElementById("btnCapturar");
-
-
-    const btnLimpiar =
-        document.getElementById("btnLimpiar");
-
-
-    const btnCamara =
-        document.getElementById("btnCamara");
-
-
-    // Si no existen los elementos,
-    // simplemente no hacemos nada.
-
-    if (
-        !video ||
-        !canvas ||
-        !foto
-    ) {
-
-        return;
-
-    }
-
-
-    // =================================================
-    // SELECCIONAR IMAGEN DESDE GALERÍA
-    // =================================================
-
-    if (btnFoto) {
-
-        btnFoto.addEventListener(
-            "change",
-            function (event) {
-
-                const file =
-                    event.target.files[0];
-
-
-                if (!file) {
-                    return;
-                }
-
-
-                // Verificar que sea una imagen
-
-                if (!file.type.startsWith("image/")) {
-
-                    alert(
-                        "Selecciona un archivo de imagen."
-                    );
-
-                    return;
-
-                }
-
-
-                const reader =
-                    new FileReader();
-
-
-                reader.onload =
-                    function (e) {
-
-                        const fotoFinal =
-                            e.target.result;
-
-
-                        foto.src =
-                            fotoFinal;
-
-
-                        const fotoInput =
-                            document.getElementById(
-                                "fotoInput"
-                            );
-
-
-                        if (fotoInput) {
-
-                            fotoInput.value =
-                                fotoFinal;
-
-                        }
-
-
-                        // Detener cámara si estaba activa
-
-                        detenerCamara();
-
-                    };
-
-
-                reader.readAsDataURL(file);
-
-            }
-        );
-
-    }
-
-
-    // =================================================
-    // CUANDO EL VIDEO ESTÉ LISTO
-    // =================================================
-
-    video.addEventListener(
-        "canplay",
-        function () {
-
-            if (streaming) {
-                return;
-            }
-
+        if (!streaming) {
 
             if (
-                video.videoWidth === 0 ||
-                video.videoHeight === 0
+                video.videoWidth &&
+                video.videoHeight
             ) {
 
-                return;
+                height =
+                    video.videoHeight /
+                    (video.videoWidth / width);
+
+            } else {
+
+                height = 240;
 
             }
 
 
-            height =
-                video.videoHeight /
-                (video.videoWidth / width);
-
-
             video.setAttribute(
                 "width",
                 width
             );
-
 
             video.setAttribute(
                 "height",
@@ -673,252 +386,185 @@ function inicializarCamara() {
             );
 
 
-            canvas.setAttribute(
-                "width",
-                width
-            );
+            if (canvas) {
 
+                canvas.setAttribute(
+                    "width",
+                    width
+                );
 
-            canvas.setAttribute(
-                "height",
-                height
-            );
+                canvas.setAttribute(
+                    "height",
+                    height
+                );
+
+            }
 
 
             streaming = true;
 
-
-            cambiarEstadoCamara(
-                "Cámara activa. Puedes tomar la fotografía."
-            );
-
         }
-    );
 
-
-    // =================================================
-    // BOTÓN USAR CÁMARA
-    // =================================================
-
-    if (btnCamara) {
-
-        btnCamara.addEventListener(
-            "click",
-            async function (e) {
-
-                e.preventDefault();
-
-
-                await iniciarCamara();
-
-            }
-        );
-
-    }
-
-
-    // =================================================
-    // BOTÓN CAPTURAR
-    // =================================================
-
-    if (btnCapturar) {
-
-        btnCapturar.addEventListener(
-            "click",
-            function (e) {
-
-                e.preventDefault();
-
-
-                tomarFoto();
-
-            }
-        );
-
-    }
-
-
-    // =================================================
-    // BOTÓN LIMPIAR
-    // =================================================
-
-    if (btnLimpiar) {
-
-        btnLimpiar.addEventListener(
-            "click",
-            function (e) {
-
-                e.preventDefault();
-
-
-                limpiarFoto();
-
-            }
-        );
-
-    }
+    });
 
 }
 
 
 // =====================================================
-// INICIAR CÁMARA
+// ABRIR CÁMARA
 // =====================================================
 
-async function iniciarCamara() {
+if (btnCamara) {
 
-    const video =
-        document.getElementById("Video");
+    btnCamara.addEventListener(
+        "click",
+        async function (e) {
 
-
-    const cameraContainer =
-        document.getElementById("Camera");
-
-
-    const errorElemento =
-        document.getElementById("cameraError");
+            e.preventDefault();
 
 
-    if (!video) {
-        return;
-    }
+            if (
+                !navigator.mediaDevices ||
+                !navigator.mediaDevices.getUserMedia
+            ) {
+
+                if (cameraError) {
+
+                    cameraError.textContent =
+                        "Tu navegador no permite acceder a la cámara.";
+
+                }
+
+                return;
+
+            }
 
 
-    // Limpiar error anterior
+            try {
 
-    if (errorElemento) {
+                if (cameraError) {
 
-        errorElemento.textContent = "";
+                    cameraError.textContent = "";
 
-    }
-
-
-    // Verificar soporte
-
-    if (
-        !navigator.mediaDevices ||
-        !navigator.mediaDevices.getUserMedia
-    ) {
-
-        mostrarErrorCamara(
-            "Tu navegador no permite utilizar la cámara."
-        );
-
-        return;
-
-    }
+                }
 
 
-    // Detener cámara anterior
+                if (cameraStatus) {
 
-    detenerCamara();
+                    cameraStatus.textContent =
+                        "Solicitando acceso a la cámara...";
 
-
-    try {
-
-        cambiarEstadoCamara(
-            "Solicitando acceso a la cámara..."
-        );
+                }
 
 
-        // Cámara trasera en teléfonos
+                const stream =
+                    await navigator.mediaDevices.getUserMedia({
 
-        const stream =
-            await navigator.mediaDevices.getUserMedia({
+                        video: {
+                            facingMode: {
+                                ideal: "environment"
+                            }
+                        },
 
-                video: {
+                        audio: false
 
-                    facingMode: {
-                        ideal: "environment"
-                    },
+                    });
 
-                    width: {
-                        ideal: 1280
-                    },
 
-                    height: {
-                        ideal: 720
+                video.srcObject = stream;
+
+                video.setAttribute(
+                    "playsinline",
+                    ""
+                );
+
+                video.setAttribute(
+                    "autoplay",
+                    ""
+                );
+
+                video.muted = true;
+
+
+                await video.play();
+
+
+                const camera =
+                    document.getElementById(
+                        "Camera"
+                    );
+
+
+                if (camera) {
+
+                    camera.style.display =
+                        "block";
+
+                }
+
+
+                if (cameraStatus) {
+
+                    cameraStatus.textContent =
+                        "Cámara activada. Puedes capturar la foto.";
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Error al acceder a la cámara:",
+                    error
+                );
+
+
+                if (cameraError) {
+
+                    if (
+                        error.name ===
+                        "NotAllowedError"
+                    ) {
+
+                        cameraError.textContent =
+                            "Permiso de cámara denegado. Autoriza la cámara en el navegador.";
+
                     }
 
-                },
+                    else if (
+                        error.name ===
+                        "NotFoundError"
+                    ) {
 
-                audio: false
+                        cameraError.textContent =
+                            "No se encontró ninguna cámara.";
 
-            });
+                    }
 
+                    else if (
+                        error.name ===
+                        "NotReadableError"
+                    ) {
 
-        video.srcObject =
-            stream;
+                        cameraError.textContent =
+                            "La cámara está siendo utilizada por otra aplicación.";
 
+                    }
 
-        if (cameraContainer) {
+                    else {
 
-            cameraContainer.style.display =
-                "block";
+                        cameraError.textContent =
+                            "No se pudo abrir la cámara.";
 
-        }
+                    }
 
+                }
 
-        video.muted = true;
-
-        video.playsInline = true;
-
-
-        await video.play();
-
-
-        cambiarEstadoCamara(
-            "Cámara activa."
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Error al abrir la cámara:",
-            error
-        );
-
-
-        let mensaje =
-            "No se pudo abrir la cámara.";
-
-
-        if (error.name === "NotAllowedError") {
-
-            mensaje =
-                "Permiso de cámara denegado. Autoriza el acceso a la cámara en tu navegador.";
+            }
 
         }
-
-
-        else if (error.name === "NotFoundError") {
-
-            mensaje =
-                "No se encontró ninguna cámara en el dispositivo.";
-
-        }
-
-
-        else if (error.name === "NotReadableError") {
-
-            mensaje =
-                "La cámara está siendo utilizada por otra aplicación.";
-
-        }
-
-
-        else if (error.name === "SecurityError") {
-
-            mensaje =
-                "La cámara requiere HTTPS para funcionar.";
-
-        }
-
-
-        mostrarErrorCamara(mensaje);
-
-    }
+    );
 
 }
 
@@ -929,44 +575,20 @@ async function iniciarCamara() {
 
 function tomarFoto() {
 
-    const video =
-        document.getElementById("Video");
-
-
-    const canvas =
-        document.getElementById("Canvas");
-
-
-    const foto =
-        document.getElementById("foto");
-
-
-    const fotoInput =
-        document.getElementById("fotoInput");
-
-
-    if (
-        !video ||
-        !canvas ||
-        !foto ||
-        !fotoInput
-    ) {
+    if (!video || !canvas || !foto) {
 
         return;
 
     }
 
 
-    // Verificar que la cámara esté activa
-
     if (
-        !video.srcObject ||
-        video.videoWidth === 0 ||
-        video.videoHeight === 0
+        !video.videoWidth ||
+        !video.videoHeight
     ) {
 
         alert(
-            "Primero debes activar la cámara."
+            "Primero debes abrir la cámara."
         );
 
         return;
@@ -974,26 +596,20 @@ function tomarFoto() {
     }
 
 
-    // Usar resolución real del video
+    const context =
+        canvas.getContext("2d");
+
 
     const ancho =
         video.videoWidth;
-
 
     const alto =
         video.videoHeight;
 
 
-    canvas.width =
-        ancho;
+    canvas.width = ancho;
 
-
-    canvas.height =
-        alto;
-
-
-    const context =
-        canvas.getContext("2d");
+    canvas.height = alto;
 
 
     context.drawImage(
@@ -1005,8 +621,6 @@ function tomarFoto() {
     );
 
 
-    // Convertir imagen a Base64
-
     const fotoFinal =
         canvas.toDataURL(
             "image/jpeg",
@@ -1014,39 +628,91 @@ function tomarFoto() {
         );
 
 
-    // Mostrar fotografía
-
-    foto.src =
-        fotoFinal;
-
-
-    // Guardar fotografía
-
-    fotoInput.value =
-        fotoFinal;
+    foto.setAttribute(
+        "src",
+        fotoFinal
+    );
 
 
-    // Detener cámara
+    foto.style.display = "block";
 
-    detenerCamara();
+
+    const fotoInput =
+        document.getElementById(
+            "fotoInput"
+        );
+
+
+    if (fotoInput) {
+
+        fotoInput.value =
+            fotoFinal;
+
+    }
 
 
     // Ocultar cámara
+    const camera =
+        document.getElementById(
+            "Camera"
+        );
 
-    const cameraContainer =
-        document.getElementById("Camera");
 
+    if (camera) {
 
-    if (cameraContainer) {
-
-        cameraContainer.style.display =
+        camera.style.display =
             "none";
 
     }
 
 
-    cambiarEstadoCamara(
-        "Fotografía capturada correctamente."
+    // Detener cámara
+    if (video.srcObject) {
+
+        const tracks =
+            video.srcObject.getTracks();
+
+
+        tracks.forEach(function (track) {
+
+            track.stop();
+
+        });
+
+
+        video.srcObject = null;
+
+    }
+
+
+    streaming = false;
+
+
+    if (cameraStatus) {
+
+        cameraStatus.textContent =
+            "Foto capturada correctamente.";
+
+    }
+
+}
+
+
+// =====================================================
+// BOTÓN CAPTURAR
+// =====================================================
+
+if (btnCapturar) {
+
+    btnCapturar.addEventListener(
+        "click",
+        function (e) {
+
+            e.preventDefault();
+
+            tomarFoto();
+
+        }
     );
 
 }
@@ -1058,123 +724,102 @@ function tomarFoto() {
 
 function limpiarFoto() {
 
-    const foto =
-        document.getElementById("foto");
-
-
-    const fotoInput =
-        document.getElementById("fotoInput");
-
-
-    const btnFoto =
-        document.getElementById("btnFoto");
-
-
-    const cameraContainer =
-        document.getElementById("Camera");
-
-
     if (foto) {
 
-        foto.src =
-            "img/default.jpg";
+        foto.setAttribute(
+            "src",
+            ""
+        );
+
+        foto.style.display =
+            "none";
 
     }
 
 
+    const fotoInput =
+        document.getElementById(
+            "fotoInput"
+        );
+
+
     if (fotoInput) {
 
-        fotoInput.value =
-            "";
+        fotoInput.value = "";
+
+    }
+
+
+    // Detener cámara
+    if (
+        video &&
+        video.srcObject
+    ) {
+
+        const tracks =
+            video.srcObject.getTracks();
+
+
+        tracks.forEach(function (track) {
+
+            track.stop();
+
+        });
+
+
+        video.srcObject = null;
+
+    }
+
+
+    if (video) {
+
+        video.pause();
+
+        video.removeAttribute(
+            "src"
+        );
+
+        video.load();
+
+    }
+
+
+    const camera =
+        document.getElementById(
+            "Camera"
+        );
+
+
+    if (camera) {
+
+        camera.style.display =
+            "block";
 
     }
 
 
     if (btnFoto) {
 
-        btnFoto.value =
-            "";
+        btnFoto.value = "";
 
     }
 
 
-    detenerCamara();
+    streaming = false;
 
 
-    if (cameraContainer) {
+    if (cameraStatus) {
 
-        cameraContainer.style.display =
-            "block";
-
-    }
-
-
-    cambiarEstadoCamara(
-        "Cámara lista para tomar una foto."
-    );
-
-}
-
-
-// =====================================================
-// DETENER CÁMARA
-// =====================================================
-
-function detenerCamara() {
-
-    const video =
-        document.getElementById("Video");
-
-
-    if (!video) {
-        return;
-    }
-
-
-    if (video.srcObject) {
-
-        const tracks =
-            video.srcObject.getTracks();
-
-
-        tracks.forEach(
-            function (track) {
-
-                track.stop();
-
-            }
-        );
-
-
-        video.srcObject =
-            null;
+        cameraStatus.textContent =
+            "Cámara lista para tomar una foto.";
 
     }
 
 
-    video.pause();
+    if (cameraError) {
 
-
-    streaming =
-        false;
-
-}
-
-
-// =====================================================
-// ESTADO DE CÁMARA
-// =====================================================
-
-function cambiarEstadoCamara(mensaje) {
-
-    const estado =
-        document.getElementById("cameraStatus");
-
-
-    if (estado) {
-
-        estado.textContent =
-            mensaje;
+        cameraError.textContent = "";
 
     }
 
@@ -1182,67 +827,68 @@ function cambiarEstadoCamara(mensaje) {
 
 
 // =====================================================
-// ERROR DE CÁMARA
+// BOTÓN LIMPIAR
 // =====================================================
 
-function mostrarErrorCamara(mensaje) {
+if (btnLimpiar) {
 
-    const error =
-        document.getElementById("cameraError");
+    btnLimpiar.addEventListener(
+        "click",
+        function (e) {
 
+            e.preventDefault();
 
-    if (error) {
-
-        error.textContent =
-            mensaje;
-
-    }
-
-
-    cambiarEstadoCamara(
-        "No se pudo iniciar la cámara."
-    );
-
-}
-
-
-// =====================================================
-// PROTEGER LA APLICACIÓN CONTRA ERRORES DE IMAGEN
-// =====================================================
-
-document.addEventListener(
-    "error",
-    function (e) {
-
-        if (
-            e.target &&
-            e.target.tagName === "IMG"
-        ) {
-
-            const imagen =
-                e.target;
-
-
-            // Evitar ciclo infinito
-
-            if (
-                !imagen.dataset.defaultError
-            ) {
-
-                imagen.dataset.defaultError =
-                    "true";
-
-
-                // Solo intentar la imagen
-                // por defecto si existe
-
-                imagen.src =
-                    "img/default.jpg";
-
-            }
+            limpiarFoto();
 
         }
+    );
 
-    },
-    true
-);
+}
+
+
+// =====================================================
+// CERRAR CÁMARA AL CERRAR EL FORMULARIO
+// =====================================================
+
+const sideForm =
+    document.getElementById(
+        "side-form"
+    );
+
+
+if (sideForm) {
+
+    sideForm.addEventListener(
+        "click",
+        function () {
+
+            // No hacemos nada aquí.
+            // Se mantiene disponible la cámara.
+
+        }
+    );
+
+}
+
+
+// =====================================================
+// EXPORTAR FUNCIONES PARA DB.JS
+// =====================================================
+//
+// db.js se carga después de index.js,
+// por lo que estas funciones quedan disponibles
+// globalmente.
+//
+// =====================================================
+
+window.mostrarPlatillo =
+    mostrarPlatillo;
+
+window.actualizarPlatillo =
+    actualizarPlatillo;
+
+window.borrarPlatillo =
+    borrarPlatillo;
+
+window.agregarALista =
+    agregarALista;
