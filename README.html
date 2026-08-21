@@ -1,0 +1,2634 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        http-equiv="X-UA-Compatible"
+        content="ie=edge"
+    >
+
+    <title>DITS - README</title>
+
+
+    <!-- =========================================
+         MATERIALIZE CSS
+    ========================================== -->
+
+    <link
+        type="text/css"
+        href="css/materialize.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================
+         MATERIAL ICONS
+    ========================================== -->
+
+    <link
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================
+         ESTILOS DITS
+    ========================================== -->
+
+    <link
+        type="text/css"
+        href="css/styles.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================
+         PWA
+    ========================================== -->
+
+    <link
+        rel="manifest"
+        href="manifest.json"
+    >
+
+    <meta
+        name="theme-color"
+        content="#4dc7e4"
+    >
+
+
+    <!-- =========================================
+         ESTILOS DEL README
+    ========================================== -->
+
+    <style>
+
+        :root {
+
+            --primary: #4dc7e4;
+            --primary-dark: #28aeca;
+            --primary-light: #e8f9fd;
+
+            --dark: #292929;
+            --text: #666;
+            --muted: #999;
+
+            --background: #f5f5f5;
+            --white: #ffffff;
+
+            --border: #eeeeee;
+
+        }
+
+
+        /* =========================================
+           GENERAL
+        ========================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(77, 199, 228, 0.10),
+                    transparent 35%
+                ),
+                var(--background);
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: var(--dark);
+
+        }
+
+
+        /* =========================================
+           NAVBAR
+        ========================================== */
+
+        nav {
+
+            background: var(--primary);
+
+            height: 64px;
+
+            line-height: 64px;
+
+        }
+
+
+        nav .nav-wrapper {
+
+            width: 92%;
+
+            max-width: 1100px;
+
+        }
+
+
+        nav a {
+
+            color: white;
+
+        }
+
+
+        nav .brand-logo {
+
+            font-size: 24px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+        }
+
+
+        nav .sidenav-trigger {
+
+            cursor: pointer;
+
+        }
+
+
+        /* =========================================
+           MENÚ LATERAL
+        ========================================== */
+
+        .sidenav {
+
+            padding-top: 10px;
+
+        }
+
+
+        .sidenav .subheader {
+
+            color: var(--primary-dark);
+
+            font-size: 22px;
+
+            font-weight: 800;
+
+            padding-bottom: 12px;
+
+        }
+
+
+        .sidenav li > a {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            font-size: 16px;
+
+        }
+
+
+        .sidenav li > a i {
+
+            color: var(--primary);
+
+        }
+
+
+        .sidenav li > a:hover {
+
+            background: var(--primary-light);
+
+        }
+
+
+        /* =========================================
+           CONTENEDOR
+        ========================================== */
+
+        .readme-container {
+
+            width: 92%;
+
+            max-width: 1000px;
+
+            margin: 40px auto 60px;
+
+        }
+
+
+        /* =========================================
+           TARJETA PRINCIPAL
+        ========================================== */
+
+        .readme-card {
+
+            background: var(--white);
+
+            border-radius: 22px;
+
+            padding: 45px;
+
+            box-shadow:
+                0 10px 35px rgba(0, 0, 0, 0.08);
+
+        }
+
+
+        /* =========================================
+           ENCABEZADO
+        ========================================== */
+
+        .readme-header {
+
+            text-align: center;
+
+            padding-bottom: 35px;
+
+            border-bottom:
+                1px solid var(--border);
+
+        }
+
+
+        .readme-icon {
+
+            width: 100px;
+
+            height: 100px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #28aeca
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            box-shadow:
+                0 10px 25px rgba(77, 199, 228, 0.30);
+
+        }
+
+
+        .readme-icon i {
+
+            color: white;
+
+            font-size: 55px;
+
+        }
+
+
+        .readme-header h1 {
+
+            margin: 0 0 10px;
+
+            font-size: 40px;
+
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+        }
+
+
+        .readme-header h2 {
+
+            margin: 0 0 20px;
+
+            color: #666;
+
+            font-size: 21px;
+
+            font-weight: 500;
+
+        }
+
+
+        .pwa-label {
+
+            display: inline-block;
+
+            padding: 8px 16px;
+
+            border-radius: 20px;
+
+            background: var(--primary-light);
+
+            color: var(--primary-dark);
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+        }
+
+
+        /* =========================================
+           BADGES
+        ========================================== */
+
+        .badges {
+
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+
+            margin-top: 25px;
+
+        }
+
+
+        .badges img {
+
+            max-width: 100%;
+
+            height: auto;
+
+        }
+
+
+        /* =========================================
+           INFORMACIÓN ACADÉMICA
+        ========================================== */
+
+        .academic-info {
+
+            margin-top: 25px;
+
+            padding: 20px;
+
+            background: #fafafa;
+
+            border-radius: 15px;
+
+            border: 1px solid var(--border);
+
+            line-height: 1.7;
+
+        }
+
+
+        .academic-info strong {
+
+            color: var(--dark);
+
+        }
+
+
+        /* =========================================
+           ÍNDICE
+        ========================================== */
+
+        .index-box {
+
+            margin: 35px 0;
+
+            padding: 25px;
+
+            background: var(--primary-light);
+
+            border-radius: 16px;
+
+            border: 1px solid #c8edf5;
+
+        }
+
+
+        .index-box h3 {
+
+            margin-top: 0;
+
+            font-size: 21px;
+
+            color: var(--dark);
+
+        }
+
+
+        .index-box ul {
+
+            margin-bottom: 0;
+
+        }
+
+
+        .index-box li {
+
+            margin: 8px 0;
+
+        }
+
+
+        .index-box a {
+
+            color: var(--primary-dark);
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+        }
+
+
+        .index-box a:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        /* =========================================
+           SECCIONES
+        ========================================== */
+
+        .readme-section {
+
+            margin-top: 45px;
+
+            scroll-margin-top: 80px;
+
+        }
+
+
+        .readme-section h2 {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-size: 26px;
+
+            margin-bottom: 20px;
+
+            color: var(--dark);
+
+        }
+
+
+        .readme-section h2 i {
+
+            color: var(--primary);
+
+            font-size: 30px;
+
+        }
+
+
+        .readme-section h3 {
+
+            font-size: 20px;
+
+            margin-top: 28px;
+
+            color: #444;
+
+        }
+
+
+        .readme-section p {
+
+            color: var(--text);
+
+            font-size: 16px;
+
+            line-height: 1.75;
+
+        }
+
+
+        .readme-section ul {
+
+            color: var(--text);
+
+            line-height: 1.8;
+
+        }
+
+
+        .readme-section li {
+
+            margin-bottom: 5px;
+
+        }
+
+
+        /* =========================================
+           DESTACADOS
+        ========================================== */
+
+        .highlight {
+
+            color: var(--primary-dark);
+
+            font-weight: 700;
+
+        }
+
+
+        /* =========================================
+           CÓDIGO / FLUJO
+        ========================================== */
+
+        .code-box {
+
+            background: #292929;
+
+            color: #f5f5f5;
+
+            border-radius: 14px;
+
+            padding: 22px;
+
+            overflow-x: auto;
+
+            font-family:
+                Consolas,
+                Monaco,
+                monospace;
+
+            line-height: 1.7;
+
+            white-space: pre;
+
+        }
+
+
+        /* =========================================
+           TARJETAS DE CARACTERÍSTICAS
+        ========================================== */
+
+        .feature-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 15px;
+
+        }
+
+
+        .feature-card {
+
+            padding: 20px;
+
+            border-radius: 15px;
+
+            background: #fff;
+
+            border: 1px solid var(--border);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+
+        }
+
+
+        .feature-card:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.07);
+
+        }
+
+
+        .feature-card h4 {
+
+            margin-top: 0;
+
+            color: var(--dark);
+
+            font-size: 17px;
+
+        }
+
+
+        .feature-card p {
+
+            font-size: 14px;
+
+            margin-bottom: 0;
+
+        }
+
+
+        /* =========================================
+           ESTRUCTURA
+        ========================================== */
+
+        .folder-tree {
+
+            background: #f8f8f8;
+
+            border: 1px solid var(--border);
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            overflow-x: auto;
+
+            font-family:
+                Consolas,
+                Monaco,
+                monospace;
+
+            line-height: 1.8;
+
+        }
+
+
+        /* =========================================
+           TABLA
+        ========================================== */
+
+        .tech-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin-top: 20px;
+
+        }
+
+
+        .tech-table th,
+        .tech-table td {
+
+            padding: 13px;
+
+            border-bottom:
+                1px solid var(--border);
+
+            text-align: left;
+
+        }
+
+
+        .tech-table th {
+
+            background: var(--primary-light);
+
+            color: var(--dark);
+
+        }
+
+
+        /* =========================================
+           BOTÓN
+        ========================================== */
+
+        .back-button {
+
+            margin-top: 40px;
+
+            background: var(--primary);
+
+            border-radius: 25px;
+
+            font-weight: 700;
+
+            box-shadow:
+                0 6px 15px rgba(77, 199, 228, 0.25);
+
+        }
+
+
+        .back-button:hover {
+
+            background: var(--primary-dark);
+
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================== */
+
+        .readme-footer {
+
+            margin-top: 45px;
+
+            padding-top: 25px;
+
+            border-top:
+                1px solid var(--border);
+
+            text-align: center;
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media only screen and (max-width: 700px) {
+
+            .feature-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        @media only screen and (max-width: 600px) {
+
+            nav {
+
+                height: 58px;
+
+                line-height: 58px;
+
+            }
+
+
+            nav .brand-logo {
+
+                font-size: 21px;
+
+            }
+
+
+            .readme-container {
+
+                width: 94%;
+
+                margin:
+                    20px auto 35px;
+
+            }
+
+
+            .readme-card {
+
+                padding:
+                    28px 20px;
+
+                border-radius: 18px;
+
+            }
+
+
+            .readme-header h1 {
+
+                font-size: 32px;
+
+            }
+
+
+            .readme-header h2 {
+
+                font-size: 18px;
+
+            }
+
+
+            .readme-icon {
+
+                width: 85px;
+
+                height: 85px;
+
+            }
+
+
+            .readme-icon i {
+
+                font-size: 45px;
+
+            }
+
+
+            .readme-section h2 {
+
+                font-size: 21px;
+
+            }
+
+
+            .readme-section p {
+
+                font-size: 15px;
+
+            }
+
+
+            .tech-table {
+
+                font-size: 13px;
+
+            }
+
+
+            .tech-table th,
+            .tech-table td {
+
+                padding: 9px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         NAVBAR
+    ========================================== -->
+
+    <nav class="z-depth-0">
+
+        <div class="nav-wrapper container">
+
+            <a
+                href="index.html"
+                class="brand-logo"
+            >
+                DITS
+            </a>
+
+
+            <a
+                href="#"
+                data-target="side-menu"
+                class="sidenav-trigger right"
+            >
+
+                <i class="material-icons">
+                    menu
+                </i>
+
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================================
+         MENÚ LATERAL
+    ========================================== -->
+
+    <ul
+        id="side-menu"
+        class="sidenav"
+    >
+
+        <li>
+
+            <a class="subheader">
+                DITS
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a
+                href="index.html"
+                class="waves-effect"
+            >
+
+                <i class="material-icons">
+                    home
+                </i>
+
+                Inicio
+
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a
+                href="pages/pedidos.html"
+                class="waves-effect"
+            >
+
+                <i class="material-icons">
+                    restaurant_menu
+                </i>
+
+                Pedidos
+
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a
+                href="README.html"
+                class="waves-effect"
+            >
+
+                <i class="material-icons">
+                    menu_book
+                </i>
+
+                README
+
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a
+                href="pages/about.html"
+                class="waves-effect"
+            >
+
+                <i class="material-icons">
+                    info
+                </i>
+
+                Acerca
+
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <div class="divider"></div>
+
+        </li>
+
+
+        <li>
+
+            <a
+                href="pages/contact.html"
+                class="waves-effect"
+            >
+
+                <i class="material-icons">
+                    mail_outline
+                </i>
+
+                Contacto
+
+            </a>
+
+        </li>
+
+    </ul>
+
+
+    <!-- =========================================
+         CONTENIDO README
+    ========================================== -->
+
+    <main class="readme-container">
+
+        <div class="readme-card">
+
+
+            <!-- =====================================
+                 ENCABEZADO
+            ====================================== -->
+
+            <header class="readme-header">
+
+                <div class="readme-icon">
+
+                    <i class="material-icons">
+                        restaurant
+                    </i>
+
+                </div>
+
+
+                <h1>
+                    🍽️ DITS
+                </h1>
+
+
+                <h2>
+                    Sistema de gestión de platillos y pedidos
+                </h2>
+
+
+                <div class="pwa-label">
+
+                    Progressive Web App (PWA)
+
+                </div>
+
+
+                <p>
+
+                    Aplicación web progresiva para registrar
+                    platillos, gestionar pedidos, consultar
+                    información de productos y obtener la
+                    ubicación del cliente.
+
+                </p>
+
+
+                <!-- =================================
+                     BADGES
+                ================================== -->
+
+                <div class="badges">
+
+                    <img
+                        src="https://img.shields.io/badge/DITS-PWA-4DC7E4?style=for-the-badge"
+                        alt="DITS PWA"
+                    >
+
+                    <img
+                        src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"
+                        alt="HTML5"
+                    >
+
+                    <img
+                        src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"
+                        alt="CSS3"
+                    >
+
+                    <img
+                        src="https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"
+                        alt="JavaScript"
+                    >
+
+                    <img
+                        src="https://img.shields.io/badge/Firebase-Firestore-FFCA28?style=for-the-badge&logo=firebase&logoColor=black"
+                        alt="Firebase"
+                    >
+
+                    <img
+                        src="https://img.shields.io/badge/Progressive-Web%20App-purple?style=for-the-badge"
+                        alt="PWA"
+                    >
+
+                </div>
+
+
+                <!-- =================================
+                     INFORMACIÓN ACADÉMICA
+                ================================== -->
+
+                <div class="academic-info">
+
+                    <strong>
+                        Proyecto académico
+                    </strong>
+
+                    <br><br>
+
+                    <strong>
+                        Martínez Merlín Luis Fernando
+                    </strong>
+
+                    <br>
+
+                    Sistemas Computacionales
+
+                    <br>
+
+                    Programación Avanzada
+
+                    <br>
+
+                    ISC181
+
+                    <br>
+
+                    Universidad Multicultural CUDEC
+
+                    <br>
+
+                    <strong>
+                        2026
+                    </strong>
+
+                </div>
+
+            </header>
+
+
+            <!-- =================================
+                 ÍNDICE
+            ================================== -->
+
+            <section class="index-box">
+
+                <h3>
+                    📋 Índice
+                </h3>
+
+
+                <ul>
+
+                    <li>
+                        <a href="#descripcion">
+                            📖 Descripción del proyecto
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#objetivos">
+                            🎯 Objetivos
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#caracteristicas">
+                            ✨ Características principales
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#tecnologias">
+                            🛠️ Tecnologías utilizadas
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#estructura">
+                            📂 Estructura del proyecto
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#funcionamiento">
+                            🔄 Funcionamiento general
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#base-datos">
+                            🗄️ Base de datos
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#pwa">
+                            📱 Progressive Web App
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#ubicacion">
+                            📍 Sistema de ubicación
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#camara">
+                            📷 Sistema de cámara
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#evidencias">
+                            📸 Evidencias
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#instalacion">
+                            🚀 Instalación
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#ejecucion">
+                            ▶️ Ejecución
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#uso">
+                            📚 Uso de la aplicación
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#seguridad">
+                            🔐 Seguridad
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#autor">
+                            👨‍💻 Autor
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#licencia">
+                            📄 Licencia
+                        </a>
+                    </li>
+
+                </ul>
+
+            </section>
+
+
+            <!-- =================================
+                 DESCRIPCIÓN
+            ================================== -->
+
+            <section
+                id="descripcion"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        description
+                    </i>
+
+                    📖 Descripción del proyecto
+
+                </h2>
+
+
+                <p>
+
+                    <strong class="highlight">
+                        DITS
+                    </strong>
+                    es una aplicación web progresiva
+                    (<strong>Progressive Web App</strong>)
+                    desarrollada para facilitar la administración
+                    de platillos y la realización de pedidos.
+
+                </p>
+
+
+                <p>
+
+                    La aplicación permite registrar diferentes
+                    platillos proporcionando información como:
+
+                </p>
+
+
+                <ul>
+
+                    <li>
+                        🍽️ Nombre del platillo.
+                    </li>
+
+                    <li>
+                        🧂 Ingredientes.
+                    </li>
+
+                    <li>
+                        💰 Precio.
+                    </li>
+
+                    <li>
+                        📷 Fotografía.
+                    </li>
+
+                </ul>
+
+
+                <p>
+
+                    Los usuarios pueden consultar los platillos
+                    disponibles y seleccionar uno para realizar
+                    un pedido.
+
+                </p>
+
+
+                <p>
+
+                    Durante el proceso de pedido, el usuario puede
+                    introducir sus datos y utilizar la ubicación de
+                    su dispositivo para obtener automáticamente
+                    sus coordenadas y una dirección aproximada.
+
+                </p>
+
+
+                <p>
+
+                    La información de los platillos y pedidos se
+                    almacena en <strong>Firebase Cloud Firestore</strong>,
+                    permitiendo que los cambios se reflejen
+                    dinámicamente en la aplicación.
+
+                </p>
+
+
+                <p>
+
+                    El proyecto fue desarrollado con fines
+                    académicos para demostrar el uso de tecnologías
+                    web, bases de datos en la nube, geolocalización,
+                    cámara y aplicaciones web progresivas.
+
+                </p>
+
+            </section>
+
+
+            <!-- =================================
+                 OBJETIVOS
+            ================================== -->
+
+            <section
+                id="objetivos"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        flag
+                    </i>
+
+                    🎯 Objetivos
+
+                </h2>
+
+
+                <h3>
+                    🎯 Objetivo general
+                </h3>
+
+
+                <p>
+
+                    Desarrollar una
+                    <strong>Progressive Web App</strong>
+                    que permita administrar platillos y gestionar
+                    pedidos de manera sencilla, utilizando
+                    tecnologías web modernas, una base de datos
+                    en la nube y servicios de geolocalización.
+
+                </p>
+
+
+                <h3>
+                    📌 Objetivos específicos
+                </h3>
+
+
+                <ul>
+
+                    <li>
+                        Crear una interfaz web intuitiva y adaptable.
+                    </li>
+
+                    <li>
+                        Implementar el registro de platillos.
+                    </li>
+
+                    <li>
+                        Permitir almacenar nombre, ingredientes,
+                        precio y fotografía.
+                    </li>
+
+                    <li>
+                        Mostrar dinámicamente los platillos disponibles.
+                    </li>
+
+                    <li>
+                        Permitir eliminar platillos.
+                    </li>
+
+                    <li>
+                        Implementar un sistema para realizar pedidos.
+                    </li>
+
+                    <li>
+                        Registrar el nombre del cliente.
+                    </li>
+
+                    <li>
+                        Registrar la dirección de entrega.
+                    </li>
+
+                    <li>
+                        Obtener la ubicación del usuario mediante GPS.
+                    </li>
+
+                    <li>
+                        Mostrar la ubicación del usuario mediante un mapa.
+                    </li>
+
+                    <li>
+                        Convertir coordenadas GPS en una dirección.
+                    </li>
+
+                    <li>
+                        Almacenar los pedidos en Firebase Firestore.
+                    </li>
+
+                    <li>
+                        Mostrar los pedidos realizados en la página principal.
+                    </li>
+
+                    <li>
+                        Permitir eliminar pedidos.
+                    </li>
+
+                    <li>
+                        Implementar acceso a la cámara del dispositivo.
+                    </li>
+
+                    <li>
+                        Permitir seleccionar fotografías desde el dispositivo.
+                    </li>
+
+                    <li>
+                        Implementar una Progressive Web App.
+                    </li>
+
+                    <li>
+                        Utilizar un Service Worker para las funcionalidades PWA.
+                    </li>
+
+                </ul>
+
+            </section>
+
+
+            <!-- =================================
+                 CARACTERÍSTICAS
+            ================================== -->
+
+            <section
+                id="caracteristicas"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        auto_awesome
+                    </i>
+
+                    ✨ Características principales
+
+                </h2>
+
+
+                <div class="feature-grid">
+
+
+                    <div class="feature-card">
+
+                        <h4>
+                            🍽️ Administración de platillos
+                        </h4>
+
+                        <p>
+                            Administración y consulta de los
+                            platillos disponibles.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <h4>
+                            🛒 Sistema de pedidos
+                        </h4>
+
+                        <p>
+                            Permite seleccionar platillos y
+                            registrar pedidos.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <h4>
+                            📍 Geolocalización
+                        </h4>
+
+                        <p>
+                            Obtención de coordenadas y ubicación
+                            aproximada del usuario.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <h4>
+                            📷 Cámara
+                        </h4>
+
+                        <p>
+                            Permite utilizar la cámara del
+                            dispositivo para fotografiar platillos.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <h4>
+                            📱 PWA
+                        </h4>
+
+                        <p>
+                            La aplicación puede instalarse y
+                            utilizarse como aplicación web progresiva.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-card">
+
+                        <h4>
+                            🔥 Firebase
+                        </h4>
+
+                        <p>
+                            Almacenamiento y sincronización de
+                            información mediante Firebase.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <h3>
+                    🍽️ Administración de platillos
+                </h3>
+
+
+                <p>
+                    La aplicación permite administrar los platillos disponibles.
+                </p>
+
+
+                <ul>
+
+                    <li>➕ Agregar platillos.</li>
+
+                    <li>📝 Registrar nombre.</li>
+
+                    <li>🧂 Registrar ingredientes.</li>
+
+                    <li>💰 Registrar precio.</li>
+
+                    <li>📷 Agregar fotografía.</li>
+
+                    <li>👁️ Visualizar platillos.</li>
+
+                    <li>🗑️ Eliminar platillos.</li>
+
+                    <li>🔄 Actualización automática mediante Firebase.</li>
+
+                </ul>
+
+
+                <h3>
+                    🛒 Sistema de pedidos
+                </h3>
+
+
+                <p>
+                    El usuario puede realizar un pedido
+                    seleccionando uno de los platillos disponibles.
+                </p>
+
+
+                <p>
+                    El proceso general consiste en seleccionar un
+                    platillo, consultar su información, ingresar
+                    los datos del cliente, obtener su ubicación y
+                    guardar finalmente el pedido en Firebase.
+                </p>
+
+            </section>
+
+
+            <!-- =================================
+                 TECNOLOGÍAS
+            ================================== -->
+
+            <section
+                id="tecnologias"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        build
+                    </i>
+
+                    🛠️ Tecnologías utilizadas
+
+                </h2>
+
+
+                <table class="tech-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Tecnología
+                            </th>
+
+                            <th>
+                                Uso
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                HTML5
+                            </td>
+
+                            <td>
+                                Estructura de las páginas.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                CSS3
+                            </td>
+
+                            <td>
+                                Diseño y estilos.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                JavaScript ES6+
+                            </td>
+
+                            <td>
+                                Lógica y funcionamiento de la aplicación.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Materialize CSS
+                            </td>
+
+                            <td>
+                                Componentes e interfaz responsive.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Firebase
+                            </td>
+
+                            <td>
+                                Base de datos y almacenamiento.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Firestore
+                            </td>
+
+                            <td>
+                                Almacenamiento de platillos y pedidos.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Firebase Storage
+                            </td>
+
+                            <td>
+                                Almacenamiento de fotografías.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Service Worker
+                            </td>
+
+                            <td>
+                                Funcionalidades PWA.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Geolocation API
+                            </td>
+
+                            <td>
+                                Obtención de ubicación.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                MediaDevices API
+                            </td>
+
+                            <td>
+                                Acceso a la cámara.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+
+            <!-- =================================
+                 ESTRUCTURA
+            ================================== -->
+
+            <section
+                id="estructura"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        folder
+                    </i>
+
+                    📂 Estructura del proyecto
+
+                </h2>
+
+
+                <div class="folder-tree">
+
+UberEatsCUDEC/
+│
+├── index.html
+├── README.md
+├── README.html
+├── manifest.json
+├── sw.js
+│
+├── css/
+│   ├── materialize.min.css
+│   └── styles.css
+│
+├── js/
+│   ├── firebase.js
+│   ├── index.js
+│   ├── db.js
+│   └── materialize.min.js
+│
+├── img/
+│
+├── pages/
+│   ├── pedidos.html
+│   ├── about.html
+│   └── contact.html
+│
+└── iconos PWA/
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 FUNCIONAMIENTO
+            ================================== -->
+
+            <section
+                id="funcionamiento"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        sync
+                    </i>
+
+                    🔄 Funcionamiento general
+
+                </h2>
+
+
+                <div class="code-box">
+
+Usuario
+   ↓
+Inicio
+   ↓
+Consultar platillos
+   ↓
+Seleccionar platillo
+   ↓
+Ingresar información
+   ↓
+Obtener ubicación
+   ↓
+Confirmar pedido
+   ↓
+Firebase Firestore
+   ↓
+Mostrar pedido
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 BASE DE DATOS
+            ================================== -->
+
+            <section
+                id="base-datos"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        storage
+                    </i>
+
+                    🗄️ Base de datos
+
+                </h2>
+
+
+                <p>
+
+                    DITS utiliza
+                    <strong>Firebase Cloud Firestore</strong>
+                    para almacenar la información de la aplicación.
+
+                </p>
+
+
+                <h3>
+                    🍽️ Platillos
+                </h3>
+
+
+                <ul>
+
+                    <li>Nombre.</li>
+
+                    <li>Ingredientes.</li>
+
+                    <li>Precio.</li>
+
+                    <li>Fotografía.</li>
+
+                </ul>
+
+
+                <h3>
+                    🛒 Pedidos
+                </h3>
+
+
+                <ul>
+
+                    <li>Nombre del cliente.</li>
+
+                    <li>Platillo seleccionado.</li>
+
+                    <li>Dirección.</li>
+
+                    <li>Coordenadas.</li>
+
+                    <li>Fecha del pedido.</li>
+
+                </ul>
+
+            </section>
+
+
+            <!-- =================================
+                 PWA
+            ================================== -->
+
+            <section
+                id="pwa"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        phone_android
+                    </i>
+
+                    📱 Progressive Web App
+
+                </h2>
+
+
+                <p>
+
+                    DITS está diseñada como una
+                    <strong>Progressive Web App</strong>,
+                    permitiendo que pueda instalarse en dispositivos
+                    compatibles.
+
+                </p>
+
+
+                <p>
+
+                    Para esto se utiliza un archivo
+                    <strong>manifest.json</strong> y un
+                    <strong>Service Worker</strong>.
+
+                </p>
+
+            </section>
+
+
+            <!-- =================================
+                 UBICACIÓN
+            ================================== -->
+
+            <section
+                id="ubicacion"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        location_on
+                    </i>
+
+                    📍 Sistema de ubicación
+
+                </h2>
+
+
+                <p>
+
+                    El sistema utiliza la
+                    <strong>Geolocation API</strong>
+                    del navegador para obtener la ubicación
+                    del usuario.
+
+                </p>
+
+
+                <p>
+
+                    Las coordenadas obtenidas pueden utilizarse
+                    para mostrar la ubicación en un mapa y obtener
+                    una dirección aproximada.
+
+                </p>
+
+            </section>
+
+
+            <!-- =================================
+                 CÁMARA
+            ================================== -->
+
+            <section
+                id="camara"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        camera_alt
+                    </i>
+
+                    📷 Sistema de cámara
+
+                </h2>
+
+
+                <p>
+
+                    DITS permite utilizar la cámara del dispositivo
+                    para obtener fotografías de los platillos.
+
+                </p>
+
+
+                <ul>
+
+                    <li>
+                        📷 Activar cámara.
+                    </li>
+
+                    <li>
+                        📸 Capturar fotografía.
+                    </li>
+
+                    <li>
+                        🖼️ Seleccionar imagen desde el dispositivo.
+                    </li>
+
+                    <li>
+                        🗑️ Limpiar fotografía.
+                    </li>
+
+                </ul>
+
+            </section>
+
+
+            <!-- =================================
+                 EVIDENCIAS
+            ================================== -->
+
+            <section
+                id="evidencias"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        photo_library
+                    </i>
+
+                    📸 Evidencias
+
+                </h2>
+
+
+                <p>
+
+                    En esta sección pueden agregarse capturas de
+                    pantalla que demuestren el funcionamiento de
+                    la aplicación.
+
+                </p>
+
+
+                <p>
+
+                    Se pueden incluir evidencias de:
+
+                </p>
+
+
+                <ul>
+
+                    <li>
+                        Pantalla principal.
+                    </li>
+
+                    <li>
+                        Registro de platillos.
+                    </li>
+
+                    <li>
+                        Cámara.
+                    </li>
+
+                    <li>
+                        Sistema de pedidos.
+                    </li>
+
+                    <li>
+                        Geolocalización.
+                    </li>
+
+                    <li>
+                        Base de datos.
+                    </li>
+
+                    <li>
+                        Aplicación instalada como PWA.
+                    </li>
+
+                </ul>
+
+            </section>
+
+
+            <!-- =================================
+                 INSTALACIÓN
+            ================================== -->
+
+            <section
+                id="instalacion"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        rocket_launch
+                    </i>
+
+                    🚀 Instalación
+
+                </h2>
+
+
+                <p>
+
+                    Para utilizar DITS es necesario descargar o
+                    clonar el proyecto y abrirlo mediante un
+                    servidor compatible con aplicaciones web.
+
+                </p>
+
+
+                <div class="code-box">
+
+git clone https://github.com/Fernando-Martinez-05/UberEatsCUDEC.git
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 EJECUCIÓN
+            ================================== -->
+
+            <section
+                id="ejecucion"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        play_arrow
+                    </i>
+
+                    ▶️ Ejecución
+
+                </h2>
+
+
+                <p>
+
+                    Una vez descargado el proyecto, se debe abrir
+                    mediante un servidor local o mediante GitHub
+                    Pages.
+
+                </p>
+
+
+                <p>
+
+                    Posteriormente se puede acceder a:
+
+                </p>
+
+
+                <div class="code-box">
+
+index.html
+
+                </div>
+
+
+                <p>
+
+                    Desde la página principal se puede acceder al
+                    resto de funcionalidades mediante el menú lateral.
+
+                </p>
+
+            </section>
+
+
+            <!-- =================================
+                 USO
+            ================================== -->
+
+            <section
+                id="uso"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        menu_book
+                    </i>
+
+                    📚 Uso de la aplicación
+
+                </h2>
+
+
+                <h3>
+                    1. Agregar un platillo
+                </h3>
+
+
+                <p>
+
+                    Desde el botón de agregar se puede abrir el
+                    formulario para registrar un nuevo platillo.
+
+                </p>
+
+
+                <h3>
+                    2. Agregar fotografía
+                </h3>
+
+
+                <p>
+
+                    Se puede seleccionar una imagen desde el
+                    dispositivo o utilizar directamente la cámara.
+
+                </p>
+
+
+                <h3>
+                    3. Realizar un pedido
+                </h3>
+
+
+                <p>
+
+                    El usuario selecciona un platillo disponible
+                    y proporciona la información solicitada.
+
+                </p>
+
+
+                <h3>
+                    4. Obtener ubicación
+                </h3>
+
+
+                <p>
+
+                    El sistema solicita permiso para utilizar la
+                    ubicación del dispositivo.
+
+                </p>
+
+
+                <h3>
+                    5. Confirmar pedido
+                </h3>
+
+
+                <p>
+
+                    Finalmente el pedido se almacena en Firebase
+                    y aparece en la aplicación.
+
+                </p>
+
+            </section>
+
+
+            <!-- =================================
+                 SEGURIDAD
+            ================================== -->
+
+            <section
+                id="seguridad"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        security
+                    </i>
+
+                    🔐 Seguridad
+
+                </h2>
+
+
+                <p>
+
+                    La aplicación utiliza Firebase para gestionar
+                    el almacenamiento de información.
+
+                </p>
+
+
+                <p>
+
+                    Las reglas de seguridad de Firebase deben
+                    configurarse correctamente antes de utilizar
+                    la aplicación en un entorno de producción.
+
+                </p>
+
+
+                <p>
+
+                    También es importante proteger cualquier
+                    credencial o información sensible utilizada
+                    por el proyecto.
+
+                </p>
+
+            </section>
+
+
+            <!-- =================================
+                 AUTOR
+            ================================== -->
+
+            <section
+                id="autor"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        person
+                    </i>
+
+                    👨‍💻 Autor
+
+                </h2>
+
+
+                <p>
+
+                    <strong>
+                        Martínez Merlín Luis Fernando
+                    </strong>
+
+                </p>
+
+
+                <p>
+                    Sistemas Computacionales
+                </p>
+
+
+                <p>
+                    Programación Avanzada
+                </p>
+
+
+                <p>
+                    ISC181
+                </p>
+
+
+                <p>
+                    Universidad Multicultural CUDEC
+                </p>
+
+
+                <p>
+                    2026
+                </p>
+
+            </section>
+
+
+            <!-- =================================
+                 LICENCIA
+            ================================== -->
+
+            <section
+                id="licencia"
+                class="readme-section"
+            >
+
+                <h2>
+
+                    <i class="material-icons">
+                        description
+                    </i>
+
+                    📄 Licencia
+
+                </h2>
+
+
+                <p>
+
+                    Este proyecto fue desarrollado con fines
+                    académicos y educativos.
+
+                </p>
+
+
+                <p>
+
+                    DITS es un proyecto desarrollado para la materia
+                    de Programación Avanzada.
+
+                </p>
+
+            </section>
+
+
+            <!-- =================================
+                 BOTÓN INICIO
+            ================================== -->
+
+            <div class="center">
+
+                <a
+                    href="index.html"
+                    class="btn waves-effect waves-light back-button"
+                >
+
+                    <i class="material-icons left">
+                        arrow_back
+                    </i>
+
+                    Volver al inicio
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================
+                 FOOTER
+            ================================== -->
+
+            <footer class="readme-footer">
+
+                <strong>
+                    DITS
+                </strong>
+
+                © 2026
+
+                <br>
+
+                Proyecto desarrollado con fines académicos.
+
+            </footer>
+
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================================
+         MATERIALIZE JS
+    ========================================== -->
+
+    <script src="js/materialize.min.js"></script>
+
+
+    <!-- =========================================
+         INICIALIZAR MENÚ
+    ========================================== -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const sidenavs =
+                    document.querySelectorAll(".sidenav");
+
+
+                M.Sidenav.init(
+                    sidenavs,
+                    {
+                        edge: "right"
+                    }
+                );
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>
